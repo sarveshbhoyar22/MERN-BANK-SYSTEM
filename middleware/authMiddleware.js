@@ -1,17 +1,19 @@
 import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
-import User from "../models/User.jsx";
+import User from "../models/User.js";
 
 // Middleware to Protect Routes
 export const protect = asyncHandler(async (req, res, next) => {
   let token = req.headers.authorization;
-
   if (token && token.startsWith("Bearer")) {
     try {
       token = token.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.userId).select("-password");
-      next();
+      const user = await User.findById(decoded.userId).select("-password");
+      console.log(token);
+      
+     req.user = user;
+      next(); 
     } catch (error) {
       res.status(401);
       throw new Error("Not authorized, invalid token");
@@ -20,9 +22,9 @@ export const protect = asyncHandler(async (req, res, next) => {
     res.status(401);
     throw new Error("Not authorized, no token provided");
   }
-});
+}); 
 
-// Middleware for Admin-Only Access
+// Middleware for Admin-Only Access 
 export const adminOnly = (req, res, next) => {
   if (req.user && req.user.role === "admin") {
     next();

@@ -10,7 +10,7 @@ export const protect = asyncHandler(async (req, res, next) => {
       token = token.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const user = await User.findById(decoded.userId).select("-password");
-      console.log(token);
+      // console.log(user); 
       
      req.user = user;
       next(); 
@@ -18,7 +18,7 @@ export const protect = asyncHandler(async (req, res, next) => {
       res.status(401);
       throw new Error("Not authorized, invalid token");
     }
-  } else {
+  } else { 
     res.status(401);
     throw new Error("Not authorized, no token provided");
   }
@@ -26,7 +26,10 @@ export const protect = asyncHandler(async (req, res, next) => {
 
 // Middleware for Admin-Only Access 
 export const adminOnly = (req, res, next) => {
+  
   if (req.user && req.user.role === "admin") {
+    console.log("Welcome Admin");
+     
     next();
   } else {
     res.status(403);

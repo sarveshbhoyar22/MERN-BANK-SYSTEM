@@ -3,7 +3,7 @@ import Account from "../models/Account.js";
 import User from "../models/User.js";
 import  Transaction from "../models/Transaction.js";
 
- 
+  
 
 // ✅ Get account details (Only for the account owner)
 export const getAccountDetails = asyncHandler(async (req, res) => {
@@ -17,7 +17,7 @@ export const getAccountDetails = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json(account);
-});
+}); 
 
 // ✅ Deposit money (Only the account owner can deposit)
 export const depositMoney = asyncHandler(async (req, res) => {
@@ -133,11 +133,11 @@ export const transferMoney = asyncHandler(async (req, res) => {
     message: `₹${amount} transferred successfully`,
     senderBalance: senderAccount.balance,
   });
-});
+}); 
 
 // ✅ Delete an account (Admin only)
 export const deleteAccount = asyncHandler(async (req, res) => {
-  const account = await Account.findById(req.params.id);
+  const account = await Account.findByIdandDelete(req.params.id);
 
   if (!account) {
     res.status(404);
@@ -147,3 +147,4 @@ export const deleteAccount = asyncHandler(async (req, res) => {
   await account.deleteOne();
   res.status(200).json({ message: "Account deleted successfully" });
 });
+ 

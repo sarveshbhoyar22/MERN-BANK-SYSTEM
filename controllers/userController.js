@@ -1,43 +1,56 @@
 import User from "../models/User.js";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
+import Account from "../models/Account.js";
+import dotenv from "dotenv";
 
-/**
- * @desc Get all users (Admin only)
- * @route GET /api/users
- * @access Private {Admin}
- */
+dotenv.config();
+
+
 export const createAdminIfNotExists = async () => {
   const adminExists = await User.findOne({ role: "admin" });
-
+ 
   if (!adminExists) {
-    const hashedPassword = bcrypt.hashSync(process.env.ADMIN_PASSWORD, 10);
-
-    await User.create({
+    
+    const user = await User.create({
       name: process.env.ADMIN_NAME,
       email: process.env.ADMIN_EMAIL,
-      password: hashedPassword,
+      password: process.env.ADMIN_PASSWORD,
       role: "admin",
+      accountId: null,
     });
+    const account = await Account.create({
+      user: user._id,
+      accountNumber: process.env.ADMIN_ACCOUNT_NUMBER,
+      balance: process.env.ADMIN_BALANCE,
+    });
+
+    user.accountId = account._id;
+    await user.save();
 
     console.log("✅ Admin created securely");
   }
 };
 
-createAdminIfNotExists();
+export const adminInfo = asyncHandler(async (req, res) => {
 
+  const admin = await User.find({ role: "admin" }).select("-password");
 
+  if(admin){
+    return res.status(200).json({message:"Admin data fetched successfully",admin})
+
+  }
+  else{
+    return res.status(404).json({ message: "Admin not found" });
+  }
+
+})
 
 export const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find().select("-password"); // Exclude password
   res.status(200).json(users);
 });
 
-/**
- * @desc Get a single user by ID
- * @route GET /api/users/:id
- * @access Private (User/Admin)
- */
 export const getUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select("-password");
 
@@ -49,11 +62,6 @@ export const getUserById = asyncHandler(async (req, res) => {
   res.status(200).json(user);
 });
 
-/**
- * @desc Update user details (User can update only their profile)
- * @route PUT /api/users/update/:id
- * @access Private (User/Admin)
- */
 export const updateUser = asyncHandler(async (req, res) => {
   const { role, password, ...updateData } = req.body; // Prevent role updates
 
@@ -90,27 +98,19 @@ export const updateUser = asyncHandler(async (req, res) => {
   res.status(200).json(updatedUser);
 });
 
-/**
- * @desc Delete a user (Admin only)
- * @route DELETE /api/users/:id
- * @access Private (Admin)
- */
 export const deleteUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+
+  const { userId } = req.body;
+  const user = await User.findByIdAndDelete(userId);
+
   if (!user) {
     res.status(404);
     throw new Error("User not found");
   }
 
-  await user.remove();
   res.status(200).json({ message: "User deleted successfully" });
 });
 
-/**
- * @desc Update user role (Admin only)
- * @route PUT /api/users/update-role
- * @access Private (Admin)
- */
 export const updateUserRole = asyncHandler(async (req, res) => {
   const { userId, newRole } = req.body;
 
@@ -119,7 +119,7 @@ export const updateUserRole = asyncHandler(async (req, res) => {
     throw new Error("Invalid role");
   }
 
-  const user = await User.findById(userId);
+  const user = await User.findById(userId).select("-password");
   if (!user) {
     res.status(404);
     throw new Error("User not found");
@@ -127,6 +127,7 @@ export const updateUserRole = asyncHandler(async (req, res) => {
 
   user.role = newRole;
   await user.save();
+ 
 
-  res.json({ message: `User role updated to ${newRole}`, user });
+  res.json({ message: `User role updated to ${newRole}`,user});
 });

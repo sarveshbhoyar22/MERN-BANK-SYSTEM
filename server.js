@@ -5,6 +5,8 @@ import morgan from "morgan";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import accountRoutes from "./routes/accountRoutes.js";
+import { createAdminIfNotExists } from "./controllers/userController.js";
+import LoanRoutes from "./routes/LoanRoutes.js";
 
 dotenv.config();
 
@@ -14,6 +16,8 @@ connectDB();
 const app = express();
 
 // Middleware
+// console.log("admin:")
+createAdminIfNotExists();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
@@ -21,6 +25,7 @@ app.use(morgan("dev"));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/account", accountRoutes);
+app.use("/api/loan",LoanRoutes);
  
 // Basic Route
 app.get("/", (req, res) => {

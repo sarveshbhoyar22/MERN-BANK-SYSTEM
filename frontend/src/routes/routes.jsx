@@ -4,27 +4,27 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // Auth context for checking user roles
+import {useAuthContext as useAuth} from "../context/AuthContext.jsx";// Auth context for checking user roles
 
-import Login from "../pages/Login";
-import Register from "../pages/Register";
-import Dashboard from "../pages/Dashboard";
-import AdminDashboard from "../pages/AdminDashboard";
-import Deposit from "../pages/AccountManagementPages/Deposit";
-import Withdraw from "../pages/AccountManagementPages/Withdraw";
-import Transfer from "../pages/AccountManagementPages/Transfer";
-import Transactions from "../pages/AccountManagementPages/Transactions";
-import Profile from "../pages/UserProfile";
-import AdminUsers from "../pages/AdminUserManagement";
-import NotFound from "../pages/Error";
-import Home from "../pages/Home";
+import Login from "../pages/Login.jsx";
+import Register from "../pages/Register.jsx";
+import Dashboard from "../pages/Dashboard.jsx";
+import AdminDashboard from "../pages/AdminDashboard.jsx";
+import Deposit from "../pages/AccountManagementPages/DepositMoney.jsx";
+import Withdraw from "../pages/AccountManagementPages/WithdrawMoney.jsx";
+import Transfer from "../pages/AccountManagementPages/TransferMoney.jsx";
+import Transactions from "../pages/AccountManagementPages/Transaction.jsx";
+import Profile from "../pages/UserProfile.jsx";
+import AdminUsers from "../pages/AdminUserManagement.jsx";
+import NotFound from "../pages/Error.jsx";
+import Home from "../pages/Home.jsx";
 
 // Protected route component
 const PrivateRoute = ({ element, allowedRoles }) => {
-  const { user } = useAuth(); // Get user data from context
+  const { user } = useAuth();
 
   if (!user) {
-    return <Navigate to="/Home" replace />;
+    return <Navigate to="/" replace />;
   }
 
   if (!allowedRoles.includes(user.role)) {
@@ -35,28 +35,22 @@ const PrivateRoute = ({ element, allowedRoles }) => {
 };
 
 const AppRoutes = () => {
+  const { user } = useAuth();
   return (
     <Router>
       <Routes>
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Home/>} />
 
         {/* User Routes */}
-        <Route
-          path="/Home"
-          element={
-            <PrivateRoute
-              element={<Home/>}
-              allowedRoles={["user", "admin"]}
-            />
-          }
-        />
+       
         <Route
           path="/dashboard"
           element={
             <PrivateRoute
-              element={<Dashboard />}
+              element={user ? <Dashboard /> : <Navigate to="/login" />}
               allowedRoles={["user", "admin"]}
             />
           }
@@ -64,32 +58,32 @@ const AppRoutes = () => {
         <Route
           path="/deposit"
           element={
-            <PrivateRoute element={<Deposit />} allowedRoles={["user"]} />
+            <PrivateRoute element={user ? <Deposit /> : <Navigate to="/login" />} allowedRoles={["user"]} />
           }
         />
         <Route
           path="/withdraw"
           element={
-            <PrivateRoute element={<Withdraw />} allowedRoles={["user"]} />
+            <PrivateRoute element={user ? <Withdraw /> : <Navigate to="/login" />} allowedRoles={["user"]} />
           }
         />
         <Route
           path="/transfer"
           element={
-            <PrivateRoute element={<Transfer />} allowedRoles={["user"]} />
+            <PrivateRoute element={user ? <Transfer /> : <Navigate to="/login" />} allowedRoles={["user"]} />
           }
         />
         <Route
           path="/transactions"
           element={
-            <PrivateRoute element={<Transactions />} allowedRoles={["user"]} />
+            <PrivateRoute element={user ? <Transactions /> : <Navigate to="/login" />} allowedRoles={["user"]} />
           }
         />
         <Route
           path="/profile"
           element={
             <PrivateRoute
-              element={<Profile />}
+              element={user ? <Profile /> : <Navigate to="/login" />}
               allowedRoles={["user", "admin"]}
             />
           }
@@ -100,7 +94,7 @@ const AppRoutes = () => {
           path="/admin"
           element={
             <PrivateRoute
-              element={<AdminDashboard />}
+              element={user ? <AdminDashboard /> : <Navigate to="/login" />}
               allowedRoles={["admin"]}
             />
           }
@@ -108,12 +102,12 @@ const AppRoutes = () => {
         <Route
           path="/admin/users"
           element={
-            <PrivateRoute element={<AdminUsers />} allowedRoles={["admin"]} />
+            <PrivateRoute element={user ? <AdminUsers />: <Navigate to="/login" />} allowedRoles={["admin"]} />
           }
         />
 
         {/* 404 Page */}
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<Error />} />
       </Routes>
     </Router>
   );

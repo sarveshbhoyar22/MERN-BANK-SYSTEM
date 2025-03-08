@@ -1,18 +1,23 @@
-import { useState } from 'react'
-import {BrowserRouter as Router} from 'react-router-dom'
 
-import AppRoutes from './routes/routes'
+import { BrowserRouter as Router } from "react-router-dom";
+import { AuthContextProvider } from "./context/AuthContext";
+import AppRoutes from "./routes/routes";
+import { Toaster } from "react-hot-toast";
 
 function App() {
-  
-
   return (
     <>
-      <Router>
-        <AppRoutes />
-      </Router>
+      <AuthContextProvider>
+
+       
+
+          <AppRoutes />
+         
+          <Toaster/>
+      </AuthContextProvider>
+      
     </>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -4,5 +4,13 @@
 // Pagination: Load transactions in pages
 // Search Bar: Find specific transactions
 
+import React from 'react'
 
+const Transaction = () => {
+  return (
+    <div>Transaction</div>
+  )
+}
+
+export default Transaction
 

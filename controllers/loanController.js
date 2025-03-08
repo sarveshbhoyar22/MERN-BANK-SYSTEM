@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Loan from "../models/Loan.js";
 import Account from "../models/Account.js";
+import { sendEmail } from "../utils/emailService.js";
 
 // Apply for a Loan
 export const applyForLoan = asyncHandler(async (req, res) => {
@@ -24,7 +25,7 @@ export const applyForLoan = asyncHandler(async (req, res) => {
 export const reviewLoan = asyncHandler(async (req, res) => {
   const { loanId, status } = req.body;
 
-  if (!loanId || !["approved", "pending","rejected"].includes(status)) {
+  if (!loanId || !["approved", "pending", "rejected"].includes(status)) {
     res.status(400);
     throw new Error(" Invalid loan review request ");
   }
@@ -52,6 +53,13 @@ export const reviewLoan = asyncHandler(async (req, res) => {
   }
 
   await loan.save();
+
+  // Send Email
+  sendEmail(
+    loan.user.email,
+    `Your Loan Request has been ${status}`,
+    `Hello ${loan.user.name},\n\nYour loan request for ₹${loan.amount} has been ${status}.`
+  );
 
   res.json({ message: `Loan ${status} successfully`, loan });
 });

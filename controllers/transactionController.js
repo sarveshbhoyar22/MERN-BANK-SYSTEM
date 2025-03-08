@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import Account from "../models/Account.js";
 import Transaction from "../models/Transaction.js";
 import User from "../models/User.js";
+import { sendEmail } from "../utils/emailService.js";
 
 // Transfer Money
 export const transferMoney = asyncHandler(async (req, res) => {
@@ -44,6 +45,19 @@ export const transferMoney = asyncHandler(async (req, res) => {
     receiver: receiver._id,
     amount,
   });
+
+  // Send Emails
+  sendEmail(
+    sender.email,
+    "Money Transfer Confirmation",
+    `You have successfully sent ₹${amount} to ${receiverEmail}.`
+  );
+
+  sendEmail(
+    receiverEmail,
+    "Money Received",
+    `You have received ₹${amount} from ${sender.email}.`
+  );
 
   res.json({
     message: "Transfer successful",

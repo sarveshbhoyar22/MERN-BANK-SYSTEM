@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import User from "../models/User.js";
 import Account from "../models/Account.js";
 import generateToken from "../utils/generateToken.js";
+import { sendEmail } from "../utils/emailService.js";
 
 // Register New User
 export const registerUser = asyncHandler(async (req, res) => {
@@ -32,6 +33,11 @@ export const registerUser = asyncHandler(async (req, res) => {
     user.accountId = account._id;
     await user.save();
 
+    sendEmail(
+      email,
+      "Welcome to Our Auth Banking System",
+      `Hello ${name},\n\nYour account has been created successfully!`
+    );
 
     res.status(201).json({
       _id: user._id,

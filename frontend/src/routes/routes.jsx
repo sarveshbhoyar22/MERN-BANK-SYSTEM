@@ -16,15 +16,20 @@ import Transfer from "../pages/AccountManagementPages/TransferMoney.jsx";
 import Transactions from "../pages/AccountManagementPages/Transaction.jsx";
 import Profile from "../pages/UserProfile.jsx";
 import AdminUsers from "../pages/AdminUserManagement.jsx";
-import NotFound from "../pages/Error.jsx";
 import Home from "../pages/Home.jsx";
+import Navbar from "../components/Navbar.jsx";
+import loading from "../components/loading.jsx";
+
+
 
 // Protected route component
 const PrivateRoute = ({ element, allowedRoles }) => {
-  const { user } = useAuth();
+  const { authUser: user } = useAuth();
+  // console.log("routeUser:",user);
+  
 
   if (!user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/" />;
   }
 
   if (!allowedRoles.includes(user.role)) {
@@ -35,17 +40,23 @@ const PrivateRoute = ({ element, allowedRoles }) => {
 };
 
 const AppRoutes = () => {
-  const { user } = useAuth();
+  const { authUser: user, loading } = useAuth();
+
+    if (loading) {
+      <loading/>// Show loading screen while checking auth state
+    }
   return (
     <Router>
+      {user && <Navbar />}
       <Routes>
+       
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Home/>} />
+        <Route path="/" element={<Home />} />
 
         {/* User Routes */}
-       
+
         <Route
           path="/dashboard"
           element={
@@ -58,29 +69,41 @@ const AppRoutes = () => {
         <Route
           path="/deposit"
           element={
-            <PrivateRoute element={user ? <Deposit /> : <Navigate to="/login" />} allowedRoles={["user"]} />
+            <PrivateRoute
+              element={user ? <Deposit /> : <Navigate to="/login" />}
+              allowedRoles={["user"]}
+            />
           }
         />
         <Route
           path="/withdraw"
           element={
-            <PrivateRoute element={user ? <Withdraw /> : <Navigate to="/login" />} allowedRoles={["user"]} />
+            <PrivateRoute
+              element={user ? <Withdraw /> : <Navigate to="/login" />}
+              allowedRoles={["user"]}
+            />
           }
         />
         <Route
           path="/transfer"
           element={
-            <PrivateRoute element={user ? <Transfer /> : <Navigate to="/login" />} allowedRoles={["user"]} />
+            <PrivateRoute
+              element={user ? <Transfer /> : <Navigate to="/login" />}
+              allowedRoles={["user"]}
+            />
           }
         />
         <Route
           path="/transactions"
           element={
-            <PrivateRoute element={user ? <Transactions /> : <Navigate to="/login" />} allowedRoles={["user"]} />
+            <PrivateRoute
+              element={user ? <Transactions /> : <Navigate to="/login" />}
+              allowedRoles={["user"]}
+            />
           }
         />
         <Route
-          path="/profile"
+          path="profile"
           element={
             <PrivateRoute
               element={user ? <Profile /> : <Navigate to="/login" />}
@@ -102,7 +125,10 @@ const AppRoutes = () => {
         <Route
           path="/admin/users"
           element={
-            <PrivateRoute element={user ? <AdminUsers />: <Navigate to="/login" />} allowedRoles={["admin"]} />
+            <PrivateRoute
+              element={user ? <AdminUsers /> : <Navigate to="/login" />}
+              allowedRoles={["admin"]}
+            />
           }
         />
 

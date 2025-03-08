@@ -1,21 +1,28 @@
 import React, { useState } from "react";
 
+import { Navigate, useNavigate } from "react-router-dom";
+
+import { Link } from "react-router-dom";
 
 import UseLogin from "../hooks/useLogin";
-import { Link } from "react-router-dom";
 
 const Login = () => {
   
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("catterpiller@gmail.com");
+  const [password, setPassword] = useState("catterpiller");
   const [error, setError] = useState("");
- const { loading, login } = UseLogin();
+  const { loading, login } = UseLogin();
+  const Navigate = useNavigate();
  
 
   const handleLogin = async (e) => {
     e.preventDefault();
-   await login(email, password);
+    const result  = await login(email, password);
+    if(result){
+      Navigate("/dashboard");
+    }
+    
     
   };
 
@@ -50,12 +57,14 @@ const Login = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <div>
-                  <Link to={"/register"} className="link link-hover">Don't have account ?</Link>
+                  <Link to={"/register"} className="link link-hover">
+                    Don't have account ?
+                  </Link>
                 </div>
                 <button className="btn btn-neutral mt-4" disabled={loading}>
                   {" "}
                   {loading ? (
-                    <span className="loading loading-spinner"></span>
+                    <span className="loading loading-ring loading-xl"></span>
                   ) : (
                     "Login"
                   )}

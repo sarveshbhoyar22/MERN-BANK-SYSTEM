@@ -2,10 +2,20 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+const API_BASE_URL = "http://localhost:5000/api";
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: { "Content-Type": "application/json" },
+});
 
 const UseLogin = () => {
+  const Navigate = useNavigate();
   const [loading, setloading] = useState(false);
-  const { setAuthUser } = useAuthContext();
+  const { authUser, setAuthUser } = useAuthContext();
 
   function handleInputErrors(email, password) {
     if (!email || !password) {
@@ -17,40 +27,30 @@ const UseLogin = () => {
   }
 
   const login = async (email, password) => {
-    setloading(true);
     try {
       const success = handleInputErrors(email, password);
       if (!success) return;
+      setloading(true);
       // console.log(email, password);
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+      const res = await axios.post("/api/auth/login", {email, password}, {
+        withCredentials: true
       });
 
       console.log(res);
-      const data = await res.json();
-      console.log(data);
+      const data = await res.data;
+      console.log(data.token);
       if (data.error) {
         throw new Error("ERROR IN LOGIN AFTER FETCHING DATA", data.error);
       }
 
+      
       localStorage.setItem("user", JSON.stringify(data));
       setAuthUser(data);
+      
+      toast.success("You have logged in successful!");
+      
+      return true;
 
-      if (res.ok) {
-        // Handle successful signup
-        toast.success("login successful!");
-        // Redirect or perform other actions as needed
-      } else {
-        toast.error(
-          "error in login data message",
-          data.message || "login failed. Please try again."
-        );
-      }
     } catch (error) {
       console.log(error.message);
       toast.error("error in login", error.message);
@@ -58,7 +58,10 @@ const UseLogin = () => {
       setloading(false);
     }
   };
-  return { loading, login };
+
+ 
+
+  return { loading, authUser, login };
 };
 
 export default UseLogin;

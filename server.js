@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import accountRoutes from "./routes/accountRoutes.js";
 import { createAdminIfNotExists } from "./controllers/userController.js";
 import LoanRoutes from "./routes/LoanRoutes.js";
+import CookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -19,7 +20,13 @@ const app = express();
 // console.log("admin:")
 createAdminIfNotExists();
 app.use(express.json());
-app.use(cors());
+app.use(CookieParser()); 
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Change to your frontend URL
+    credentials: true, // ALLOW cookies
+  })
+);
 app.use(morgan("dev"));
 
 // Routes

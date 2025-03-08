@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router } from "react-router-dom";
 import { AuthContextProvider } from "./context/AuthContext";
 import AppRoutes from "./routes/routes";
@@ -8,14 +7,10 @@ function App() {
   return (
     <>
       <AuthContextProvider>
+        <AppRoutes />
 
-       
-
-          <AppRoutes />
-         
-          <Toaster/>
+        <Toaster />
       </AuthContextProvider>
-      
     </>
   );
 }

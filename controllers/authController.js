@@ -59,22 +59,49 @@ export const loginUser = asyncHandler(async (req, res) => {
   const { email,password } = req.body;
 
 
-  const user = await User.findOne({ email }).populate("accountId");
-
+  const user = await User.findOne({ email }).populate("_id");
+  const token = generateToken(user._id);
   if (user && (await user.matchPassword(password))) {
+
+     res.cookie("jwt", token, {
+       httpOnly: true, // Prevents XSS attacks
+       secure: process.env.NODE_ENV === "production", // Secure in production
+       sameSite: "strict",
+       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+     });
+
+    res.json(
+     
+      {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        accountId: user.accountId,
+        token: token,
+      }
+    );
+
+    console.log("✅ User logged in successfully");
+  } else {
+    res.status(401);
+    throw new Error("Invalid email or password");
+  }
+});
+
+export const getProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).populate("accountId");
+  if (user) {
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
       role: user.role,
       accountId: user.accountId,
-      token: generateToken(user._id),
     });
-
-    console.log("✅ User logged in successfully");
   } else {
-    res.status(401);
-    throw new Error("Invalid email or password");
+    res.status(404);
+    throw new Error("User not found");
   }
 });
 

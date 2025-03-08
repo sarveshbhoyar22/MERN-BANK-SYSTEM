@@ -2,7 +2,14 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
+const API_BASE_URL = "http://localhost:5000/api";
 
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: API_BASE_URL ,
+  headers: { "Content-Type": "application/json" },
+});
 const UseRegister = () => {
   const [loading, setloading] = useState(false);
   const { setAuthUser } = useAuthContext();
@@ -26,43 +33,29 @@ const UseRegister = () => {
       const success = handleInputErrors(email, password,name,balance);
       if (!success) return;
       // console.log(email, password);
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          password,
-          name,
-          balance
-        }),
-      });
+      const res = await axios.post(
+        "/api/auth/register",
+        { email, password,name,balance },
+        {
+          withCredentials: true,
+        }
+      );
 
       console.log(res);
-      const data = await res.json();
+      const data = await res.data;
       console.log(data);
       if (data.error) {
-        throw new Error("ERROR IN LOGIN AFTER FETCHING DATA", data.error);
+        throw new Error("ERROR IN register AFTER FETCHING DATA", data.error);
       }
 
       localStorage.setItem("user", JSON.stringify(data));
       setAuthUser(data);
+      toast.success("You have registered successful!");
 
-      if (res.ok) {
-        // Handle successful signup
-        toast.success("You have registered successful!");
-        toast.success(
-          " For any further queries please contact us through email"
-        );
-        // Redirect or perform other actions as needed
-      } else {
-        toast.error(
-          "error in register data message",
-          data.message || "Registration failed. Please try again."
-        );
-      }
+      return true;
     } catch (error) {
       console.log(error.message);
-      toast.error("error in login", error.message);
+      toast.error("error in Register", error.message);
     } finally {
       setloading(false);
     }

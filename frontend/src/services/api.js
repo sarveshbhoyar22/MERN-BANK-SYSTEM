@@ -29,10 +29,10 @@ export const registerUser = async (userData) => {
   return response.data;
 };
 
-export const getProfile = async () => {
-  const response = await api.get("/users/profile");
-  return response.data;
-};
+// export const getProfile = async () => {
+//   const response = await api.get("/users/profile");
+//   return response.data;
+// };
 
 // Account APIs
 export const getAccountDetails = async (userId) => {

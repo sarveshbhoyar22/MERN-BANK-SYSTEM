@@ -1,19 +1,23 @@
 import React, { useState } from "react";
 
 import UseRegister from "../hooks/UseRegister";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const [email, setEmail] = useState("testmesarvesh@gmail.com");
-  const [name, setName] = useState("sarvesh");
+  const [email, setEmail] = useState("test@gmail.com");
+  const [name, setName] = useState("test");
   const [balance, setbalance] = useState("1000");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("test@123");
   const [error, setError] = useState("");
   const { loading, register } = UseRegister();
+  const Navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    await register(email, password,name, balance);
+    const result = await register(email, password,name, balance);
+    if (result) {
+      Navigate("/Dashboard");
+    }
   };
 
   return (
@@ -63,12 +67,14 @@ const Register = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <div>
-                  <Link to={"/login"} className="link link-hover">Already have an account?</Link>
+                  <Link to={"/login"} className="link link-hover">
+                    Already have an account?
+                  </Link>
                 </div>
                 <button className="btn btn-neutral mt-4" disabled={loading}>
                   {" "}
                   {loading ? (
-                    <span className="loading loading-spinner"></span>
+                    <span className="loading loading-ring loading-xl"></span>
                   ) : (
                     "Register"
                   )}

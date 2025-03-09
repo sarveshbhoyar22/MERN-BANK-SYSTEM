@@ -5,17 +5,7 @@ const Mainfile = () => {
     const {authUser: user} = useAuthContext();
   return (
     <div className="flex justify-center">
-      <div className="stats shadow mt-20 bg-black border-2 border-gray-500 p-5 rounded-xl">
-        <div className="stat">
-          <div className="stat-figure text-primary">✨</div>
-          {/* <div></div> */}
-          <div className="stat-title">Current Balance</div>
-          <div className="stat-value text-sky-300">
-            $ {user.account.balance}
-          </div>
-          <div className="stat-desc"></div>
-        </div>
-
+      <div className="stats shadow mt-20 sm:flex block  w-auto m-2 bg-black border-2 border-gray-500 p-5 rounded-xl">
         <div className="stat">
           <div className="stat-figure text-secondary">
             <div className="avatar online">
@@ -24,22 +14,22 @@ const Mainfile = () => {
               </div>
             </div>
           </div>
-          <div className="stat-value text-2xl">{user.name}</div>
-          <div className="stat-title">
-            Account Number: 
-            <span className=" ml-2 stat-desc text-secondary">
+          <div className="stat-value text-3xl pb-5 ">{user.name}</div>
+          <div className="stat-title text-lg">
+            Account Number:
+            <span className=" ml-2 stat-desc text-lg text-secondary">
               {user.account.accountNumber}
             </span>
           </div>
-          <div className="stat-title">
-            email: 
-            <span className=" ml-2 stat-desc text-secondary">
+          <div className="stat-title text-lg">
+            email:
+            <span className=" ml-2 stat-desc text-secondary text-lg">
               {user.email}
             </span>
           </div>
-          <div className="stat-title">
-            role: 
-            <span className=" ml-2 stat-desc text-secondary">
+          <div className="stat-title text-lg">
+            role:
+            <span className=" ml-2 stat-desc text-secondary text-lg">
               {user.role}
             </span>
           </div>

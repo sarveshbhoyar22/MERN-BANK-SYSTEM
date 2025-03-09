@@ -16,7 +16,7 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
 
   return (
     <>
-      <div className="navbar  text-white shadow-sm absolute z-10 ">
+      <div className="navbar  text-white shadow-sm absolute fixed z-10 ">
         {width < 768 ? (
           <div className="navbar-start dropdown ">
             <div

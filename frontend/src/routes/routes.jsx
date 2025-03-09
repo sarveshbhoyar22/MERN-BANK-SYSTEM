@@ -19,6 +19,8 @@ import AdminUsers from "../pages/AdminUserManagement.jsx";
 import Home from "../pages/Home.jsx";
 import Navbar from "../components/Navbar.jsx";
 import loading from "../components/loading.jsx";
+import CheckBalance from "../pages/CheckBalance.jsx";
+import Layout from "../layouts/layout.jsx";
 
 
 
@@ -47,94 +49,107 @@ const AppRoutes = () => {
     }
   return (
     <Router>
-      <Navbar />
-      <Routes>
-       
-        {/* Public Routes */}
-        <Route path="/login" element={user?<Navigate to="/dashboard"/>:<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Home />} />
+      {/* <Navbar /> */}
+      <Layout>
+        <Routes>
+          {/* Public Routes */}
+          <Route
+            path="/login"
+            element={user ? <Navigate to="/dashboard" /> : <Login />}
+          />
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<Home />} />
 
-        {/* User Routes */}
+          {/* User Routes */}
 
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute
-              element={user ? <Dashboard /> : <Navigate to="/login" />}
-              allowedRoles={["user", "admin"]}
-            />
-          }
-        />
-        <Route
-          path="/deposit"
-          element={
-            <PrivateRoute
-              element={user ? <Deposit /> : <Navigate to="/login" />}
-              allowedRoles={["user"]}
-            />
-          }
-        />
-        <Route
-          path="/withdraw"
-          element={
-            <PrivateRoute
-              element={user ? <Withdraw /> : <Navigate to="/login" />}
-              allowedRoles={["user"]}
-            />
-          }
-        />
-        <Route
-          path="/transfer"
-          element={
-            <PrivateRoute
-              element={user ? <Transfer /> : <Navigate to="/login" />}
-              allowedRoles={["user"]}
-            />
-          }
-        />
-        <Route
-          path="/transactions"
-          element={
-            <PrivateRoute
-              element={user ? <Transactions /> : <Navigate to="/login" />}
-              allowedRoles={["user"]}
-            />
-          }
-        />
-        <Route
-          path="profile"
-          element={
-            <PrivateRoute
-              element={user ? <Profile /> : <Navigate to="/login" />}
-              allowedRoles={["user", "admin"]}
-            />
-          }
-        />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute
+                element={user ? <Dashboard /> : <Navigate to="/login" />}
+                allowedRoles={["user", "admin"]}
+              />
+            }
+          />
+          <Route
+            path="/deposit"
+            element={
+              <PrivateRoute
+                element={user ? <Deposit /> : <Navigate to="/login" />}
+                allowedRoles={["user"]}
+              />
+            }
+          />
+          <Route
+            path="/withdraw"
+            element={
+              <PrivateRoute
+                element={user ? <Withdraw /> : <Navigate to="/login" />}
+                allowedRoles={["user"]}
+              />
+            }
+          />
+          <Route
+            path="/transfer"
+            element={
+              <PrivateRoute
+                element={user ? <Transfer /> : <Navigate to="/login" />}
+                allowedRoles={["user"]}
+              />
+            }
+          />
+          <Route
+            path="/transactions"
+            element={
+              <PrivateRoute
+                element={user ? <Transactions /> : <Navigate to="/login" />}
+                allowedRoles={["user"]}
+              />
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute
+                element={user ? <Profile /> : <Navigate to="/login" />}
+                allowedRoles={["user", "admin"]}
+              />
+            }
+          />
+          <Route
+            path="/checkBalance"
+            element={
+              <PrivateRoute
+                element={user ? <CheckBalance /> : <Navigate to="/login" />}
+                allowedRoles={["user", "admin"]}
+              />
+            }
+          />
 
-        {/* Admin Routes */}
-        <Route
-          path="/admin"
-          element={
-            <PrivateRoute
-              element={user ? <AdminDashboard /> : <Navigate to="/login" />}
-              allowedRoles={["admin"]}
-            />
-          }
-        />
-        <Route
-          path="/admin/users"
-          element={
-            <PrivateRoute
-              element={user ? <AdminUsers /> : <Navigate to="/login" />}
-              allowedRoles={["admin"]}
-            />
-          }
-        />
+          {/* Admin Routes */}
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute
+                element={user ? <AdminDashboard /> : <Navigate to="/login" />}
+                allowedRoles={["admin"]}
+              />
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <PrivateRoute
+                element={user ? <AdminUsers /> : <Navigate to="/login" />}
+                allowedRoles={["admin"]}
+              />
+            }
+          />
 
-        {/* 404 Page */}
-        <Route path="*" element={<Error />} />
-      </Routes>
+          {/* 404 Page */}
+          <Route path="*" element={<Error />} />
+        </Routes>
+      </Layout>
     </Router>
   );
 };

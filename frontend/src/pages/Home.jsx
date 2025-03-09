@@ -6,7 +6,7 @@ import { useAuthContext } from '../context/AuthContext';
 
 const Home = () => {
   const { authUser: user } = useAuthContext();
-  
+
   return (
     <>
       {/* //first part */}
@@ -22,8 +22,10 @@ const Home = () => {
           <div className="max-w-md">
             <h1 className="mb-5 text-6xl font-bold">Welcome to Auth-Bank</h1>
             <p className="mb-5">
-              The application provides a secure and user-friendly platform for
-              banking operations
+              Experience a secure and user-friendly banking platform designed
+              for seamless financial operations. Manage your transactions, check
+              balances, apply for loans, and more—all with enhanced security and
+              convenience.
             </p>
             {user ? (
               <Link to={"/dashboard"}>

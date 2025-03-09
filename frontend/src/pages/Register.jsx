@@ -22,13 +22,15 @@ const Register = () => {
 
   return (
     <form action="" onSubmit={handleRegister} method="post">
-      <div className="hero bg-base-200 min-h-screen">
+      <div className="hero bg-base-300 min-h-screen">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
             <h1 className="text-5xl font-bold">Register now!</h1>
-            <p className="py-6">
-              The application provides a secure and user-friendly platform for
-              banking operations
+            <p className="py-6 ">
+              Experience a secure and user-friendly banking platform designed
+              for seamless financial operations. Manage your transactions, check
+              balances, apply for loans, and more—all with enhanced security and
+              convenience.
             </p>
           </div>
           <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">

@@ -14,7 +14,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const { loading, login } = UseLogin();
   const Navigate = useNavigate();
- 
+  
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,7 +22,7 @@ const Login = () => {
     if(result){
       Navigate("/dashboard");
     }
-    
+     
     
   };
 

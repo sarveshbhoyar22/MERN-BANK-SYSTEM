@@ -8,7 +8,7 @@ import accountRoutes from "./routes/accountRoutes.js";
 import { createAdminIfNotExists } from "./controllers/userController.js";
 import LoanRoutes from "./routes/LoanRoutes.js";
 import CookieParser from "cookie-parser";
-
+import notificationRoutes from "./routes/notificationRoutes.js";
 dotenv.config();
 
 // Connect to MongoDB
@@ -33,6 +33,7 @@ app.use(morgan("dev"));
 app.use("/api/auth", authRoutes);
 app.use("/api/account", accountRoutes);
 app.use("/api/loan",LoanRoutes);
+app.use("/api/notifications",notificationRoutes);
  
 // Basic Route
 app.get("/", (req, res) => {

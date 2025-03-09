@@ -3,6 +3,7 @@ import Account from "../models/Account.js";
 import Transaction from "../models/Transaction.js";
 import User from "../models/User.js";
 import { sendEmail } from "../utils/emailService.js";
+import Notification from "../models/Notification.js";
 
 // Transfer Money
 export const transferMoney = asyncHandler(async (req, res) => {
@@ -45,6 +46,22 @@ export const transferMoney = asyncHandler(async (req, res) => {
     receiver: receiver._id,
     amount,
   });
+
+  // ✅ Create a notification for the sender
+  const senderNotification = new Notification({
+    user: sender.user,
+    message: `You sent $${amount} to ${receiver.accountNumber}.`,
+    type: "transaction",
+  });
+  await senderNotification.save();
+
+  // ✅ Create a notification for the receiver
+  const receiverNotification = new Notification({
+    user: receiver.user,
+    message: `You received $${amount} from ${sender.accountNumber}.`,
+    type: "transaction",
+  });
+  await receiverNotification.save();
 
   // Send Emails
   sendEmail(

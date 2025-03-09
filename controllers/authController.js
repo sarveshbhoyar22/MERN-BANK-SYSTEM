@@ -3,6 +3,8 @@ import User from "../models/User.js";
 import Account from "../models/Account.js";
 import generateToken from "../utils/generateToken.js";
 import { sendEmail } from "../utils/emailService.js";
+import Notification from "../models/Notification.js";
+import { getAccountDetails } from "./accountController.js";
 
 // Register New User
 export const registerUser = asyncHandler(async (req, res) => {
@@ -26,10 +28,8 @@ export const registerUser = asyncHandler(async (req, res) => {
 
 
   if (user) {
-  
-
     // Automatically create an account for the user
-    
+
     user.accountId = account._id;
     await user.save();
 
@@ -38,6 +38,15 @@ export const registerUser = asyncHandler(async (req, res) => {
       "Welcome to Our Auth Banking System",
       `Hello ${name},\n\nYour account has been created successfully!`
     );
+
+    // ✅ Add Welcome Notification
+    const welcomeNotification = new Notification({
+      user: user._id,
+      message: `🎉 Welcome to our banking system, ${name}! Your account has been created successfully.`,
+      type: "welcome",
+    });
+
+    await welcomeNotification.save();
 
     res.status(201).json({
       _id: user._id,
@@ -62,25 +71,34 @@ export const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email }).populate("_id");
   const token = generateToken(user._id);
   if (user && (await user.matchPassword(password))) {
+    res.cookie("jwt", token, {
+      httpOnly: true, // Prevents XSS attacks
+      secure: process.env.NODE_ENV === "production", // Secure in production
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
 
-     res.cookie("jwt", token, {
-       httpOnly: true, // Prevents XSS attacks
-       secure: process.env.NODE_ENV === "production", // Secure in production
-       sameSite: "strict",
-       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-     });
+    // ✅ Add Welcome Notification
+    const welcomeNotification = new Notification({
+      user: user._id,
+      message: ` Your account has been logged in! if it's not you, please change your password`,
+      type: "welcome",
+    });
 
-    res.json(
-     
-      {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        accountId: user.accountId,
-        token: token,
-      }
-    );
+    
+    await welcomeNotification.save();
+
+    const account = await Account.findById(user.accountId);
+    
+
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      account: account,
+      token: token,
+    });
 
     console.log("✅ User logged in successfully");
   } else {

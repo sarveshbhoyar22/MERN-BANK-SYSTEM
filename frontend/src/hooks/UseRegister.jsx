@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
+
 const API_BASE_URL = "http://localhost:5000/api";
 
 import axios from "axios";
@@ -10,6 +11,7 @@ const api = axios.create({
   baseURL: API_BASE_URL ,
   headers: { "Content-Type": "application/json" },
 });
+
 const UseRegister = () => {
   const [loading, setloading] = useState(false);
   const { setAuthUser } = useAuthContext();
@@ -33,15 +35,15 @@ const UseRegister = () => {
       const success = handleInputErrors(email, password,name,balance);
       if (!success) return;
       // console.log(email, password);
-      const res = await axios.post(
-        "/api/auth/register",
+      const res = await api.post(
+        "/auth/register",
         { email, password,name,balance },
         {
           withCredentials: true,
         }
       );
 
-      console.log(res);
+      // console.log(res);
       const data = await res.data;
       console.log(data);
       if (data.error) {
@@ -49,6 +51,7 @@ const UseRegister = () => {
       }
 
       localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem("token", data.token);
       setAuthUser(data);
       toast.success("You have registered successful!");
 

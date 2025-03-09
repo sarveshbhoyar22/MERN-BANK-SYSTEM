@@ -47,11 +47,11 @@ const AppRoutes = () => {
     }
   return (
     <Router>
-      {user && <Navbar />}
+      <Navbar />
       <Routes>
        
         {/* Public Routes */}
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={user?<Navigate to="/dashboard"/>:<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<Home />} />
 

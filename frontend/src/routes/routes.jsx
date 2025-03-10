@@ -21,6 +21,7 @@ import Navbar from "../components/Navbar.jsx";
 import loading from "../components/loading.jsx";
 import CheckBalance from "../pages/CheckBalance.jsx";
 import Layout from "../layouts/layout.jsx";
+import ScrollToTop from "../utils/ScrollToTop.jsx";
 
 
 
@@ -50,6 +51,7 @@ const AppRoutes = () => {
   return (
     <Router>
       {/* <Navbar /> */}
+      <ScrollToTop/>
       <Layout>
         <Routes>
           {/* Public Routes */}

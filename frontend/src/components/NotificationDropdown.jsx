@@ -3,6 +3,7 @@ import { useState } from "react";
 
 const NotificationDropdown = () => {
   const { notifications, markAsRead } = useNotificationContext();
+ 
   const [open, setOpen] = useState(false);
 
   const handleMarkedAsRead = async (id) => {
@@ -14,6 +15,8 @@ const NotificationDropdown = () => {
        }
     
   };
+
+
 
   return (
     <div className="relative">
@@ -59,17 +62,22 @@ const NotificationDropdown = () => {
               <div
                 key={notif._id}
                 className={`p-2 border-b  hover:cursor-pointer rounded-lg ${
-                  notif.status === "unread" ? "border-2 border-blue-500" : "bg-black"
+                  notif.status === "unread"
+                    ? "border-2 border-blue-500"
+                    : "bg-black"
                 }`}
-                onClick={() => handleMarkedAsRead(notif._id)}
               >
-                <p className="text-sm">
-                  {notif.message}
-
-                </p>
+                <p className="text-sm">{notif.message}</p>
                 <small className="text-xs text-gray-400">
                   {new Date(notif.createdAt).toLocaleString()}
                 </small>
+                <button
+                  className="btn btn-xs ml-2"
+                  onClick={() => handleMarkedAsRead(notif._id)}
+                >
+                  {" "}
+                  Read
+                </button>
               </div>
             ))
           )}

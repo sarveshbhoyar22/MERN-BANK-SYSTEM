@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useAuthContext } from "./AuthContext";
+import {io} from "socket.io-client"
 
 const API_BASE_URL = "http://localhost:5000/api";
 
@@ -21,10 +22,38 @@ export const useNotificationContext = () => {
 export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const { authUser } = useAuthContext();
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
     if (authUser) {
       fetchNotifications();
+
+      //socketio
+      // Initialize socket connection
+      const newSocket = io("http://localhost:5000", {
+        transports: ["websocket"],
+        reconnection: true, // Auto-reconnect if disconnected
+        reconnectionAttempts: 5,
+        reconnectionDelay: 2000,
+      });
+      newSocket.emit("join", authUser._id);
+     setSocket(newSocket)
+
+      newSocket.on("connect", () => {
+        console.log("connected to webSocket:", newSocket.id);
+      });
+
+      newSocket.on("newNotification", (newNotification) => {
+        setNotifications((prev) => [newNotification, ...prev]);
+      });
+
+      newSocket.on("disconnect", () => {
+        console.log("disconnected from webSocket");
+      });
+      
+      return () => {
+        newSocket.disconnect();
+      };
     }
   }, [authUser]);
 
@@ -42,7 +71,7 @@ export const NotificationProvider = ({ children }) => {
         },
         withCredentials: true,
       });
-      console.log("notifications:",notifications)
+      console.log("notifications:",data)
       setNotifications(data);
     } catch (error) {
       console.error("Error fetching notifications", error);

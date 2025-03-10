@@ -37,6 +37,7 @@ export const registerUser = asyncHandler(async (req, res) => {
       email,
       "Welcome to Our Auth Banking System",
       `Hello ${name},\n\nYour account has been created successfully!`
+      `<P>\n\nYour account number is: ${account.accountNumber}<P>`
     );
 
     // ✅ Add Welcome Notification

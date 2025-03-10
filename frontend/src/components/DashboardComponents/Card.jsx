@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 const Card = ({ title, photo, description,buttonname,link="" }) => {
   return (
     <Link to={link}>
-    <div className="card bg-base-300 w-56 shadow-sm hover:cursor-pointer ">
+    <div className="card bg-base-300 w-44 h-64 shadow-sm hover:cursor-pointer ">
       <figure className=" p-2 rounded-4xl">
-        <img className="h-40" src={photo} alt="Shoes" />
+        <img className="h-24 p-2" src={photo} alt="Shoes" />
       </figure>
       <div className="card-body">
         <h2 className="card-title">{title}</h2>

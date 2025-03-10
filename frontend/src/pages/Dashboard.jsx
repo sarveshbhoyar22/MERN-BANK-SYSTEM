@@ -14,7 +14,7 @@ const Dashboard = () => {
     <>
       <div className=" bg-black ">
         <Mainfile />
-        <div className="p-10 flex items-center w-auto m-auto sm:justify-center gap-4">
+        <div className="p-3 flex items-center w-auto m-auto sm:justify-center gap-4">
           <Card
             link="/deposit"
             title="Deposit Money"

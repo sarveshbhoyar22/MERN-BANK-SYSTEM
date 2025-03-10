@@ -5,7 +5,7 @@ const Mainfile = () => {
     const {authUser: user} = useAuthContext();
   return (
     <div className="flex justify-center">
-      <div className="stats shadow mt-20 sm:flex block  w-auto m-2 bg-black border-2 border-gray-500 p-5 rounded-xl">
+      <div className="stats shadow mt-20 sm:flex block bg-base-300  w-auto m-2  p-5 rounded-xl">
         <div className="stat">
           <div className="stat-figure text-secondary">
             <div className="avatar online">

@@ -9,18 +9,20 @@ import { createAdminIfNotExists } from "./controllers/userController.js";
 import LoanRoutes from "./routes/LoanRoutes.js";
 import CookieParser from "cookie-parser";
 import notificationRoutes from "./routes/notificationRoutes.js";
+// ..........................
+
 dotenv.config();
 
 // Connect to MongoDB
 connectDB();
 
+// Create Express app
 const app = express();
 
 // Middleware
 // console.log("admin:")
-createAdminIfNotExists();
 app.use(express.json());
-app.use(CookieParser()); 
+app.use(CookieParser());
 app.use(
   cors({
     origin: "http://localhost:3000", // Change to your frontend URL
@@ -29,20 +31,53 @@ app.use(
 );
 app.use(morgan("dev"));
 
+//socketio
+import { Server } from "socket.io";
+import http from "http";
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+// WebSocket Event Handling
+io.on("connection", (socket) => {
+  console.log("user Connected", socket.id);
+
+  socket.on("joinRoom", (userId) => {
+    socket.join(userId);
+    console.log(`User ${userId} joined room`);
+  });
+
+
+  socket.on("disconnect", () => {
+    console.log("user Disconnected", socket.id);
+  });
+});
+
+
+createAdminIfNotExists();
+
+// ........................
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/account", accountRoutes);
-app.use("/api/loan",LoanRoutes);
-app.use("/api/notifications",notificationRoutes);
- 
+app.use("/api/loan", LoanRoutes);
+app.use("/api/notifications", notificationRoutes);
+
 // Basic Route
 app.get("/", (req, res) => {
   res.send("Banking System Backend is Running...");
-}); 
- 
+});
+
 // Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
 
+export { io };

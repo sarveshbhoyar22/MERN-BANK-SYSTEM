@@ -17,6 +17,16 @@ const TransactionSchema =
             type: Date,
             default: Date.now,
         },
+        type: {
+            type: String,
+            enum: ["deposit", "withdraw", "transfer","loan"],
+            required: true,
+        },
+        status: {
+            type: String,
+            enum: ["success", "failed","pending"],
+            default: "success",
+        },
     })
 
 const Transaction = mongoose.model("Transaction", TransactionSchema);

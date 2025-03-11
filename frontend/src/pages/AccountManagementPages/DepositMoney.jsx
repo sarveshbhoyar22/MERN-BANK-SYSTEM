@@ -10,7 +10,7 @@ import axios from "axios";
 const DepositMoney = () => {
   const [amount, setAmount] = React.useState("");
   const { authUser:user } = useAuthContext();
-  const [accountNumber] = React.useState(user.account.accountNumber);
+  const [accountNumber] = React.useState(user?.account?.accountNumber);
   const [loading,setloading] = React.useState(true);
 
   const handleSubmit = async (e) => {
@@ -25,12 +25,12 @@ const DepositMoney = () => {
       setloading(false);
     }, 3000);
 
-    const user_id = user.account;
-    const userId = user_id._id;
+    const user_id = user?.account;
+    const userId = user_id?._id;
     const stringuserId = userId.toString();
     // console.log(userId);
 
-
+    
     
     console.log(accountNumber, amount);
 
@@ -77,7 +77,7 @@ const DepositMoney = () => {
               <label className="fieldset-label hidden">Account Number 🔒</label>
               <input
                 type="accountNumber"
-                className="input hidden"
+                className="input hidden "
                 placeholder="Type Your Account_Number"
                 value={accountNumber}
                 readOnly
@@ -118,7 +118,7 @@ const DepositMoney = () => {
                 </span>{" "}
                 <br />
                 <span className="text-xl font-bold">
-                  Your Account has been Creadited with :
+                  Your Account has been Credited with :
                 </span>
                 <span className="text-3xl font-bold">${amount}.00</span>
               </div>

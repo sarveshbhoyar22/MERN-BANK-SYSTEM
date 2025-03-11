@@ -4,7 +4,7 @@ import User from "../models/User.js";
 import Transaction from "../models/Transaction.js";
 import { sendEmail } from "../utils/emailService.js";
 import Notification from "../models/Notification.js";
-import {io} from "../server.js"
+import { io } from "../server.js";
 
 // ✅ Get account details (Only for the account owner)
 export const getAccountDetails = asyncHandler(async (req, res) => {
@@ -24,7 +24,7 @@ export const getAccountDetailsall = asyncHandler(async (req, res) => {
   const users = await User.find().select("-password");
   const accounts = await Account.find().select("-password");
 
- res.status(200).json({users,accounts});
+  res.status(200).json({ users, accounts });
 });
 
 // ✅ Deposit money (Only the account owner can deposit)
@@ -33,9 +33,9 @@ export const depositMoney = asyncHandler(async (req, res) => {
   const accountId = req.params.id;
 
   const account = await Account.findOne({ accountNumber });
-  
-  const user = await User.findById( req.user._id);
-  const userId = user._id
+
+  const user = await User.findById(req.user._id);
+  const userId = user._id;
 
   if (!account) {
     res.status(404);
@@ -57,12 +57,12 @@ export const depositMoney = asyncHandler(async (req, res) => {
   });
 
   const notification = await depositNotification.save();
-  
-  if(notification){
+
+  if (notification) {
     console.log("Notification saved successfully");
 
     // Emit event to frontend in real-time
-    io.to(userId.toString()).emit("newNotification", notification)
+    io.to(userId.toString()).emit("newNotification", notification);
   }
 
   const email = user.email;
@@ -83,6 +83,7 @@ export const depositMoney = asyncHandler(async (req, res) => {
 export const withdrawMoney = asyncHandler(async (req, res) => {
   const { amount, accountNumber } = req.body;
   const account = await Account.findOne({ accountNumber });
+  const user = await User.findById(req.user._id);
 
   if (!account) {
     res.status(404);
@@ -102,6 +103,29 @@ export const withdrawMoney = asyncHandler(async (req, res) => {
   account.balance = account.balance - parseInt(amount);
   await account.save();
 
+  const withdrawNotification = new Notification({
+    user: user._id,
+    message: `You have successfully withdrawn $${amount} from your account.`,
+    type: "transaction",
+  });
+
+  const notification = await withdrawNotification.save();
+  const userId = user._id;
+  if (notification) {
+    console.log("Notification saved successfully");
+
+    // Emit event to frontend in real-time
+    io.to(userId.toString()).emit("newNotification", notification);
+  }
+
+  const email = user.email;
+
+  sendEmail(
+    email,
+    "Deposit Notification",
+    ` You have successfully withdrawn $${amount} from your account.`
+  );
+
   res.status(200).json({
     message: `₹${amount} withdrawn successfully`,
     balance: account.balance,
@@ -112,18 +136,16 @@ export const withdrawMoney = asyncHandler(async (req, res) => {
 export const transferMoney = asyncHandler(async (req, res) => {
   const { amount, receiverAccountNumber } = req.body;
 
-  const senderUser = await User.findById( req.user._id );
- 
-  const senderAccountId = senderUser.accountId
-  const senderAccount = await Account.findById(
-    senderAccountId
-  );
+  const senderUser = await User.findById(req.user._id);
 
-  const receiverAccount = await Account.findOne(
-    {accountNumber: receiverAccountNumber}
-  );
+  const senderAccountId = senderUser.accountId;
+  const senderAccount = await Account.findById(senderAccountId);
 
-  const receiverUser = await User.findOne({accountId: receiverAccount._id});
+  const receiverAccount = await Account.findOne({
+    accountNumber: receiverAccountNumber,
+  });
+
+  const receiverUser = await User.findOne({ accountId: receiverAccount._id });
 
   if (!senderAccount) {
     res.status(404);
@@ -153,10 +175,11 @@ export const transferMoney = asyncHandler(async (req, res) => {
 
   // Log transaction
   const transaction = await Transaction.create({
-    sender: senderAccount.user,
-    receiver: receiverAccount.user,
+    sender: senderAccount._id,
+    receiver: receiverAccount._id,
     amount,
     type: "transfer",
+    status: "success",
     date: new Date(),
   });
 
@@ -190,20 +213,19 @@ export const transferMoney = asyncHandler(async (req, res) => {
   const notification2 = await receivedMoneyNotification.save();
 
   if (notification2) {
-   console.log(
-     "Sending notification to receiverUser:",
-     receiverUser._id.toString()
-   );
+    console.log(
+      "Sending notification to receiverUser:",
+      receiverUser._id.toString()
+    );
 
     // Emit event to frontend in real-time
     io.to(receiverUser._id.toString()).emit("newNotification", notification2);
   }
 
-
   ///email
 
   const senderEmail = senderUser.email;
-  console.log("senderEmail:",senderEmail);
+  console.log("senderEmail:", senderEmail);
   const receiverEmail = receiverUser.email;
 
   sendEmail(
@@ -217,7 +239,6 @@ export const transferMoney = asyncHandler(async (req, res) => {
     "Money Received",
     `You have received $${amount} from account:name -${senderUser.name}, account number- ${senderAccount.accountNumber}.`
   );
-
 
   res.json({
     message:
@@ -234,12 +255,41 @@ export const transferMoney = asyncHandler(async (req, res) => {
   // });
 });
 
+
+export const getTransaction = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const userAccount = await Account.findOne({ user: user._id });
+  
+    if (!userAccount) {
+      return res.status(404).json({ message: "User account not found" });
+    }
+  
+    const transaction = await Transaction.find({
+      $or: [{ sender: userAccount._id }, { receiver: userAccount._id }],
+    })
+      .populate({
+        path: "sender",
+        populate: { path: "user", select: "name email" },
+      })
+      .populate({
+        path: "receiver",
+        populate: { path: "user", select: "name email" },
+      })
+      .sort({ date: -1 }); // Sort by latest transactions first
+  
+    res.status(200).json(transaction);
+  } catch (error) {
+    console.error("Error fetching transactions:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 // ✅ Delete an account (Admin only)
 export const deleteAccount = asyncHandler(async (req, res) => {
-  const{accountNumber,email} = req.body
-  const account = await Account.findByOne({accountNumber});
-  const user = await User.findByOne({email})
-
+  const { accountNumber, email } = req.body;
+  const account = await Account.findByOne({ accountNumber });
+  const user = await User.findByOne({ email });
 
   if (!account) {
     res.status(404);

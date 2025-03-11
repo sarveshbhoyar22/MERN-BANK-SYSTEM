@@ -47,7 +47,7 @@ export const adminInfo = asyncHandler(async (req, res) => {
 })
 
 export const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find().select("-password"); // Exclude password
+  const users = await User.find().select("password"); // Exclude password
   res.status(200).json(users);
 });
 

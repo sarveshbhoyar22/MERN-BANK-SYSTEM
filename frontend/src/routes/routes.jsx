@@ -127,6 +127,15 @@ const AppRoutes = () => {
               />
             }
           />
+          <Route
+            path="/history"
+            element={
+              <PrivateRoute
+                element={user ? <Transactions /> : <Navigate to="/login" />}
+                allowedRoles={["user", "admin"]}
+              />
+            }
+          />
 
           {/* Admin Routes */}
           <Route

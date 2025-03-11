@@ -1,3 +1,4 @@
+import { set } from "mongoose";
 import { useNotificationContext } from "../context/NotificationContext";
 import { useState } from "react";
 
@@ -5,11 +6,15 @@ const NotificationDropdown = () => {
   const { notifications, markAsRead } = useNotificationContext();
  
   const [open, setOpen] = useState(false);
+  const[hide,setHide] = useState(false);
 
   const handleMarkedAsRead = async (id) => {
-  
+
        try {
          await markAsRead(id);
+         setHide(true)
+         
+
        } catch (error) {
         console.error("Error marking notification as read:", error);
        }
@@ -73,6 +78,7 @@ const NotificationDropdown = () => {
                 </small>
                 <button
                   className="btn btn-xs ml-2"
+
                   onClick={() => handleMarkedAsRead(notif._id)}
                 >
                   {" "}

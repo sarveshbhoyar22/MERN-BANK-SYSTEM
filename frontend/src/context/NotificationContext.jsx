@@ -35,6 +35,7 @@ export const NotificationProvider = ({ children }) => {
         reconnection: true, // Auto-reconnect if disconnected
         reconnectionAttempts: 5,
         reconnectionDelay: 2000,
+        forceNew: true
       });
       newSocket.emit("join", authUser._id);
      setSocket(newSocket)
@@ -44,6 +45,7 @@ export const NotificationProvider = ({ children }) => {
       });
 
       newSocket.on("newNotification", (newNotification) => {
+        console.log("Received new notification:", newNotification);
         setNotifications((prev) => [newNotification, ...prev]);
       });
 
@@ -52,7 +54,9 @@ export const NotificationProvider = ({ children }) => {
       });
       
       return () => {
-        newSocket.disconnect();
+        if (newSocket) {
+          newSocket.disconnect();
+        }
       };
     }
   }, [authUser]);
@@ -96,8 +100,8 @@ export const NotificationProvider = ({ children }) => {
             Authorization: `Bearer ${token}`, // Attach token in headers
             "Content-Type": "application/json",
           },
+          withCredentials: true 
         },
-        { withCredentials: true }
       );
       setNotifications(
         notifications.map((notif) =>

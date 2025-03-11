@@ -5,8 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [email, setEmail] = useState("test@gmail.com");
+ 
   const [name, setName] = useState("test");
-  const [balance, setbalance] = useState("1000");
+ 
+  const [balance, setbalance] = useState("10000");
+ 
   const [password, setPassword] = useState("test@123");
   const [error, setError] = useState("");
   const { loading, register } = UseRegister();

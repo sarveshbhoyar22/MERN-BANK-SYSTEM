@@ -9,6 +9,7 @@ import { createAdminIfNotExists } from "./controllers/userController.js";
 import LoanRoutes from "./routes/LoanRoutes.js";
 import CookieParser from "cookie-parser";
 import notificationRoutes from "./routes/notificationRoutes.js";
+import infoRoutes from "./routes/infoRoutes.js";
 // ..........................
 
 dotenv.config();
@@ -34,6 +35,7 @@ app.use(morgan("dev"));
 //socketio
 import { Server } from "socket.io";
 import http from "http";
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -68,6 +70,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/account", accountRoutes);
 app.use("/api/loan", LoanRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/info",infoRoutes)
 
 // Basic Route
 app.get("/", (req, res) => {

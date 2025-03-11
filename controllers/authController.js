@@ -19,7 +19,7 @@ export const registerUser = asyncHandler(async (req, res) => {
   const user = await User.create({ name, email, password, role: "user", accountId: null });
   const account = await Account.create({
     user: user._id,
-    accountNumber: Math.floor(Math.random() * 9000000000) + 1000000000,
+    accountNumber: Math.floor(Math.random() * 900000000000) + 100000000000,
     balance: balance,
   });
 
@@ -37,7 +37,7 @@ export const registerUser = asyncHandler(async (req, res) => {
       email,
       "Welcome to Our Auth Banking System",
       `Hello ${name},\n\nYour account has been created successfully!`
-      `<P>\n\nYour account number is: ${account.accountNumber}<P>`
+      
     );
 
     // ✅ Add Welcome Notification

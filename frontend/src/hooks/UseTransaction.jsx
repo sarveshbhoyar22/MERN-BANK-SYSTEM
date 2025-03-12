@@ -9,11 +9,6 @@ const useTransaction = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // if (!user) {
-    //   console.error("User not authenticated");
-    //   setLoading(false);
-    //   return;
-    // }
 
     const token = localStorage.getItem("token");
     if (!token) {

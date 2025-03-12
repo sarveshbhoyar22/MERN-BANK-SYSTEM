@@ -5,79 +5,41 @@ import * as XLSX from "xlsx";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import UseTransaction from "../../hooks/UseTransaction";
+import moment from "moment";
+import { useAuthContext } from "../../context/AuthContext";
 
-// Dummy Transaction Data (Replace with API Fetch)
-// const transactionsData = [
-//   {
-//     id: 1,
-//     type: "Deposit",
-//     amount: 1500,
-//     status: "Success",
-//     date: "2025-03-01",
-//     category: "Salary",
-//   },
-//   {
-//     id: 2,
-//     type: "Withdraw",
-//     amount: 200,
-//     status: "Failed",
-//     date: "2025-03-02",
-//     category: "Groceries",
-//   },
-//   {
-//     id: 3,
-//     type: "Transfer",
-//     amount: 750,
-//     status: "Success",
-//     date: "2025-03-05",
-//     category: "Rent",
-//   },
-//   {
-//     id: 4,
-//     type: "Loan",
-//     amount: 500,
-//     status: "Pending",
-//     date: "2025-03-07",
-//     category: "Loan EMI",
-//   },
-//   {
-//     id: 5,
-//     type: "Withdraw",
-//     amount: 300,
-//     status: "Success",
-//     date: "2025-03-10",
-//     category: "Entertainment",
-//   },
-// ];
-
-const Transaction =  () => {
+const Transaction = () => {
   const [transactions, setTransactions] = useState([]);
+  const {authuser:user} = useAuthContext();
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [filters, setFilters] = useState({
     type: "",
     status: "",
     date: "",
   });
-  
+
   const { transactions: transactionsData, loading, error } = UseTransaction();
-  //  if (loading) return <p>Loading transactions...</p>;
-  //  if (error) return <p>Error fetching transactions. Please try again.</p>;
 
   useEffect(() => {
-    const loadTransactions = async () => {
-      const data =  transactionsData;
-      if(data){
-        setTransactions(data);
-        setFilteredTransactions(data);
-      }
+    if (transactionsData) {
+      console.log("Fetched Transaction", transactionsData);
+      const formattedTransactionData = transactionsData.map((txn) => ({
+        _id: txn?._id,
+        type: txn?.type || "unknown",
+        amount: txn?.amount,
+        status: txn?.status,
+
+        date: moment(txn?.createdAt).format("DD-MM-YYYY hh:mm A") || "N/A",
+
+        receiver: txn?.receiver?.user?.name,
+        sender: txn?.sender?.user?.name,
+        receiverAC: txn?.receiver?.user?.email,
+        senderAC: txn?.sender?.user?.email,
+      }));
+      setFilteredTransactions(formattedTransactionData);
+      setTransactions(formattedTransactionData);
     }
-
-    loadTransactions();
-  },[]);
-
-
-
-
+  }, [transactionsData]);
 
   // Filter Transactions
   useEffect(() => {
@@ -86,17 +48,22 @@ const Transaction =  () => {
       filtered = filtered.filter((t) => t.type === filters.type);
     if (filters.status)
       filtered = filtered.filter((t) => t.status === filters.status);
-    if (filters.date)
-      filtered = filtered.filter((t) => t.date === filters.date);
+    if (filters.date) {
+      filtered = filtered.filter(
+        (t) =>
+          moment(t.date, "DD-MM-YYYY hh:mm A").format("YYYY-MM-DD") ===
+          filters.date
+      );
+    }
     setFilteredTransactions(filtered);
   }, [filters, transactions]);
 
   // Calculate Summary
   const totalInflow = transactions
-    .filter((t) => t.type === "Deposit")
+    .filter((t) => t.type === "deposit")
     .reduce((sum, t) => sum + t.amount, 0);
   const totalOutflow = transactions
-    .filter((t) => t.type !== "Deposit")
+    .filter((t) => t.type !== "deposit")
     .reduce((sum, t) => sum + t.amount, 0);
   const highestTransaction = Math.max(...transactions.map((t) => t.amount));
 
@@ -132,10 +99,10 @@ const Transaction =  () => {
             onChange={(e) => setFilters({ ...filters, type: e.target.value })}
           >
             <option value="">All Types</option>
-            <option value="Deposit">Deposit</option>
-            <option value="Withdraw">Withdraw</option>
-            <option value="Transfer">Transfer</option>
-            <option value="Loan">Loan</option>
+            <option value="deposit">Deposit</option>
+            <option value="withdraw">Withdraw</option>
+            <option value="transfer">Transfer</option>
+            <option value="loan">Loan</option>
           </select>
 
           <select
@@ -143,7 +110,7 @@ const Transaction =  () => {
             onChange={(e) => setFilters({ ...filters, status: e.target.value })}
           >
             <option value="">All Status</option>
-            <option value="Success">Success</option>
+            <option value="success">Success</option>
             <option value="Failed">Failed</option>
             <option value="Pending">Pending</option>
           </select>
@@ -170,10 +137,12 @@ const Transaction =  () => {
 
         {/* Transaction Table */}
         <div className="overflow-y-auto h-96">
-          <table className="table w-full text-white">
+          <table className="table w-full text-white ">
             <thead>
-              <tr>
-                <th>ID</th>
+              <tr className="">
+                <th>Transaction ID</th>
+                <th>Sender</th>
+                <th>Receiver</th>
                 <th>Type</th>
                 <th>Amount</th>
                 <th>Status</th>
@@ -189,15 +158,37 @@ const Transaction =  () => {
                 </tr>
               ) : (
                 filteredTransactions.map((txn) => (
-                  <tr key={txn.id} className="hover:bg-gray-700">
-                    <td>{txn.id}</td>
-                    <td>{txn.type}</td>
+                  <tr key={txn._id} className="hover:bg-gray-700">
+                    <td>{txn._id}</td>
+                    <td>
+                      <span>{txn.sender}⬆️</span>
+                      <br />
+                      <span>{txn.senderAC}</span>
+                    </td>
+                    <td>
+                      <span>{txn.receiver}⬇️</span>
+                      <br />
+                      <span>{txn.receiverAC}</span>
+                    </td>
+                    <td>
+                    
+                    <span>
+                      {txn.type === "deposit" && "Deposit"}
+                      {txn.type === "withdraw" && "Withdraw"}
+                      {txn.type === "transfer" && "Transfer"}
+                      {txn.type === "loan" && "Loan"}
+
+                      
+                    </span>
+                    </td>
                     <td>${txn.amount}</td>
                     <td
                       className={`font-bold ${
-                        txn.status === "Success"
+                        txn.status === "success"
                           ? "text-green-400"
-                          : "text-red-400"
+                          : txn.status === "failed"
+                          ? "text-red-400"
+                          : "text-yellow-400"
                       }`}
                     >
                       {txn.status}
@@ -232,6 +223,7 @@ const Transaction =  () => {
         </div> */}
 
         {/* Export Buttons */}
+
         <div className="flex gap-4">
           <button onClick={exportCSV} className="btn btn-primary">
             📥 Download CSV

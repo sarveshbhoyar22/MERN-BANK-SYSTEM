@@ -5,7 +5,7 @@ import axios from "axios";
 
 const TransferMoney = () => {
   const [receiverAccountNumber, setAccountNumber] =
-    React.useState("6940848846");
+    React.useState("44530124689");
   const [amount, setAmount] = React.useState("");
   const { authUser: user } = useAuthContext();
   const [loading, setloading] = React.useState(true);

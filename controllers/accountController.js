@@ -50,6 +50,22 @@ export const depositMoney = asyncHandler(async (req, res) => {
   account.balance += parseInt(amount);
   await account.save();
 
+   const transaction = await Transaction.create({
+     sender: account,
+     receiver: account,
+     amount,
+     type: "deposit",
+     status: "success",
+   });
+
+   await transaction.save();
+
+   if (transaction) {
+     console.log("Deposit-transaction saved successfully");
+   } else {
+     console.log("Deposit-transaction not saved successfully");
+   }
+
   const depositNotification = new Notification({
     user: user._id,
     message: `You have successfully deposited $${amount} to your account.`,
@@ -72,6 +88,8 @@ export const depositMoney = asyncHandler(async (req, res) => {
     "Deposit Notification",
     `You have successfully deposited $${amount}.`
   );
+
+ 
 
   res.status(200).json({
     message: `$${amount} deposited successfully`,
@@ -103,6 +121,23 @@ export const withdrawMoney = asyncHandler(async (req, res) => {
   account.balance = account.balance - parseInt(amount);
   await account.save();
 
+  const transaction = await Transaction.create({
+    sender: account,
+    receiver: null,
+    amount,
+    type: "withdraw",
+    status: "success",
+  });
+
+  await transaction.save();
+
+  if(transaction){
+    console.log("Withdraw-transaction saved successfully");
+  }else{
+    console.log("Withdraw-transaction not saved successfully");
+  }
+
+
   const withdrawNotification = new Notification({
     user: user._id,
     message: `You have successfully withdrawn $${amount} from your account.`,
@@ -125,6 +160,8 @@ export const withdrawMoney = asyncHandler(async (req, res) => {
     "Deposit Notification",
     ` You have successfully withdrawn $${amount} from your account.`
   );
+
+  
 
   res.status(200).json({
     message: `₹${amount} withdrawn successfully`,
@@ -180,7 +217,7 @@ export const transferMoney = asyncHandler(async (req, res) => {
     amount,
     type: "transfer",
     status: "success",
-    date: new Date(),
+    
   });
 
   await transaction.save();
@@ -265,8 +302,13 @@ export const getTransaction = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "User account not found" });
     }
   
-    const transaction = await Transaction.find({
-      $or: [{ sender: userAccount._id }, { receiver: userAccount._id }],
+    const transactions = await Transaction.find({
+      $or: [
+        { sender: userAccount._id },
+        { receiver: userAccount._id },
+        { type: "deposit", sender: user._id },
+        { type: "withdraw", sender: user._id },
+      ],
     })
       .populate({
         path: "sender",
@@ -276,9 +318,9 @@ export const getTransaction = asyncHandler(async (req, res) => {
         path: "receiver",
         populate: { path: "user", select: "name email" },
       })
-      .sort({ date: -1 }); // Sort by latest transactions first
+      .sort({ createdAt: -1 }); // Sort by latest transactions first
   
-    res.status(200).json(transaction);
+    res.status(200).json(transactions);
   } catch (error) {
     console.error("Error fetching transactions:", error);
     res.status(500).json({ message: "Internal server error" });

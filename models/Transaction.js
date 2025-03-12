@@ -13,7 +13,7 @@ const TransactionSchema =
             type: Number,
             required: true,
         },
-        date: {
+        createdAt: {
             type: Date,
             default: Date.now,
         },
@@ -27,7 +27,8 @@ const TransactionSchema =
             enum: ["success", "failed","pending"],
             default: "success",
         },
-    })
+    },
+    { timestamps: true })
 
 const Transaction = mongoose.model("Transaction", TransactionSchema);
 export default Transaction;

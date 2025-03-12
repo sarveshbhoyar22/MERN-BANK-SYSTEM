@@ -18,13 +18,13 @@ const Mainfile = () => {
           <div className="stat-title text-lg">
             Account Number:
             <span className=" ml-2 stat-desc text-lg text-secondary">
-              {user?.account?.accountNumber}
+              {user?.accountNumber}
             </span>
           </div>
           <div className="stat-title text-lg">
             email:
             <span className=" ml-2 stat-desc text-secondary text-lg">
-              {user.email}
+              {user?.email}
             </span>
           </div>
           <div className="stat-title text-lg">

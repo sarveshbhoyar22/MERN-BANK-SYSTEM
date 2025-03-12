@@ -7,7 +7,7 @@ import {
   withdrawMoney,
   transferMoney
 } from "../controllers/accountController.js";
-import { getUserTransactions } from "../controllers/transactionController.js";
+
 
 
 const router = express.Router();
@@ -18,7 +18,7 @@ router.post("/withdraw/", protect, withdrawMoney);
 router.post("/transfer", protect, transferMoney);
 router.post("/admin", protect , adminOnly, adminInfo); 
 router.put("/update-role", protect, adminOnly, updateUserRole);
-router.put("/getusertransaction", protect, adminOnly, getUserTransactions);
+
 router.post("/delete-user", protect, adminOnly, deleteUser);
  
 export default router; 

@@ -46,10 +46,28 @@ export const adminInfo = asyncHandler(async (req, res) => {
 
 })
 
+// export const getUsers = asyncHandler(async (req, res) => {
+//   const users = await User.find().select("password"); // Exclude password
+//   res.status(200).json(users);
+// });
+
 export const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find().select("password"); // Exclude password
+  const { query } = req.query; // Get search query from request
+
+  // Build a search condition to find users by name or account number
+  const searchCondition = query
+    ? {
+        $or: [
+          { name: { $regex: query, $options: "i" } }, // Case-insensitive name search
+          { accountNumber: query }, // Exact account number match
+        ],
+      }
+    : {};
+
+  const users = await User.find(searchCondition).select("-password"); // Exclude password field
   res.status(200).json(users);
 });
+
 
 export const getUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select("-password");

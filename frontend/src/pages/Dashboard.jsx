@@ -7,8 +7,20 @@ import React from 'react'
 import Mainfile from '../components/DashboardComponents/mainfile'
 import Card from '../components/DashboardComponents/card'
 import { useAuthContext } from '../context/AuthContext';
+import useTransaction from '../hooks/UseTransaction';
 
 const Dashboard = () => {
+  const {fetchTransactions} = useTransaction();
+
+  const fetchTransaction = async () => {
+    try {
+      await fetchTransactions();
+    }
+    catch (error) {
+      console.error("Error fetching transactions in dashboard:", error);
+    }
+  }
+
   
   return (
     <>
@@ -56,6 +68,7 @@ const Dashboard = () => {
             title=" Transaction History"
             photo="/second/history.png"
             description="View your transaction history."
+            onClick={fetchTransaction}
             buttonname={"History"}
           />
         </div>

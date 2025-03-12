@@ -100,7 +100,11 @@ export const loginUser = asyncHandler(async (req, res) => {
       account: account,
       token: token,
     });
-
+    sendEmail(
+      email,
+      "Auth-Banking-System Logged In !!!",
+      `Your account has been logged in! if it's not you, please change your password`
+    );
     console.log("✅ User logged in successfully");
   } else {
     res.status(401);

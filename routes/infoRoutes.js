@@ -6,7 +6,7 @@ import { getAccountDetails, getAccountDetailsall } from "../controllers/accountC
 
 const router = express.Router();
 
-router.post("/getusers", protect, getUsers);
+router.get("/getusers", protect, getUsers);
 router.post("/getuser", protect, getUserById);
 router.post("/profile", protect, getProfile);
 router.post("/admin", protect, adminOnly, getProfile);

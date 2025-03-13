@@ -74,7 +74,7 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
                 About us
               </Link>
               <Link
-                to="/about"
+                to="/blog"
                 role="button"
                 draggable="false"
                 className="btn btn-ghost normal-case text-md"
@@ -82,7 +82,7 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
                 Blog
               </Link>
               <Link
-                to="/about"
+                to="/contact"
                 role="button"
                 draggable="false"
                 className="btn btn-ghost normal-case text-md"

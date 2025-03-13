@@ -1,43 +1,37 @@
-// import { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 import { useState, useEffect } from "react";
-import axios from "axios";
-import UseTransaction from "../../hooks/UseTransaction";
 import moment from "moment";
+import UseTransaction from "../../hooks/UseTransaction";
 import { useAuthContext } from "../../context/AuthContext";
+import useScreenSize from "../../hooks/Usescreensize"; // Ensure correct import
 
 const Transaction = () => {
   const [transactions, setTransactions] = useState([]);
-  const {authuser:user} = useAuthContext();
+  const { authuser: user } = useAuthContext();
   const [filteredTransactions, setFilteredTransactions] = useState([]);
-  const [filters, setFilters] = useState({
-    type: "",
-    status: "",
-    date: "",
-  });
-
+  const [filters, setFilters] = useState({ type: "", status: "", date: "" });
   const { transactions: transactionsData, loading, error } = UseTransaction();
+  const { width } = useScreenSize(); // Get screen width for responsiveness
 
+  // Fetch Transactions
   useEffect(() => {
     if (transactionsData) {
-      console.log("Fetched Transaction", transactionsData);
-      const formattedTransactionData = transactionsData.map((txn) => ({
+      console.log("Fetched Transactions:", transactionsData);
+      const formattedTransactions = transactionsData.map((txn) => ({
         _id: txn?._id,
         type: txn?.type || "unknown",
         amount: txn?.amount,
         status: txn?.status,
-
         date: moment(txn?.createdAt).format("DD-MM-YYYY hh:mm A") || "N/A",
-
         receiver: txn?.receiver?.user?.name,
         sender: txn?.sender?.user?.name,
         receiverAC: txn?.receiver?.user?.email,
         senderAC: txn?.sender?.user?.email,
       }));
-      setFilteredTransactions(formattedTransactionData);
-      setTransactions(formattedTransactionData);
+      setFilteredTransactions(formattedTransactions);
+      setTransactions(formattedTransactions);
     }
   }, [transactionsData]);
 
@@ -51,8 +45,7 @@ const Transaction = () => {
     if (filters.date) {
       filtered = filtered.filter(
         (t) =>
-          moment(t.date, "DD-MM-YYYY hh:mm A").format("YYYY-MM-DD") ===
-          filters.date
+          moment(t.date, "DD-MM-YYYY").format("YYYY-MM-DD") === filters.date
       );
     }
     setFilteredTransactions(filtered);
@@ -65,7 +58,9 @@ const Transaction = () => {
   const totalOutflow = transactions
     .filter((t) => t.type !== "deposit")
     .reduce((sum, t) => sum + t.amount, 0);
-  const highestTransaction = Math.max(...transactions.map((t) => t.amount));
+  const highestTransaction = transactions.length
+    ? Math.max(...transactions.map((t) => t.amount))
+    : 0;
 
   // Pie Chart Data
   const categoryData = [
@@ -76,7 +71,7 @@ const Transaction = () => {
   ];
   const COLORS = ["#FF5733", "#33FF57", "#3357FF", "#FFC300"];
 
-  // Download CSV
+  // Export CSV Function
   const exportCSV = () => {
     const ws = XLSX.utils.json_to_sheet(filteredTransactions);
     const wb = XLSX.utils.book_new();
@@ -86,14 +81,22 @@ const Transaction = () => {
 
   return (
     <div className="p-6 bg-black text-white">
-      <div className="mt-20 ">
-        <h2 className="text-2xl font-bold mb-4 flex gap-3">
-          <img src="/second/history.png" className="w-10 h-10" alt="" />
+      <div className="mt-20">
+        <h2 className="text-2xl font-bold mb-4 flex items-center gap-3">
+          <img
+            src="/second/history.png"
+            className="w-10 h-10"
+            alt="History Icon"
+          />
           Transaction History
         </h2>
 
         {/* Filters */}
-        <div className="flex gap-4 mb-4">
+        <div
+          className={`flex flex-wrap ${
+            width < 640 ? "flex-col gap-2" : "gap-4"
+          } mb-4`}
+        >
           <select
             className="select select-bordered bg-gray-800"
             onChange={(e) => setFilters({ ...filters, type: e.target.value })}
@@ -111,8 +114,8 @@ const Transaction = () => {
           >
             <option value="">All Status</option>
             <option value="success">Success</option>
-            <option value="Failed">Failed</option>
-            <option value="Pending">Pending</option>
+            <option value="failed">Failed</option>
+            <option value="pending">Pending</option>
           </select>
 
           <input
@@ -123,7 +126,11 @@ const Transaction = () => {
         </div>
 
         {/* Summary */}
-        <div className="grid grid-cols-3 gap-4 mb-4 w-[70%]">
+        <div
+          className={`grid ${
+            width < 640 ? "grid-cols-1" : "grid-cols-3"
+          } gap-4 mb-4`}
+        >
           <div className="bg-gray-900 p-6 rounded-lg border-2 border-green-900">
             <h3>Total Inflow: 💰 ${totalInflow}</h3>
           </div>
@@ -136,10 +143,10 @@ const Transaction = () => {
         </div>
 
         {/* Transaction Table */}
-        <div className="overflow-y-auto h-96">
-          <table className="table w-full text-white ">
+        <div className="overflow-x-auto">
+          <table className="table w-full text-white">
             <thead>
-              <tr className="">
+              <tr>
                 <th>Transaction ID</th>
                 <th>Sender</th>
                 <th>Receiver</th>
@@ -152,7 +159,7 @@ const Transaction = () => {
             <tbody>
               {filteredTransactions.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="text-center py-4">
+                  <td colSpan="7" className="text-center py-4">
                     No Transactions Found
                   </td>
                 </tr>
@@ -161,26 +168,16 @@ const Transaction = () => {
                   <tr key={txn._id} className="hover:bg-gray-700">
                     <td>{txn._id}</td>
                     <td>
-                      <span>{txn.sender}⬆️</span>
+                      {txn.sender} ⬆️
                       <br />
-                      <span>{txn.senderAC}</span>
+                      {txn.senderAC}
                     </td>
                     <td>
-                      <span>{txn.receiver}⬇️</span>
+                      {txn.receiver} ⬇️
                       <br />
-                      <span>{txn.receiverAC}</span>
+                      {txn.receiverAC}
                     </td>
-                    <td>
-                    
-                    <span>
-                      {txn.type === "deposit" && "Deposit"}
-                      {txn.type === "withdraw" && "Withdraw"}
-                      {txn.type === "transfer" && "Transfer"}
-                      {txn.type === "loan" && "Loan"}
-
-                      
-                    </span>
-                    </td>
+                    <td>{txn.type}</td>
                     <td>${txn.amount}</td>
                     <td
                       className={`font-bold ${
@@ -201,30 +198,8 @@ const Transaction = () => {
           </table>
         </div>
 
-        {/* Charts */}
-        {/* <div className="flex justify-center my-6">
-          <PieChart width={300} height={300}>
-            <Pie
-              data={categoryData}
-              cx={150}
-              cy={150}
-              outerRadius={80}
-              dataKey="value"
-            >
-              {categoryData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
-        </div> */}
-
         {/* Export Buttons */}
-
-        <div className="flex gap-4">
+        <div className="flex gap-4 mt-4">
           <button onClick={exportCSV} className="btn btn-primary">
             📥 Download CSV
           </button>

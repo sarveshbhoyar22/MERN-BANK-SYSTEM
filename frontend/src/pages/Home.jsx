@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import BackgroundVideo from '../components/BackgrouondVideo';
 import Secondpage from '../components/secondpage';
 import { useAuthContext } from '../context/AuthContext';
+import Contact from './Contact';
 
 const Home = () => {
   const { authUser: user } = useAuthContext();
@@ -43,6 +44,7 @@ const Home = () => {
       {/* second part */}
 
       {/* <Secondpage/> */}
+      
     </>
   );
 }

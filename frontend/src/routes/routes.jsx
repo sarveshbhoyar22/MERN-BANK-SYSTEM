@@ -22,6 +22,9 @@ import loading from "../components/loading.jsx";
 import CheckBalance from "../pages/CheckBalance.jsx";
 import Layout from "../layouts/layout.jsx";
 import ScrollToTop from "../utils/ScrollToTop.jsx";
+import Contact from "../pages/Contact.jsx";
+import Blog from "../pages/Blog.jsx";
+
 
 
 
@@ -51,7 +54,7 @@ const AppRoutes = () => {
   return (
     <Router>
       {/* <Navbar /> */}
-      <ScrollToTop/>
+      <ScrollToTop />
       <Layout>
         <Routes>
           {/* Public Routes */}
@@ -61,6 +64,9 @@ const AppRoutes = () => {
           />
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Home />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/blog" element={<Blog />} />
+          
 
           {/* User Routes */}
 

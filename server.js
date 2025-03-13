@@ -11,6 +11,7 @@ import CookieParser from "cookie-parser";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import infoRoutes from "./routes/infoRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
+import blogRoutes from "./routes/blogroutes.js";
 // ..........................
 
 dotenv.config();
@@ -73,6 +74,7 @@ app.use("/api/loan", LoanRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/info",infoRoutes)
 app.use("/api/transaction", transactionRoutes);
+app.use("/blogs",blogRoutes)
 
 // Basic Route
 app.get("/", (req, res) => {

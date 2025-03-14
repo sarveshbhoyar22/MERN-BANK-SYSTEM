@@ -12,6 +12,7 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 import infoRoutes from "./routes/infoRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import blogRoutes from "./routes/blogroutes.js";
+import forgetPasswordRoutes from "./routes/forgetPasswordRoutes.js";
 // ..........................
 
 dotenv.config();
@@ -37,6 +38,7 @@ app.use(morgan("dev"));
 //socketio
 import { Server } from "socket.io";
 import http from "http";
+import { forgetPassword } from "./controllers/forgetPasswordController.js";
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -75,6 +77,7 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/info",infoRoutes)
 app.use("/api/transaction", transactionRoutes);
 app.use("/blogs",blogRoutes)
+app.use("/forget", forgetPasswordRoutes);
 
 // Basic Route
 app.get("/", (req, res) => {

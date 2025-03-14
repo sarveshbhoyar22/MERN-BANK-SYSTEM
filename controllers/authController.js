@@ -98,6 +98,7 @@ export const loginUser = asyncHandler(async (req, res) => {
       email: user.email,
       role: user.role,
       account: account,
+      accountNumber: account.accountNumber,
       token: token,
     });
     sendEmail(

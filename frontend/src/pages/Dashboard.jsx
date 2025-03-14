@@ -68,6 +68,14 @@ const Dashboard = () => {
               onClick={fetchTransaction}
               buttonname={"History"}
             />
+            <Card
+              link="/users"
+              title=" Other Users"
+              photo="/second/user.png"
+              description="Find other users."
+              onClick={fetchTransaction}
+              buttonname={"History"}
+            />
           </div>
         </div>
       ) : (
@@ -109,6 +117,14 @@ const Dashboard = () => {
               title=" Transaction History"
               photo="/second/history.png"
               description="View your transaction history."
+              onClick={fetchTransaction}
+              buttonname={"History"}
+            />
+            <Card
+              link="/users"
+              title=" Other Users"
+              photo="/second/user.png"
+              description="Find other users."
               onClick={fetchTransaction}
               buttonname={"History"}
             />

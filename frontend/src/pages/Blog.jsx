@@ -4,16 +4,18 @@ import BlogForm from "../components/BlogForm";
 import BlogList from "../components/BlogList";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
+import { Navigate } from "react-router-dom";
 
 const BlogPage = () => {
   const [blogs, setBlogs] = useState([]);
   const [open, setOpen] = useState(false);
-  const {authUser:user} = useAuthContext(); // Destructure user from useAuthContext
+  const {authUser:user} = useAuthContext(); 
 
   const handleCreateBlog = () => {
-    if(user){
+    if(user !== null){
         
         setOpen(!open);
+        
     }
     else{
         toast.error("Please login to create a blog");

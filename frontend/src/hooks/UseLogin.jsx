@@ -54,7 +54,7 @@ const UseLogin = () => {
 
     } catch (error) {
       console.log(error.message);
-      toast.error("error in login", error.message);
+      toast.error("Invalid Credentials", error.message);
     } finally {
       setloading(false);
     }

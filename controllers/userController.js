@@ -52,21 +52,35 @@ export const adminInfo = asyncHandler(async (req, res) => {
 // });
 
 export const getUsers = asyncHandler(async (req, res) => {
-  const { query } = req.query; // Get search query from request
+  try {
+    // Fetch all users
+    const users = await User.find().select("-password"); // Exclude password field
 
-  // Build a search condition to find users by name or account number
-  const searchCondition = query
-    ? {
-        $or: [
-          { name: { $regex: query, $options: "i" } }, // Case-insensitive name search
-          { accountNumber: query }, // Exact account number match
-        ],
-      }
-    : {};
+    // Fetch all accounts
+    const accounts = await Account.find();
 
-  const users = await User.find(searchCondition).select("-password"); // Exclude password field
-  res.status(200).json(users);
+    // Merge user data with account details
+    const usersWithAccounts = users.map((user) => {
+      const userAccount = accounts.find(
+        (acc) => acc._id.toString() === user.accountId
+      );
+      return {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        accountNumber: userAccount ? userAccount.accountNumber : "N/A",
+      };
+    });
+
+    res.json(usersWithAccounts); // Send merged user data
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
 });
+
+
 
 
 export const getUserById = asyncHandler(async (req, res) => {
@@ -81,9 +95,9 @@ export const getUserById = asyncHandler(async (req, res) => {
 });
 
 export const updateUser = asyncHandler(async (req, res) => {
-  const { role, password, ...updateData } = req.body; // Prevent role updates
+  const { role, ...updateData } = req.body; // Prevent role updates
 
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.user._id);
   if (!user) {
     res.status(404);
     throw new Error("User not found");
@@ -105,16 +119,24 @@ export const updateUser = asyncHandler(async (req, res) => {
   }
 
   // Hash new password if provided
-  if (password) {
-    const salt = await bcrypt.genSalt(10);
-    updateData.password = await bcrypt.hash(password, salt);
+ 
+    
+   
+
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, updateData, {
+    new: true,
+    runValidators: true,
+  }).select("-password");
+
+  if (!updatedUser) { 
+    res.status(400);
+    throw new Error("Error updating user");
   }
 
-  const updatedUser = await User.findByIdAndUpdate(req.params.id, updateData, {
-    new: true,
-  }).select("-password");
   res.status(200).json(updatedUser);
 });
+
+
 
 export const deleteUser = asyncHandler(async (req, res) => {
 

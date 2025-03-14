@@ -65,7 +65,7 @@ const BlogForm = ({ onBlogAdded }) => {
 
         <button
           type="submit"
-          className="bg-blue-500 text-white p-2 rounded w-full"
+          className="bg-blue-500 text-white p-2 rounded w-full cursor-pointer"
         >
           Submit
         </button>

@@ -33,7 +33,7 @@ const BlogCard = ({ blog, onBlogDeleted }) => {
       <p className="text-sm text-gray-400">{blog.createdAt.split("T")[0]}</p>
       {user?.name === blog.author && (<button
         onClick={handleDelete}
-        className="mt-2 bg-red-500 text-white px-3 py-1 rounded"
+        className="mt-2 bg-red-500 text-white px-3 py-1 rounded cursor-pointer"
       >
         Delete
       </button> )}

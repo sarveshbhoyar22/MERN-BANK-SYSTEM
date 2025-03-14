@@ -24,6 +24,9 @@ import Layout from "../layouts/layout.jsx";
 import ScrollToTop from "../utils/ScrollToTop.jsx";
 import Contact from "../pages/Contact.jsx";
 import Blog from "../pages/Blog.jsx";
+import User from "../../../models/User.js";
+import Users from "../pages/Users.jsx";
+import UserProfile from "../pages/UserProfile.jsx";
 
 
 
@@ -66,6 +69,7 @@ const AppRoutes = () => {
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/users" element={<Users />} />
           
 
           {/* User Routes */}
@@ -119,7 +123,7 @@ const AppRoutes = () => {
             path="/profile"
             element={
               <PrivateRoute
-                element={user ? <Profile /> : <Navigate to="/login" />}
+                element={user ? <UserProfile /> : <Navigate to="/login" />} 
                 allowedRoles={["user", "admin"]}
               />
             }

@@ -54,7 +54,7 @@ export const registerUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      accountId: account._id,
+      account: account,
       accountNumber: account.accountNumber,
       token: generateToken(user._id),
     });
@@ -71,6 +71,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email }).populate("_id");
   const token = generateToken(user._id);
+  
   if (user && (await user.matchPassword(password))) {
     res.cookie("jwt", token, {
       httpOnly: true, // Prevents XSS attacks
@@ -98,7 +99,6 @@ export const loginUser = asyncHandler(async (req, res) => {
       email: user.email,
       role: user.role,
       account: account,
-      accountNumber: account.accountNumber,
       token: token,
     });
     sendEmail(
@@ -115,6 +115,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 
 export const getProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id).populate("accountId");
+  const account = await Account.findById(user.accountId);
   if (user) {
     res.json({
       _id: user._id,
@@ -122,6 +123,8 @@ export const getProfile = asyncHandler(async (req, res) => {
       email: user.email,
       role: user.role,
       accountId: user.accountId,
+      account: account,
+      
     });
   } else {
     res.status(404);

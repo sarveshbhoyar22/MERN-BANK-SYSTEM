@@ -9,6 +9,8 @@ import Card from '../components/DashboardComponents/card'
 import { useAuthContext } from '../context/AuthContext';
 import useTransaction from '../hooks/UseTransaction';
 import useScreenSize from '../hooks/Usescreensize';
+import { Link } from 'react-router-dom';
+
 
 const Dashboard = () => {
   const {fetchTransactions} = useTransaction();
@@ -28,7 +30,9 @@ const Dashboard = () => {
     <>
       {width > 768 ? (
         <div className=" bg-black ">
-          <Mainfile />
+         
+            <Mainfile />
+         
           <div className="p-3 flex items-center w-auto m-auto sm:justify-center gap-4">
             <Card
               link="/deposit"
@@ -80,7 +84,9 @@ const Dashboard = () => {
         </div>
       ) : (
         <div className=" bg-black ">
-          <Mainfile />
+          <Link to="/profile">
+            <Mainfile />
+          </Link>
           <div className="p-5 grid grid-cols-2 items-center w-auto m-auto justify-center gap-5">
             <Card
               link="/deposit"

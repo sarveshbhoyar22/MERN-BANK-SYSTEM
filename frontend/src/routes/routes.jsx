@@ -27,6 +27,8 @@ import Blog from "../pages/Blog.jsx";
 import User from "../../../models/User.js";
 import Users from "../pages/Users.jsx";
 import UserProfile from "../pages/UserProfile.jsx";
+import WithdrawMoney from "../pages/AccountManagementPages/WithdrawMoney.jsx";
+import AboutUs from "../components/AboutUs.jsx";
 
 
 
@@ -70,7 +72,7 @@ const AppRoutes = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/users" element={<Users />} />
-          
+          <Route path="/about" element={<AboutUs />} />
 
           {/* User Routes */}
 
@@ -96,7 +98,7 @@ const AppRoutes = () => {
             path="/withdraw"
             element={
               <PrivateRoute
-                element={user ? <Withdraw /> : <Navigate to="/login" />}
+                element={user ? <WithdrawMoney /> : <Navigate to="/login" />}
                 allowedRoles={["user"]}
               />
             }
@@ -123,7 +125,7 @@ const AppRoutes = () => {
             path="/profile"
             element={
               <PrivateRoute
-                element={user ? <UserProfile /> : <Navigate to="/login" />} 
+                element={user ? <UserProfile /> : <Navigate to="/login" />}
                 allowedRoles={["user", "admin"]}
               />
             }

@@ -10,7 +10,7 @@ import axios from "axios";
 const WithdrawMoney = () => {
   const [amount, setAmount] = React.useState("");
   const { authUser: user } = useAuthContext();
-  const [accountNumber] = React.useState(user.account.accountNumber);
+  const [accountNumber] = React.useState(user.accountNumber);
   const [loading, setloading] = React.useState(true);
 
   const handleSubmit = async (e) => {

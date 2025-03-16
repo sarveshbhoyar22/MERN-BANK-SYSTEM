@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/User.js";
-import bcrypt from "bcryptjs";
+import bcrypt, { compare } from "bcryptjs";
 import nodemailer from "nodemailer";
 import { sendEmail } from "../utils/emailService.js";
 
@@ -62,15 +62,19 @@ export const resetPassword = asyncHandler(async (req, res) => {
 
   // console.log(email,newPassword)
   const user = await User.findOne({ email }); 
-  if (!user) {
+  if (!user) { 
     res.status(404);
     throw new Error("User not found");
   }
+  
 
-  // Hash new password
-  const salt = await bcrypt.genSalt(10);
-  user.password = await bcrypt.hash(newPassword, salt);
+  user.password = newPassword;
   await user.save();
+  
+  
+  
+
+  
 
   
 

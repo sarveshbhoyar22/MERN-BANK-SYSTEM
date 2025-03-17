@@ -16,7 +16,7 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
 
   return (
     <>
-      <div className="navbar  text-white shadow-sm  fixed z-10 ">
+      <div className="navbar bg-gradient-to-b from-gray-900  to-black  text-white shadow-sm  fixed z-10 ">
         {width < 768 ? (
           <div className="navbar-start dropdown ">
             <div
@@ -40,18 +40,17 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
                 />{" "}
               </svg>
             </div>
-            <div className='mt-10 -ml-8'>
-
-            <ul
-              tabIndex={0}
-              className="menu menu-lg gap-4 dropdown-content bg-base-100 rounded-box z-1 mt- w-52 p-2 shadow"
+            <div className="mt-10 -ml-8">
+              <ul
+                tabIndex={0}
+                className="menu menu-lg gap-4 dropdown-content bg-base-100 rounded-box z-1 mt- w-52 p-2 shadow"
               >
-              <Link to="/">Home</Link>
-              <Link to="/about">About us</Link>
-              <Link to="/blog">Blog</Link>
-              <Link to="/contact">Contact</Link>
-            </ul>
-              </div>
+                <Link to="/">Home</Link>
+                <Link to="/about">About us</Link>
+                <Link to="/blog">Blog</Link>
+                <Link to="/contact">Contact</Link>
+              </ul>
+            </div>
           </div>
         ) : (
           <div className="navbar-start -mr-1  ">
@@ -107,29 +106,7 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
           </div>
         )}
         <div className="navbar-end">
-          {user && (
-            <button className="btn btn-ghost btn-circle">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {" "}
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />{" "}
-              </svg>
-            </button>
-          )}
-          {user && (
-          
-            <NotificationDropdown/>
-          )}
+          {user && <NotificationDropdown />}
 
           <div className="dropdown dropdown-end gap-2 m-2">
             <div

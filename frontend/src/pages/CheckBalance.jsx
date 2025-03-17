@@ -1,5 +1,6 @@
 import React from "react";
 import { useAuthContext } from "../context/AuthContext";
+import Goback from "../components/Goback";
 
 const CheckBalance = () => {
   const { authUser: user } = useAuthContext();
@@ -33,22 +34,26 @@ const CheckBalance = () => {
             <div className="hero-overlay"></div>
             <div className="hero-content text-neutral-content text-center">
               <div className="max-w-md">
-                <h1 className="mb-5 text-5xl font-bold">Online Auth-BANK</h1>
-                <p className="mb-5">
+                <h1 className="mb-5 flex items-center sm:gap-8 sm:text-4xl text-3xl font-bold">
+                  {" "}
+                  <Goback />
+                  Online Auth-BANK
+                </h1>
+                <p className="mb-5 sm:block hidden">
                   Easily view your current account balance in real-time. Stay
                   updated on your available funds before making transactions.
                   This feature ensures financial awareness and helps in managing
                   expenses effectively.
                 </p>
                 <button
-                  className="btn btn-success text-white text-xl p-8"
+                  className="btn bg-blue-500 text-white text-md p-2"
                   onClick={handleclick}
                 >
                   Check Balance
                 </button>
 
                 <dialog id="my_modal_1" className="modal h-full">
-                  <div className="modal-box border-2 h-1/2 border-green-800 flex flex-col justify-center overflow-hidden">
+                  <div className="modal-box border-2 h-1/2 border-blue-400 flex flex-col justify-center overflow-hidden">
                     {/* <h3 className="font-bold text-2xl absolute justify-center"></h3> */}
                     <p className="py-4">
                       {loading ? (
@@ -56,7 +61,6 @@ const CheckBalance = () => {
                       ) : (
                         <div className="flex flex-col items-center ">
                           <span className="text-gray-400">
-
                             <img
                               src="/second/checkBalance.png"
                               className="w-20 animate-pulse"

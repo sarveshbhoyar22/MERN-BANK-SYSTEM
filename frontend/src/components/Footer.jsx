@@ -1,176 +1,161 @@
-import React from 'react'
-import { useAuthContext } from '../context/AuthContext';
-import useScreenSize from '../hooks/Usescreensize';
+import React from "react";
+import { useAuthContext } from "../context/AuthContext";
+import useScreenSize from "../hooks/Usescreensize";
 
 const Footer = () => {
-    const {authUser: user} = useAuthContext();
-    const {width} = useScreenSize();
+  const { authUser: user } = useAuthContext();
+  const { width } = useScreenSize();
+
   return (
-    <>
-      {width > 768 ? (
-        <div>
-          <footer className="footer sm:footer-horizontal text-base-content p-10 bg-black">
-            <aside className="flex flex-col justify-center text-center items-center">
-              <img src="/logo.png" className="rounded-full w-20" alt="" />
-              <p>
-                Auth-Bank Ltd.
-                <br />
-                Providing reliable Web-dev since 2022
-              </p>
-            </aside>
-            <nav>
-              <h6 className="footer-title">Services</h6>
-              <a className="link link-hover">Branding</a>
-              <a className="link link-hover">Design</a>
-              <a className="link link-hover">Marketing</a>
-              <a className="link link-hover">Advertisement</a>
-            </nav>
-            <nav>
-              <h6 className="footer-title">Company</h6>
-              <a className="link link-hover">About us</a>
-              <a className="link link-hover">Contact</a>
-              <a className="link link-hover">Jobs</a>
-              <a className="link link-hover">Press kit</a>
-            </nav>
-            <nav>
-              <h6 className="footer-title">Legal</h6>
-              <a className="link link-hover">Terms of use</a>
-              <a className="link link-hover">Privacy policy</a>
-              <a className="link link-hover">Cookie policy</a>
-            </nav>
-            <nav>
-              <h6 className="footer-title">Social</h6>
-              <div className="grid grid-flow-col gap-4">
-                <a>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    className="fill-current"
-                  >
-                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
-                  </svg>
+    <footer className="bg-gradient-to-t from-gray-900 to-black text-white py-10">
+      <div className="divider"></div>
+      <div className="container mx-auto px-6 md:px-12">
+        {/* Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* Logo & Description */}
+          <div className="flex flex-col items-center md:items-start text-center md:text-left">
+            <img
+              src="/logo.png"
+              alt="Logo"
+              className="w-20 h-20 rounded-full shadow-lg"
+            />
+            <p className="mt-3 text-gray-400 text-sm">
+              Auth-Bank Ltd. <br />
+              Providing reliable Web-dev since 2022.
+            </p>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h6 className="text-lg font-semibold mb-3">Services</h6>
+            <ul className="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition"
+                >
+                  Branding
                 </a>
-                <a>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    className="fill-current"
-                  >
-                    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path>
-                  </svg>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition"
+                >
+                  Design
                 </a>
-                <a>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    className="fill-current"
-                  >
-                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path>
-                  </svg>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition"
+                >
+                  Marketing
                 </a>
-              </div>
-            </nav>
-            {user ? <div></div> : ""}
-          </footer>
-          <span className=" text-sm flex flex-col justify-center text-center bg-black">
-            Copyright © 2025 - All right reserved{" "}
-          </span>
-          <span className=" text-sm flex flex-col justify-center text-center bg-black">
-            {" "}
-            Sarvesh Bhoyar (IIT(ISM)Dhanbad){" "}
-          </span>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition"
+                >
+                  Advertisement
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Company Info */}
+          <div>
+            <h6 className="text-lg font-semibold mb-3">Company</h6>
+            <ul className="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition"
+                >
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition"
+                >
+                  Contact
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition"
+                >
+                  Jobs
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition"
+                >
+                  Press Kit
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal & Social Media */}
+          <div>
+            <h6 className="text-lg font-semibold mb-3">Legal</h6>
+            <ul className="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition"
+                >
+                  Terms of Use
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition"
+                >
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition"
+                >
+                  Cookie Policy
+                </a>
+              </li>
+            </ul>
+
+            {/* Social Icons */}
+            <div className="flex gap-4 mt-4">
+              <a href="#" className="hover:text-blue-500 transition">
+                <i className="fab fa-twitter text-2xl"></i>
+              </a>
+              <a href="#" className="hover:text-red-500 transition">
+                <i className="fab fa-youtube text-2xl"></i>
+              </a>
+              <a href="#" className="hover:text-blue-700 transition">
+                <i className="fab fa-facebook text-2xl"></i>
+              </a>
+            </div>
+          </div>
         </div>
-      ) : (
-        <div>
-          <footer className="footer sm:footer-horizontal text-base-content p-10 bg-black">
-            <aside className="flex justify-center text-left items-center">
-              <img src="/logo.png" className="rounded-full w-12" alt="" />
-              <p>
-                Auth-Bank Ltd.
-                <br />
-                Providing reliable Web-dev since 2022
-              </p>
-            </aside>
 
-            <nav className="flex  gap-2">
-              <h6 className="footer-title">Services</h6>
-              <a className="link link-hover">Branding</a>
-              <a className="link link-hover">Design</a>
-              <a className="link link-hover">Marketing</a>
-              <a className="link link-hover">Advertisement</a>
-            </nav>
-
-            <nav className="flex  gap-2">
-              <h6 className="footer-title">Company</h6>
-              <a className="link link-hover">About us</a>
-              <a className="link link-hover">Contact</a>
-              <a className="link link-hover">Jobs</a>
-              <a className="link link-hover">Press kit</a>
-            </nav>
-            <nav className="flex  gap-2">
-              <h6 className="footer-title">Legal</h6>
-              <a className="link link-hover">Terms of use</a>
-              <a className="link link-hover">Privacy policy</a>
-              <a className="link link-hover">Cookie policy</a>
-            </nav>
-
-            <nav>
-              <h6 className="footer-title">Social</h6>
-              <div className="grid grid-flow-col gap-4">
-                <a>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    className="fill-current"
-                  >
-                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
-                  </svg>
-                </a>
-                <a>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    className="fill-current"
-                  >
-                    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path>
-                  </svg>
-                </a>
-                <a>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    className="fill-current"
-                  >
-                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path>
-                  </svg>
-                </a>
-              </div>
-            </nav>
-            {user ? <div></div> : ""}
-          </footer>
-          <span className=" text-sm flex flex-col justify-center text-center bg-black">
-            Copyright © 2025 - All right reserved{" "}
-          </span>
-          <span className=" text-sm flex flex-col justify-center text-center bg-black">
-            {" "}
-            Sarvesh Bhoyar (IIT(ISM)Dhanbad){" "}
-          </span>
+        {/* Copyright Section */}
+        <div className="mt-8 border-t border-gray-700 pt-4 text-center text-gray-500 text-sm">
+          <p>© 2025 Auth-Bank Ltd. All rights reserved.</p>
+          <p>Created by Sarvesh Bhoyar (IIT(ISM) Dhanbad)</p>
         </div>
-      )}
-    </>
+      </div>
+    </footer>
   );
-}
+};
 
-export default Footer
+export default Footer;

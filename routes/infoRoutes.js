@@ -1,5 +1,5 @@
 import express from "express";
-import {getUserById, getUsers, updateUser} from "../controllers/userController.js"
+import {Contactus, getUserById, getUsers, updateUser} from "../controllers/userController.js"
 import { adminOnly, protect } from "../middleware/authMiddleware.js";
 import { getProfile } from "../controllers/authController.js";
 import { getAccountDetails, getAccountDetailsall } from "../controllers/accountController.js";
@@ -12,5 +12,6 @@ router.get("/profile", protect, getProfile);
 router.put("/update-User", protect, updateUser);
 router.post("/admin", protect, adminOnly, getProfile);
 router.post("/getaccountdetails", protect, getAccountDetailsall);
+router.post("/contact",Contactus);
 
 export default router;

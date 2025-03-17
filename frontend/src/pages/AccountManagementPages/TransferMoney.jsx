@@ -1,47 +1,39 @@
-
-import React from "react";
+import React, { useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import Goback from "../../components/Goback";
 
 const TransferMoney = () => {
-  const [receiverAccountNumber, setAccountNumber] =
-    React.useState("44530124689");
-  const [amount, setAmount] = React.useState("");
+  const [receiverAccountNumber, setReceiverAccountNumber] = useState("");
+  const [amount, setAmount] = useState("");
   const { authUser: user } = useAuthContext();
-  const [loading, setloading] = React.useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setloading(true);
+    if (!receiverAccountNumber || !amount) {
+      setError("Please enter both account number and amount.");
+      return;
+    }
 
-    document.getElementById("my_modal_1").showModal();
+    setLoading(true);
+    setError("");
+    document.getElementById("transfer_modal").showModal();
 
-    setTimeout(() => {
-      setAmount(amount);
-      setloading(false);
-    }, 3000);
-
-    const user_id = user.account;
-    const userId = user_id._id;
-    const stringuserId = userId.toString();
-    // console.log(userId);
-
-    console.log(receiverAccountNumber, amount);
-
-    const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+    const token = localStorage.getItem("token");
     if (!token) {
-      console.error("No token found");
+      alert("No token found. Please log in again.");
+      setLoading(false);
       return;
     }
 
     try {
       const response = await axios.post(
         `http://localhost:5000/api/account/transfer`,
-        {
-          amount,
-          receiverAccountNumber,
-        },
+        { amount, receiverAccountNumber },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -51,82 +43,103 @@ const TransferMoney = () => {
         }
       );
 
-      const data = await response.data;
-      console.log(data);
+      console.log(response.data);
     } catch (error) {
       console.error(error);
+      setError("Transaction failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
-      <div className="bg-black flex justify-center items-center h-screen w-auto">
-        <div className="mt-20">
-          <form onSubmit={handleSubmit}>
-            <fieldset className="fieldset w-xs h-96 flex flex-col justify-center bg-base-200 border border-base-300 p-4 rounded-box">
-              <div className="text-center title p-5 text-2xl font-bold flex items-center gap-2 justify-left">
-                <img src="/second/transfer3.png" className="w-15" alt="" />
-                <span>Transfer Money</span>
-              </div>
-              <label className="fieldset-label">Receiver Account Number</label>
-              <input
-                type="accountNumber"
-                className="input"
-                placeholder="Type Your Account_Number"
-                value={receiverAccountNumber}
-                autoFocus
-                onChange={(e) => setAccountNumber(e.target.value)}
-              />
+      {/* Background */}
+      <div className="bg-black min-h-screen flex items-center justify-center">
+        <div className="w-auto max-w-md p-6 bg-black border border-gray-800 rounded-lg shadow-lg">
+          <div className="flex items-center mb-6 space-x-3">
+            <Goback />
+            <img src="/second/transfer3.png" className="w-12" alt="Transfer" />
+            <h2 className="text-white text-2xl font-semibold">
+              Transfer Money
+            </h2>
+          </div>
 
-              <label className="fieldset-label">Amount</label>
-              <input
-                type="amount"
-                className="input"
-                placeholder="$1000"
-                value={amount}
-                onFocus={(e) => (e.target.value = "")}
-                maxLength={5}
-                required
-                onChange={(e) => setAmount(e.target.value)}
-              />
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <label className="block text-gray-300 text-sm">
+              Receiver's Account Number
+            </label>
+            <input
+              type="text"
+              className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg border border-gray-600 focus:outline-none focus:border-blue-500"
+              placeholder="Enter receiver's account number"
+              value={receiverAccountNumber}
+              required
+              onChange={(e) => setReceiverAccountNumber(e.target.value)}
+            />
 
-              <button className="btn btn-neutral mt-4">Send Money</button>
-            </fieldset>
+            <label className="block text-gray-300 text-sm">Amount</label>
+            <input
+              type="number"
+              className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg border border-gray-600 focus:outline-none focus:border-blue-500"
+              placeholder="Enter amount (e.g. 1000)"
+              value={amount}
+              required
+              onChange={(e) => setAmount(e.target.value)}
+            />
+
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:cursor-pointer hover:bg-blue-700 transition-all duration-200 text-white py-2 rounded-lg font-semibold"
+            >
+              Send Money
+            </button>
+
+            {/* Find Users Link */}
+            <Link
+              to="/users"
+              className="block btn  text-blue-400 p-2 "
+            >
+              Find Other Users
+            </Link>
           </form>
         </div>
       </div>
-      <dialog id="my_modal_1" className="modal h-full">
-        <div className="modal-box border-2 h-1/2 border-green-800 flex flex-col justify-center items-center overflow-hidden">
-          {/* <h3 className="font-bold text-2xl absolute justify-center"></h3> */}
-          <div className="py-4">
-            {loading ? (
-              <span className="loading loading-ring loading-xl "></span>
-            ) : (
-              <div className="flex flex-col items-center ">
-                <span className="text-gray-400">
-                  <img
-                    src="/second/checkBalance.png"
-                    className="w-20 animate-pulse"
-                    alt=""
-                  />{" "}
-                </span>{" "}
-                <br />
-                <span className="text-xl font-bold text-center">
-                  Your have successfully transfered{" "}
-                  <br />
-                  <span>
-                    ${amount} to {receiverAccountNumber}
-                  </span>
-                </span>
-                {/* <span className="text-3xl font-bold">${amount}.00</span> */}
-              </div>
-            )}
-          </div>
+
+      {/* Modal */}
+      <dialog id="transfer_modal" className="modal">
+        <div className="modal-box bg-black border h-96 justify-center border-blue-500 text-white text-center flex flex-col items-center">
+          {loading ? (
+            <span className="loading loading-ring loading-lg text-blue-400"></span>
+          ) : error ? (
+            <p className="text-red-500 font-semibold">{error}</p>
+          ) : (
+            <>
+              <img
+                src="/second/checkBalance.png"
+                className="w-16 animate-bounce"
+                alt="Success"
+              />
+              <h3 className="text-xl font-semibold mt-2">
+                Transfer Successful
+              </h3>
+              <p className="text-3xl font-bold mt-2">${amount}.00</p>
+              <p className="text-sm mt-1">
+                Transferred to Account: {receiverAccountNumber}
+              </p>
+            </>
+          )}
           <div className="modal-action">
-            <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
-            </form>
+            <button
+              className="btn btn-neutral"
+              onClick={() => document.getElementById("transfer_modal").close()}
+            >
+              Close
+            </button>
           </div>
         </div>
       </dialog>

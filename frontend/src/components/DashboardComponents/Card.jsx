@@ -1,19 +1,34 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Card = ({ title, photo, description,buttonname,link="" }) => {
+const Card = ({ title, photo, description, buttonname, link = "" }) => {
   return (
-    <Link to={link}>
-    <div className="card bg-base-300 w-44 h-64 border-2 border-gray-800 shadow-sm hover:cursor-pointer ">
-      <figure className=" p-2 rounded-4xl">
-        <img className="h-24 p-2" src={photo} alt="Shoes" />
-      </figure>
-      <div className="card-body">
-        <h2 className="card-title">{title}</h2>
-        <p>{description}</p>
-       
+    <Link to={link} className="group">
+      <div className="bg-black text-white border border-gray-800 shadow-lg rounded-lg w-48 h-72 p-4 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+        {/* Image */}
+        <div className="flex justify-center">
+          <img
+            className="h-24 w-24 object-cover rounded-lg transition-all duration-300 group-hover:scale-110"
+            src={photo}
+            alt={title}
+          />
+        </div>
+
+        {/* Card Content */}
+        <div className="mt-3 text-center">
+          <h2 className="text-lg font-semibold">{title}</h2>
+          <p className="text-gray-400 text-sm mt-1">{description}</p>
+        </div>
+
+        {/* Button */}
+        {buttonname && (
+          <div className="flex justify-center mt-4">
+            <button className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition duration-300">
+              {buttonname}
+            </button>
+          </div>
+        )}
       </div>
-    </div>
     </Link>
   );
 };

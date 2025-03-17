@@ -1,87 +1,87 @@
 import React, { useState } from "react";
-
-import { Navigate, useNavigate } from "react-router-dom";
-
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 import UseLogin from "../hooks/useLogin";
 
 const Login = () => {
-  
-
-  const [email, setEmail] = useState("catterpiller@gmail.com");
-  const [password, setPassword] = useState("catterpiller");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { loading, login } = UseLogin();
-  const Navigate = useNavigate();
-  
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const result  = await login(email, password);
-    if(result){
-      Navigate("/dashboard");
+    const result = await login(email, password);
+    if (result) {
+      navigate("/dashboard");
+    } else {
+      setError("Invalid email or password");
     }
-     
-    
   };
 
   return (
-    <form action="" onSubmit={handleLogin} method="post">
-        <div className="hero bg-black min-h-screen ">
-      <div className="sm:ml-50">
-          <div className="hero-content flex-col lg:flex-row-reverse ">
-            <div className="text-center lg:text-left">
-              <h1 className="text-5xl font-bold">Login now!</h1>
-              <p className="py-6 sm:w-2/3">
-                Experience a secure and user-friendly banking platform designed
-                for seamless financial operations. Manage your transactions,
-                check balances, apply for loans, and more—all with enhanced
-                security and convenience.
-              </p>
-            </div>
-            <div className="card bg-base-300 w-full max-w-sm shrink-0 shadow-2xl">
-              <div className="card-body">
-                <fieldset className="fieldset">
-                  <label className="fieldset-label">Email</label>
-                  <input
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    type="email"
-                    className="input"
-                    placeholder="Email"
-                  />
-                  <label className="fieldset-label">Password</label>
-                  <input
-                    type="password"
-                    className="input"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <div>
-                    <Link to={"/register"} className="link link-hover">
-                      Don't have account ?
-                    </Link>
-                  </div>
-                  <button
-                    className="btn btn-neutral bg-blue-500 mt-4"
-                    disabled={loading}
-                  >
-                    {" "}
-                    {loading ? (
-                      <span className="loading loading-ring loading-xl"></span>
-                    ) : (
-                      "Login"
-                    )}
-                  </button>
-                </fieldset>
-              </div>
-            </div>
+    <div className="flex justify-center items-center min-h-screen bg-black ">
+      <div className="bg-black border border-gray-600 text-white p-8 rounded-lg shadow-lg w-auto m-5">
+        <h1 className="text-3xl font-bold text-center mb-4">Login!</h1>
+        <p className="text-gray-400 text-center mb-6">
+          Sign in to continue managing your finances securely.
+        </p>
+
+        {error && (
+          <p className="text-red-500 text-sm text-center mb-3">{error}</p>
+        )}
+
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">Email</label>
+            <input
+              type="email"
+              className="w-full px-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
-        </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Password</label>
+            <input
+              type="password"
+              className="w-full px-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="flex justify-between items-center text-sm">
+            <Link to="/register" className="text-blue-400 hover:underline">
+              Don't have an account?
+            </Link>
+            <Link
+              to="/forgot-password"
+              className="text-gray-400 hover:underline"
+            >
+              Forgot password?
+            </Link>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-600 transition duration-300 text-white py-2 rounded-lg font-semibold flex justify-center items-center"
+            disabled={loading}
+          >
+            {loading ? (
+              <span className="loading loading-ring loading-lg"></span>
+            ) : (
+              "Login"
+            )}
+          </button>
+        </form>
       </div>
-    </form>
+    </div>
   );
 };
 

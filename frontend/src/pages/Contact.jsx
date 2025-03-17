@@ -1,77 +1,123 @@
-import React from 'react'
-import useScreenSize from '../hooks/Usescreensize';
+import React, { useEffect } from "react";
+import useScreenSize from "../hooks/Usescreensize";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const Contact = () => {
-    const width = useScreenSize();
+  const width = useScreenSize();
+  const [email, setEmail] = React.useState("");
+  const [message, setMessage] = React.useState("");
+  const [done, setDone] = React.useState(false);
+
+  useEffect(() => {
+    if (done) {
+      setEmail("");
+      setMessage("");
+    }
+  }, [done]);
+
+  const contactUs = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/info/contact",
+        {
+          email,
+          message,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (res.status === 201) {
+        setEmail("");
+        setMessage("");
+        toast.success(
+          "Message Sent Successfully! We will get back to you soon."
+        );
+      }
+    } catch (error) {
+      console.error(
+        toast.error("Error Sending Message! "),
+        error.response?.data?.message || error.message
+      );
+    }
+  };
+
   return (
-    <>
-      {width > 768 ? (
-        <div className="hero bg-black min-h-screen ">
-          <div className="hero-content flex mt-20 text-sm">
-            <div className="text-center lg:text-left flex flex-col justify-center items-center">
-              <h1 className="text-4xl font-bold text-center ">Contact Us</h1>
-              <p className="py-6 w-2/3 text-center">
-                We're here to help! Whether you have questions, feedback, or
-                business inquiries, feel free to reach out. Connect with us
-                through the form below, or use the provided contact details to
-                get in touch. We’ll respond as soon as possible!
-              </p>
-            </div>
-            <div className="card bg-base-300 w-full max-w-sm shrink-0 shadow-2xl mr-40">
-              <div className="card-body">
-                <fieldset className="fieldset ">
-                  <label className="fieldset-label">Your Email</label>
-                  <input type="email" className="input" placeholder="Email" />
-                  <label className="fieldset-label">Your Message</label>
-                  <input
-                    type="text"
-                    className="input h-20 "
-                    placeholder="Message"
-                  />
-
-                  <button className="btn btn-neutral bg-blue-500 mt-4 ">
-                    Contact Us
-                  </button>
-                </fieldset>
-              </div>
-            </div>
+    <div className="flex items-center justify-center min-h-screen bg-black text-white px-4">
+      <div className="w-full max-w-4xl mt-20 flex flex-col md:flex-row items-center justify-between space-y-8 md:space-y-0 md:space-x-12">
+        {/* Left Side - Contact Info */}
+        <div className="text-center md:text-left md:w-1/2">
+          <h1 className="text-5xl font-bold text-blue-400 animate-fadeIn">
+            Contact Us
+          </h1>
+          <p className="mt-4 text-gray-400">
+            Have any questions or feedback? Feel free to reach out, and our team
+            will respond as soon as possible.
+          </p>
+          <div className="mt-6 space-y-4">
+            <p className="flex items-center space-x-3 text-gray-300">
+              📧 <span className="font-medium">support@authbank.com</span>
+            </p>
+            <p className="flex items-center space-x-3 text-gray-300">
+              📍{" "}
+              <span className="font-medium">
+                123 Finance Street, New York, NY
+              </span>
+            </p>
+            <p className="flex items-center space-x-3 text-gray-300">
+              ☎ <span className="font-medium">+1 (800) 555-0123</span>
+            </p>
           </div>
         </div>
-      ) : (
-        <div className="hero bg-black min-h-screen ">
-          <div className="hero-content flex flex-col mt-20 ">
-            <div className="text-center lg:text-left flex flex-col justify-center items-center">
-              <h1 className="text-4xl font-bold text-center ">Contact Us</h1>
-              <p className="py-6 w-2/3 text-center text-sm">
-                We're here to help! Whether you have questions, feedback, or
-                business inquiries, feel free to reach out. Connect with us
-                through the form below, or use the provided contact details to
-                get in touch. We’ll respond as soon as possible!
-              </p>
-            </div>
-            <div className="card bg-base-300 w-full max-w-sm shrink-0 shadow-2xl ">
-              <div className="card-body">
-                <fieldset className="fieldset ">
-                  <label className="fieldset-label">Your Email</label>
-                  <input type="email" className="input" placeholder="Email" />
-                  <label className="fieldset-label">Your Message</label>
-                  <input
-                    type="text"
-                    className="input h-20 "
-                    placeholder="Message"
-                  />
 
-                  <button className="btn btn-neutral bg-blue-500 mt-4 ">
-                    Contact Us
-                  </button>
-                </fieldset>
-              </div>
+        {/* Right Side - Contact Form */}
+        <div className="w-full md:w-1/2 bg-black border-2 border-gray-800 bg-opacity-90 rounded-xl p-8 shadow-lg backdrop-blur-md">
+          <h2 className="text-2xl font-semibold text-blue-300 text-center mb-4">
+            Send a Message
+          </h2>
+          <form>
+            <div className="mb-4">
+              <label className="block text-gray-300 font-medium">
+                Your Email
+              </label>
+              <input
+                type="email"
+                className="w-full p-3 mt-1 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-500"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
-          </div>
+            <div className="mb-4">
+              <label className="block text-gray-300 font-medium">
+                Your Message
+              </label>
+              <textarea
+                className="w-full p-3 mt-1 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-500"
+                rows="4"
+                placeholder="Enter your message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              ></textarea>
+            </div>
+            <button
+              type="button"
+              className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-md cursor-pointer     transition-transform transform hover:scale-105"
+              onClick={contactUs}
+            >
+              Send Message
+            </button>
+          </form>
         </div>
-      )}
-    </>
+      </div>
+    </div>
   );
-}
+};
 
-export default Contact
+export default Contact;

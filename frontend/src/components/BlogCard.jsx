@@ -1,18 +1,17 @@
 import axios from "axios";
-import { useAuthContext } from "../context/AuthContext";
+import { format } from "date-fns";
 
 const BlogCard = ({ blog, onBlogDeleted }) => {
+  const user = JSON.parse(localStorage.getItem("user"));
 
-    // const {authUser:user} = useAuthContext();
-    const user = JSON.parse(localStorage.getItem("user"));
-    // console.log("username",user.name);
-    // console.log("blog author",blog.author);
-    
   const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this blog?"
+    );
+    if (!confirmDelete) return;
+
     try {
-        const confirmDelete = window.confirm("Are you sure you want to delete this blog?");
-        if (!confirmDelete) return;
-      await axios.delete(`http://localhost:5000/blogs/${blog._id}`,{
+      await axios.delete(`http://localhost:5000/blogs/${blog._id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -26,18 +25,32 @@ const BlogCard = ({ blog, onBlogDeleted }) => {
   };
 
   return (
-    <div className="border rounded-lg p-4 shadow">
-      <h3 className="text-xl font-bold">{blog.title}</h3>
-      <p className="text-gray-300">{blog.content}</p>
-      <p className="text-sm text-gray-400">By {blog.author}</p>
-      <p className="text-sm text-gray-400">{blog.createdAt.split("T")[0]}</p>
-      {user?.name === blog.author && (<button
-        onClick={handleDelete}
-        className="mt-2 bg-red-500 text-white px-3 py-1 rounded cursor-pointer"
-      >
-        Delete
-      </button> )}
+    <div className="bg-gray-900 text-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-800">
+      {/* Blog Title */}
+      <h3 className="text-2xl font-semibold text-blue-400 mb-2">
+        {blog.title}
+      </h3>
 
+      {/* Blog Content */}
+      <p className="text-gray-300 mb-4 max-h-48 overflow-auto">{blog.content}</p>
+
+      {/* Author & Date */}
+      <div className="flex justify-between items-center text-sm text-gray-400 mb-3">
+        <span>
+          By <span className="font-semibold">{blog.author}</span>
+        </span>
+        <span>{format(new Date(blog.createdAt), "MMM dd, yyyy")}</span>
+      </div>
+
+      {/* Delete Button (Only for the Author) */}
+      {user?.name === blog.author && (
+        <button
+          onClick={handleDelete}
+          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-md"
+        >
+          Delete Blog
+        </button>
+      )}
     </div>
   );
 };

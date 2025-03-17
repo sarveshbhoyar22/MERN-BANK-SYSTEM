@@ -5,7 +5,8 @@ import { useState, useEffect } from "react";
 import moment from "moment";
 import UseTransaction from "../../hooks/UseTransaction";
 import { useAuthContext } from "../../context/AuthContext";
-import useScreenSize from "../../hooks/Usescreensize"; // Ensure correct import
+import useScreenSize from "../../hooks/Usescreensize";
+import Goback from "../../components/Goback";
 
 const Transaction = () => {
   const [transactions, setTransactions] = useState([]);
@@ -14,15 +15,9 @@ const Transaction = () => {
   const [filters, setFilters] = useState({ type: "", status: "", date: "" });
   const { transactions: transactionsData, loading, error } = UseTransaction();
   const { width } = useScreenSize(); // Get screen width for responsiveness
- 
 
-  const showtransaction = () => {
-    
-  };
-  // Fetch Transactions
   useEffect(() => {
     if (transactionsData) {
-      console.log("Fetched Transactions:", transactionsData);
       const formattedTransactions = transactionsData.map((txn) => ({
         _id: txn?._id,
         type: txn?.type || "unknown",
@@ -39,7 +34,6 @@ const Transaction = () => {
     }
   }, [transactionsData]);
 
-  // Filter Transactions
   useEffect(() => {
     let filtered = transactions;
     if (filters.type)
@@ -55,7 +49,6 @@ const Transaction = () => {
     setFilteredTransactions(filtered);
   }, [filters, transactions]);
 
-  // Calculate Summary
   const totalInflow = transactions
     .filter((t) => t.type === "deposit")
     .reduce((sum, t) => sum + t.amount, 0);
@@ -66,16 +59,6 @@ const Transaction = () => {
     ? Math.max(...transactions.map((t) => t.amount))
     : 0;
 
-  // Pie Chart Data
-  const categoryData = [
-    { name: "Rent", value: 750 },
-    { name: "Groceries", value: 200 },
-    { name: "Entertainment", value: 300 },
-    { name: "Loan EMI", value: 500 },
-  ];
-  const COLORS = ["#FF5733", "#33FF57", "#3357FF", "#FFC300"];
-
-  // Export CSV Function
   const exportCSV = () => {
     const ws = XLSX.utils.json_to_sheet(filteredTransactions);
     const wb = XLSX.utils.book_new();
@@ -84,277 +67,154 @@ const Transaction = () => {
   };
 
   return (
-    <>
-      {width > 768 ? (
-        <div className="p-6 bg-black text-white">
-          <div className="mt-20">
-            <h2 className="text-2xl font-bold mb-4 flex items-center gap-3">
-              <img
-                src="/second/history.png"
-                className="w-10 h-10"
-                alt="History Icon"
-              />
-              Transaction History
-            </h2>
+    <div className="p-6 bg-black text-white min-h-screen">
+      <div className="mt-20">
+        <h2 className="text-3xl font-semibold mb-6 flex items-center gap-3">
+          <Goback />
+          <img src="/second/history.png" className="w-12 h-12" alt="History" />
+          Transaction History
+        </h2>
 
-            {/* Filters */}
-            <div
-              className={`flex flex-wrap ${
-                width < 640 ? "flex-col gap-2" : "gap-4"
-              } mb-4`}
-            >
-              <select
-                className="select select-bordered bg-gray-800"
-                onChange={(e) =>
-                  setFilters({ ...filters, type: e.target.value })
-                }
-              >
-                <option value="">All Types</option>
-                <option value="deposit">Deposit</option>
-                <option value="withdraw">Withdraw</option>
-                <option value="transfer">Transfer</option>
-                <option value="loan">Loan</option>
-              </select>
+        {/* Filters Section */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+          <select
+            className="select select-bordered bg-gray-900 text-white"
+            onChange={(e) => setFilters({ ...filters, type: e.target.value })}
+          >
+            <option value="">All Types</option>
+            <option value="deposit">Deposit</option>
+            <option value="withdraw">Withdraw</option>
+            <option value="transfer">Transfer</option>
+            <option value="loan">Loan</option>
+          </select>
 
-              <select
-                className="select select-bordered bg-gray-800"
-                onChange={(e) =>
-                  setFilters({ ...filters, status: e.target.value })
-                }
-              >
-                <option value="">All Status</option>
-                <option value="success">Success</option>
-                <option value="failed">Failed</option>
-                <option value="pending">Pending</option>
-              </select>
+          <select
+            className="select select-bordered bg-gray-900 text-white"
+            onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+          >
+            <option value="">All Status</option>
+            <option value="success">Success</option>
+            <option value="failed">Failed</option>
+            <option value="pending">Pending</option>
+          </select>
 
-              <input
-                type="date"
-                className="input input-bordered bg-gray-800"
-                onChange={(e) =>
-                  setFilters({ ...filters, date: e.target.value })
-                }
-              />
+          <input
+            type="date"
+            className="input input-bordered bg-gray-900 text-white"
+            onChange={(e) => setFilters({ ...filters, date: e.target.value })}
+          />
 
-              <button onClick={exportCSV} className="btn btn-primary ">
-                📥 Download ExcelSheet
-              </button>
-            </div>
+          <button
+            onClick={exportCSV}
+            className="btn bg-blue-800 hover:bg-blue-700 text-white transition hover:scale-105"
+          >
+            📥 Download Excel
+          </button>
+        </div>
 
-            {/* Summary */}
-            <div
-              className={`grid ${
-                width < 640 ? "grid-cols-1" : "grid-cols-3"
-              } gap-4 mb-4`}
-            >
-              <div className="bg-gray-900 p-6 rounded-lg border-2 border-green-900">
-                <h3>Total Inflow: 💰 ${totalInflow}</h3>
-              </div>
-              <div className="bg-gray-900 p-6 rounded-lg border-2 border-red-900">
-                <h3>Total Outflow: 💸 ${totalOutflow}</h3>
-              </div>
-              <div className="bg-gray-900 p-6 rounded-lg border-2 border-blue-900">
-                <h3>Highest Transaction: ⚡ ${highestTransaction}</h3>
-              </div>
-            </div>
+        {/* Summary Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+          <div className="p-6 border border-gray-700 text-white rounded-lg shadow-lg">
+            <h3 className="text-lg">Total Inflow 💰</h3>
+            <p className="text-2xl font-bold">${totalInflow}</p>
+          </div>
+          <div className="p-6 border border-gray-700 text-white rounded-lg shadow-lg">
+            <h3 className="text-lg">Total Outflow 💸</h3>
+            <p className="text-2xl font-bold">${totalOutflow}</p>
+          </div>
+          <div className="p-6 border border-gray-700 text-white rounded-lg shadow-lg">
+            <h3 className="text-lg">Highest Transaction ⚡</h3>
+            <p className="text-2xl font-bold">${highestTransaction}</p>
+          </div>
+        </div>
 
-            {/* Transaction Table */}
-            <div className="overflow-x-auto border-2 border-gray-700 rounded-xl">
-              <table className="table w-full text-white">
-                <thead className="bg-gray-800">
+        {/* Transaction Table */}
+        {width > 768 ? (
+          <div className="overflow-x-auto border border-gray-700 rounded-xl shadow-lg">
+            <table className="table w-full text-white">
+              <thead className="bg-gray-900">
+                <tr>
+                  <th>ID</th>
+                  <th>Amount</th>
+                  <th>Sender</th>
+                  <th>Receiver</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody className="bg-black">
+                {filteredTransactions.length === 0 ? (
                   <tr>
-                    <th>Transaction ID</th>
-                    <th>Amount</th>
-                    <th>Sender</th>
-                    <th>Receiver</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th>Date</th>
+                    <td colSpan="7" className="text-center py-4">
+                      No Transactions Found
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="bg-gray-900">
-                  {filteredTransactions.length === 0 ? (
-                    <tr>
-                      <td colSpan="7" className="text-center py-4">
-                        No Transactions Found
+                ) : (
+                  filteredTransactions.map((txn) => (
+                    <tr key={txn._id} className="hover:bg-gray-800 transition">
+                      <td>{txn._id.slice(0, 6)}...</td>
+                      <td>${txn.amount}</td>
+                      <td>{txn.sender}</td>
+                      <td>{txn.receiver}</td>
+                      <td>{txn.type}</td>
+                      <td
+                        className={`font-bold ${
+                          txn.status === "success"
+                            ? "text-green-400"
+                            : txn.status === "failed"
+                            ? "text-red-400"
+                            : "text-yellow-400"
+                        }`}
+                      >
+                        {txn.status}
                       </td>
+                      <td>{txn.date}</td>
                     </tr>
-                  ) : (
+                   
+                  ))
+                )}
+               
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div>
+            {filteredTransactions.map((txn) => (
+              <div
+                key={txn._id}
+                className="bg-gray-900 p-4 rounded-lg mb-4 shadow-md"
+              >
+                <p>
+                  <span className="font-bold">Amount:</span><span className="text-green-400 m-2 p-2">
+                    ${txn.amount}
                     
-                    filteredTransactions.map((txn) => (
-                      <tr onClick={showtransaction} key={txn._id} className="hover:bg-gray-700">
-                        <td>
-                          <div>{txn._id}</div>
-                        </td>
-                        <td>${txn.amount}</td>
-                        <td>
-                          {txn.sender} ⬆️
-                          <br />
-                          {txn.senderAC}
-                        </td>
-                        <td>
-                          {txn.receiver} ⬇️
-                          <br />
-                          {txn.receiverAC}
-                        </td>
-                        <td>{txn.type}</td>
-                        <td
-                          className={`font-bold ${
-                            txn.status === "success"
-                              ? "text-green-400"
-                              : txn.status === "failed"
-                              ? "text-red-400"
-                              : "text-yellow-400"
-                          }`}
-                        >
-                          {txn.status}
-                        </td>
-                        <td>{txn.date}</td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            
+                    </span>
+                </p>
+                <p>
+                  <span className="font-bold">Type:</span> {txn.type}
+                </p>
+                <p>
+                  <span className="font-bold">Status:</span> {txn.status}
+                </p>
+                <p>
+                  <span className="font-bold">ID:</span> {txn._id}
+                </p>
+                <p>
+                  <span className="font-bold">Sender:</span> {txn.sender}
+                </p>
+                <p>
+                  <span className="font-bold">Receiver:</span> {txn.receiver}
+                </p>
+                <p>
+                  <span className="font-bold">Date and Time:</span> {txn.date}
+                </p>
+              </div>
+            ))}
           </div>
-        </div>
-      ) : (
-        <div className="p-6 bg-black text-white">
-          <div className="mt-20">
-            <h2 className="text-2xl font-bold mb-4 flex items-center gap-3">
-              <img
-                src="/second/history.png"
-                className="w-10 h-10"
-                alt="History Icon"
-              />
-              Transaction History
-            </h2>
-
-            {/* Filters */}
-            <div
-              className={`flex flex-wrap ${
-                width < 640 ? "flex-col gap-2" : "gap-4"
-              } mb-4`}
-            >
-              <select
-                className="select select-bordered bg-gray-800"
-                onChange={(e) =>
-                  setFilters({ ...filters, type: e.target.value })
-                }
-              >
-                <option value="">All Types</option>
-                <option value="deposit">Deposit</option>
-                <option value="withdraw">Withdraw</option>
-                <option value="transfer">Transfer</option>
-                <option value="loan">Loan</option>
-              </select>
-
-              <select
-                className="select select-bordered bg-gray-800"
-                onChange={(e) =>
-                  setFilters({ ...filters, status: e.target.value })
-                }
-              >
-                <option value="">All Status</option>
-                <option value="success">Success</option>
-                <option value="failed">Failed</option>
-                <option value="pending">Pending</option>
-              </select>
-
-              <input
-                type="date"
-                className="input input-bordered bg-gray-800"
-                onChange={(e) =>
-                  setFilters({ ...filters, date: e.target.value })
-                }
-              />
-              <button onClick={exportCSV} className="btn btn-primary w-2/3 ">
-                📥 Download ExcelSheet
-              </button>
-            </div>
-
-            {/* Summary */}
-            <div
-              className={`grid ${
-                width < 640 ? "grid-cols-1" : "grid-cols-3"
-              } gap-4 mb-4`}
-            >
-              <div className="bg-gray-900 p-6 rounded-lg border-2 border-green-900">
-                <h3>Total Inflow: 💰 ${totalInflow}</h3>
-              </div>
-              <div className="bg-gray-900 p-6 rounded-lg border-2 border-red-900">
-                <h3>Total Outflow: 💸 ${totalOutflow}</h3>
-              </div>
-              <div className="bg-gray-900 p-6 rounded-lg border-2 border-blue-900">
-                <h3>Highest Transaction: ⚡ ${highestTransaction}</h3>
-              </div>
-            </div>
-
-            {/* Transaction Table */}
-            <div className="overflow-x-auto border-2 border-gray-700 rounded-xl">
-              <table className="table w-full text-white">
-                <thead className="bg-gray-800">
-                  <tr>
-                    <th>Transaction ID</th>
-                    <th>Amount</th>
-                    <th>Type</th>
-                    <th>Sender</th>
-                    <th>Receiver</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-gray-900">
-                  {filteredTransactions.length === 0 ? (
-                    <tr>
-                      <td colSpan="7" className="text-center py-4">
-                        No Transactions Found
-                      </td>
-                    </tr>
-                  ) : (
-                    filteredTransactions.map((txn) => (
-                      <tr onClick={showtransaction} key={txn._id} className="hover:bg-gray-700 text-[] ">
-                        <td>
-                          <div>{txn._id}</div>
-                        </td>
-                        <td>${txn.amount}</td>
-                        <td>{txn.type}</td>
-                        <td>
-                          {txn.sender} ⬆️
-                          <br />
-                          {txn.senderAC}
-                        </td>
-                        <td>
-                          {txn.receiver} ⬇️
-                          <br />
-                          {txn.receiverAC}
-                        </td>
-                        <td
-                          className={`font-bold ${
-                            txn.status === "success"
-                              ? "text-green-400"
-                              : txn.status === "failed"
-                              ? "text-red-400"
-                              : "text-yellow-400"
-                          }`}
-                        >
-                          {txn.status}
-                        </td>
-                        <td>{txn.date}</td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Export Buttons */}
-          </div>
-        </div>
-      )}
-    </>
+        )}
+      </div>
+    </div>
   );
 };
 

@@ -3,6 +3,8 @@ import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import Account from "../models/Account.js";
 import dotenv from "dotenv";
+import Contact from "../models/Contact.js";
+import { sendEmail } from "../utils/emailService.js";
 
 dotenv.config();
 
@@ -170,4 +172,23 @@ export const updateUserRole = asyncHandler(async (req, res) => {
  
 
   res.json({ message: `User role updated to ${newRole}`,user});
+});
+
+
+export const Contactus = asyncHandler(async (req, res) => {
+  const { email, message } = req.body;
+  const contact = await Contact.create({  email, message });
+
+  sendEmail(
+    email,
+    "Contact Form Submission",
+    `Hello,\n\nThank you for reaching out to us:\n\n We have received your message and will get back to you as soon as possible.\n\nBest regards,\nOur Team`
+  )
+  sendEmail(
+    process.env.EMAIL_USER,
+    "Contact Form Submission : Auth Banking System User",
+    `Hello,\n\nThis is a contact form submission from ${email}:\n\n\nmessage: ${message}\n\n\n`
+  );
+
+  res.status(201).json(contact);
 });

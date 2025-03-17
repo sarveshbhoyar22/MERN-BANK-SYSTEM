@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { set } from "mongoose";
 import { Navigate } from "react-router-dom";
 import useScreenSize from "../hooks/Usescreensize";
+import Goback from "../components/Goback";
 
 const UserProfile = () => {
 
@@ -270,320 +271,171 @@ const UserProfile = () => {
 
   return (
     <div className="p-6 bg-black text-white min-h-screen flex justify-center">
-      <div className="mt-16">
-        {width > 768 && (
-          <div className="w-[600px] max-w-lg bg-black border-2 border-gray-600 p-6 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-4">User Profile</h2>
+      <div className="mt-16 w-full max-w-lg bg-black border border-gray-700 p-6 rounded-lg shadow-lg">
+        <h2 className="text-3xl font-semibold mb-6 flex items-center gap-2 text-white">
+          <Goback />
+          User Profile
+        </h2>
 
-            {/* Display User Info */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium">Name:</label>
-              {editMode ? (
-                <input
-                  type="text"
-                  name="name"
-                  value={updatedUser.name}
-                  onChange={handleInputChange}
-                  className="w-full bg-gray-700 text-white p-2 rounded mt-1"
-                />
-              ) : (
-                <p className="bg-gray-700 p-2 rounded">{user?.name}</p>
-              )}
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium">Email:</label>
-              {editMode ? (
-                <input
-                  type="email"
-                  name="email"
-                  value={updatedUser.email}
-                  onChange={handleInputChange}
-                  className="w-full bg-gray-700  text-white p-2 rounded mt-1"
-                />
-              ) : (
-                <p className="bg-gray-700 p-2 rounded">{user.email}</p>
-              )}
-            </div>
-
-            {/* <div className="mb-4">
-          <label className="block text-sm font-medium">Role:</label>
-          <p className="bg-gray-700 p-2 rounded">{user.role}</p>
-        </div> */}
-
-            {/* Edit Profile Buttons */}
+        {/* User Information */}
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-300">
+              Name:
+            </label>
             {editMode ? (
-              <div className="flex gap-4">
-                <button
-                  onClick={handleUpdateProfile}
-                  className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={() => setEditMode(false)}
-                  className="bg-gray-500 text-white px-4 py-2 rounded cursor-pointer"
-                >
-                  Cancel
-                </button>
-              </div>
+              <input
+                type="text"
+                name="name"
+                value={updatedUser.name}
+                onChange={handleInputChange}
+                className="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-600 focus:ring focus:ring-blue-500 outline-none"
+              />
             ) : (
-              <button
-                onClick={() => setEditMode(true)}
-                className="bg-green-500 text-white px-4 py-2 rounded cursor-pointer"
-              >
-                Edit Profile
-              </button>
-            )}
-
-            {/* Change Password Section */}
-            {!opennew && (
-              <div className="mt-6 w-[320px]">
-                <h3 className="text-lg font-bold mb-2">Change Password</h3>
-                <input
-                  type="password"
-                  value={OldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                  className={`${
-                    opennew ? "hidden" : "block"
-                  } w-full bg-gray-700 text-white p-2 rounded mt-1`}
-                  placeholder="Enter old password"
-                />
-
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className={` w-full bg-gray-700 text-white p-2 rounded mt-1`}
-                  placeholder="Enter new password"
-                />
-
-                <button
-                  onClick={() => setOpennew(true)}
-                  className={`mt-2 text-white cursor-pointer hover:underline py-2 rounded ml-2`}
-                >
-                  Forget Password
-                </button>
-                <br />
-                <button
-                  onClick={handleChangePassword}
-                  className={` mt-2 cursor-pointer bg-blue-500 text-white px-4 py-2 rounded`}
-                >
-                  Submit
-                </button>
-              </div>
-            )}
-
-            {opennew && !verified && (
-              <div className="mt-6 w-[320px]">
-                <h3 className="text-lg font-bold mb-2">Change Password</h3>
-
-                <input
-                  type="password"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  className={` w-full bg-gray-700 text-white p-2 rounded mt-1`}
-                  placeholder="Enter OTP"
-                />
-
-                <div>OTP will be valid for 5 minutes</div>
-                <br />
-                {!otpSent && (
-                  <button
-                    onClick={sendotp}
-                    className={` mt-2 cursor-pointer bg-blue-500 text-white px-4 py-2 rounded`}
-                  >
-                    Send OTP
-                  </button>
-                )}
-                {otpSent && (
-                  <button
-                    onClick={verifyotp}
-                    className={` mt-2 cursor-pointer bg-blue-500 text-white px-4 py-2 rounded`}
-                  >
-                    Verify OTP
-                  </button>
-                )}
-              </div>
-            )}
-            {opennew && verified && (
-              <div className="mt-6 w-[320px]">
-                <h3 className="text-lg font-bold mb-2">Change Password</h3>
-
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className={` w-full bg-gray-700 text-white p-2 rounded mt-1`}
-                  placeholder="Enter New Password"
-                />
-
-                <br />
-                <button
-                  onClick={resetPassword}
-                  className={` mt-2 cursor-pointer bg-blue-500 text-white px-4 py-2 rounded`}
-                >
-                  Set Password
-                </button>
-              </div>
+              <p className="bg-gray-800 p-3 rounded-lg border border-gray-700">
+                {user?.name}
+              </p>
             )}
           </div>
-        )}
-        {width < 768 && (
-          <div className="w-full max-w-lg bg-black border-2 border-gray-600 p-6 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-4">User Profile</h2>
 
-            {/* Display User Info */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium">Name:</label>
-              {editMode ? (
+          <div>
+            <label className="block text-sm font-medium text-gray-300">
+              Email:
+            </label>
+            {editMode ? (
+              <input
+                type="email"
+                name="email"
+                value={updatedUser.email}
+                onChange={handleInputChange}
+                className="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-600 focus:ring focus:ring-blue-500 outline-none"
+              />
+            ) : (
+              <p className="bg-gray-800 p-3 rounded-lg border border-gray-700">
+                {user.email}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Edit Profile Buttons */}
+        <div className="flex gap-4 mt-6">
+          {editMode ? (
+            <>
+              <button
+                onClick={handleUpdateProfile}
+                className="w-full bg-blue-500 cursor-pointer hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-lg transition duration-200"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => setEditMode(false)}
+                className="w-full bg-gray-600 cursor-pointer hover:bg-gray-500 text-white font-medium px-4 py-2 rounded-lg transition duration-200"
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => setEditMode(true)}
+              className="w-full bg-green-700 hover:bg-green-800 cursor-pointer text-white font-medium px-4 py-2 rounded-lg transition duration-200"
+            >
+              Edit Profile
+            </button>
+          )}
+        </div>
+
+        {/* Change Password Section */}
+        {!opennew && (
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold mb-3 text-gray-200">
+              Change Password
+            </h3>
+            <input
+              type="password"
+              value={OldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              className="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-600 focus:ring focus:ring-blue-500 outline-none"
+              placeholder="Enter old password"
+            />
+
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-600 focus:ring focus:ring-blue-500 outline-none mt-3"
+              placeholder="Enter new password"
+            />
+
+            <button
+              onClick={() => setOpennew(true)}
+              className="mt-3 text-blue-400 hover:underline transition duration-200"
+            >
+              Forgot Password?
+            </button>
+
+            <button
+              onClick={handleChangePassword}
+              className="mt-4 cursor-pointer w-full bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition duration-200"
+            >
+              Submit
+            </button>
+          </div>
+        )}
+
+        {/* OTP Verification & Reset Password */}
+        {opennew && (
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold mb-3 text-gray-200">
+              Verify OTP
+            </h3>
+            {!verified ? (
+              <>
                 <input
                   type="text"
-                  name="name"
-                  value={updatedUser.name}
-                  onChange={handleInputChange}
-                  className="w-full bg-gray-700 text-white p-2 rounded mt-1"
-                />
-              ) : (
-                <p className="bg-gray-700 p-2 rounded">{user?.name}</p>
-              )}
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium">Email:</label>
-              {editMode ? (
-                <input
-                  type="email"
-                  name="email"
-                  value={updatedUser.email}
-                  onChange={handleInputChange}
-                  className="w-full bg-gray-700  text-white p-2 rounded mt-1"
-                />
-              ) : (
-                <p className="bg-gray-700 p-2 rounded">{user.email}</p>
-              )}
-            </div>
-
-            {/* <div className="mb-4">
-          <label className="block text-sm font-medium">Role:</label>
-          <p className="bg-gray-700 p-2 rounded">{user.role}</p>
-        </div> */}
-
-            {/* Edit Profile Buttons */}
-            {editMode ? (
-              <div className="flex gap-4">
-                <button
-                  onClick={handleUpdateProfile}
-                  className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={() => setEditMode(false)}
-                  className="bg-gray-500 text-white px-4 py-2 rounded cursor-pointer"
-                >
-                  Cancel
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => setEditMode(true)}
-                className="bg-green-500 text-white px-4 py-2 rounded cursor-pointer"
-              >
-                Edit Profile
-              </button>
-            )}
-
-            {/* Change Password Section */}
-            {!opennew && (
-              <div className="mt-6 w-[320px]">
-                <h3 className="text-lg font-bold mb-2">Change Password</h3>
-                <input
-                  type="password"
-                  value={OldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                  className={`${
-                    opennew ? "hidden" : "block"
-                  } w-full bg-gray-700 text-white p-2 rounded mt-1`}
-                  placeholder="Enter old password"
-                />
-
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className={` w-full bg-gray-700 text-white p-2 rounded mt-1`}
-                  placeholder="Enter new password"
-                />
-
-                <button
-                  onClick={() => setOpennew(true)}
-                  className={`mt-2 text-white cursor-pointer hover:underline py-2 rounded ml-2`}
-                >
-                  Forget Password
-                </button>
-                <br />
-                <button
-                  onClick={handleChangePassword}
-                  className={` mt-2 cursor-pointer bg-blue-500 text-white px-4 py-2 rounded`}
-                >
-                  Submit
-                </button>
-              </div>
-            )}
-
-            {opennew && !verified && (
-              <div className="mt-6 w-[320px]">
-                <h3 className="text-lg font-bold mb-2">Change Password</h3>
-
-                <input
-                  type="password"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
-                  className={` w-full bg-gray-700 text-white p-2 rounded mt-1`}
+                  className="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-600 focus:ring focus:ring-blue-500 outline-none"
                   placeholder="Enter OTP"
                 />
-
-                <div>OTP will be valid for 5 minutes</div>
-                <br />
-                {!otpSent && (
+                <p className="text-gray-400 mt-2">
+                  OTP is valid for 5 minutes.
+                </p>
+                {!otpSent ? (
                   <button
                     onClick={sendotp}
-                    className={` mt-2 cursor-pointer bg-blue-500 text-white px-4 py-2 rounded`}
+                    className="mt-4 w-full bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2 rounded-lg transition duration-200"
                   >
                     Send OTP
                   </button>
-                )}
-                {otpSent && (
+                ) : (
                   <button
                     onClick={verifyotp}
-                    className={` mt-2 cursor-pointer bg-blue-500 text-white px-4 py-2 rounded`}
+                    className="mt-4 w-full bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2 rounded-lg transition duration-200"
                   >
                     Verify OTP
                   </button>
                 )}
-              </div>
-            )}
-            {opennew && verified && (
-              <div className="mt-6 w-[320px]">
-                <h3 className="text-lg font-bold mb-2">Change Password</h3>
-
+              </>
+            ) : (
+              <>
+                <h3 className="text-lg font-semibold mb-3 text-gray-200">
+                  Reset Password
+                </h3>
                 <input
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className={` w-full bg-gray-700 text-white p-2 rounded mt-1`}
+                  className="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-600 focus:ring focus:ring-blue-500 outline-none"
                   placeholder="Enter New Password"
                 />
-
-                <br />
                 <button
                   onClick={resetPassword}
-                  className={` mt-2 cursor-pointer bg-blue-500 text-white px-4 py-2 rounded`}
+                  className="mt-4 w-full bg-green-600 hover:bg-green-500 text-white font-medium px-4 py-2 rounded-lg transition duration-200"
                 >
                   Set Password
                 </button>
-              </div>
+              </>
             )}
           </div>
         )}

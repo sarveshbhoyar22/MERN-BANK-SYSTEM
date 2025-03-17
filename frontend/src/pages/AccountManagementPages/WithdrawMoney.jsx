@@ -1,48 +1,33 @@
-// Purpose: Allow users to deposit money into their account.
-// Features:
-// Input field for amount
-// Calls deposit API
-// Updates balance after a successful transaction
-import React from "react";
+import React, { useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import axios from "axios";
+import Goback from "../../components/Goback";
 
 const WithdrawMoney = () => {
-  const [amount, setAmount] = React.useState("");
+  const [amount, setAmount] = useState("");
   const { authUser: user } = useAuthContext();
-  const [accountNumber] = React.useState(user.accountNumber);
-  const [loading, setloading] = React.useState(true);
+  const [accountNumber] = useState(user?.account?.accountNumber);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    setloading(true);
-
-    document.getElementById("my_modal_1").showModal();
+    setLoading(true);
+    document.getElementById("withdraw_modal").showModal();
 
     setTimeout(() => {
-      setAmount(amount);
-      setloading(false);
+      setLoading(false);
     }, 3000);
 
-    
-    // console.log(userId);
+    const userId = user?.account?._id?.toString();
+    if (!userId) return console.error("Invalid User ID");
 
-    console.log(accountNumber, amount);
-
-    const token = localStorage.getItem("token"); // Retrieve the token from localStorage
-    if (!token) {
-      console.error("No token found");
-      return;
-    }
+    const token = localStorage.getItem("token");
+    if (!token) return console.error("No token found");
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/account/withdraw`,
-        {
-          amount,
-          accountNumber,
-        },
+        `http://localhost:5000/api/account/withdraw/`,
+        { amount, accountNumber },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -51,9 +36,7 @@ const WithdrawMoney = () => {
           withCredentials: true,
         }
       );
-
-      const data = await response.data;
-      console.log(data);
+      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -61,74 +44,79 @@ const WithdrawMoney = () => {
 
   return (
     <>
-      <div className="bg-black flex justify-center items-center h-screen w-auto">
-        <div className="mt-20">
-          <form onSubmit={handleSubmit}>
-            <fieldset className="fieldset w-auto h-96 flex flex-col justify-center bg-base-200 border border-base-300 p-4 rounded-box">
-              <div className="text-center title p-5 text-2xl w-auto font-bold flex items-center gap-2 justify-left">
-                <img
-                  src="/second/withdraw.png"
-                  draggable="false"
-                  className="w-15"
-                  alt=""
-                />
-                <span>Withdraw Money</span>
-              </div>
-              <label className="fieldset-label hidden">Account Number 🔒</label>
-              <input
-                type="accountNumber"
-                className="input hidden"
-                placeholder="Type Your Account_Number"
-                value={accountNumber}
-                readOnly
-              />
+      {/* Background */}
+      <div className="bg-black min-h-screen flex items-center justify-center">
+        <div className="w-auto max-w-md p-6 bg-black border border-gray-800 rounded-lg shadow-lg">
+          <div className="flex items-center mb-6 space-x-3">
+            <Goback />
+            <img
+              src="/second/withdraw.png"
+              className="w-12"
+              alt="Withdraw Icon"
+            />
+            <h2 className="text-white text-2xl font-semibold">
+              Withdraw Money
+            </h2>
+          </div>
 
-              <label className="fieldset-label">Amount</label>
-              <input
-                type="amount"
-                className="input"
-                placeholder="$1000"
-                value={amount}
-                onFocus={(e) => (e.target.value = "")}
-                autoFocus
-                maxLength={5}
-                required
-                onChange={(e) => setAmount(e.target.value)}
-              />
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <label className="block text-gray-300 text-sm">
+              Your Account Number
+            </label>
+            <input
+              type="text"
+              className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg border border-gray-600 focus:outline-none focus:border-red-500"
+              value={accountNumber}
+              readOnly
+            />
 
-              <button className="btn btn-neutral mt-4">Withdraw Money</button>
-            </fieldset>
+            <label className="block text-gray-300 text-sm">Amount</label>
+            <input
+              type="number"
+              className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg border border-gray-600 focus:outline-none focus:border-red-500"
+              placeholder="Enter amount (e.g. 1000)"
+              value={amount}
+              required
+              onChange={(e) => setAmount(e.target.value)}
+            />
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full bg-red-600 hover:cursor-pointer hover:bg-red-700 transition-all duration-200 text-white py-2 rounded-lg font-semibold"
+            >
+              Withdraw Money
+            </button>
           </form>
         </div>
       </div>
-      <dialog id="my_modal_1" className="modal h-full">
-        <div className="modal-box border-2 h-1/2 border-green-800 flex flex-col justify-center items-center overflow-hidden">
-          {/* <h3 className="font-bold text-2xl absolute justify-center"></h3> */}
-          <p className="py-4">
-            {loading ? (
-              <span className="loading loading-ring loading-xl "></span>
-            ) : (
-              <div className="flex flex-col items-center ">
-                <span className="text-gray-400">
-                  <img
-                    src="/second/checkBalance.png"
-                    className="w-20 animate-pulse"
-                    alt=""
-                  />{" "}
-                </span>{" "}
-                <br />
-                <span className="text-3xl font-bold">${amount}.00 </span> <br />
-                <span className="text-xl font-bold">
-                  Debited from your Account
-                </span>
-              </div>
-            )}
-          </p>
+
+      {/* Modal */}
+      <dialog id="withdraw_modal" className="modal">
+        <div className="modal-box bg-black border h-96 justify-center border-red-500 text-white text-center flex flex-col items-center">
+          {loading ? (
+            <span className="loading loading-ring loading-lg text-red-400"></span>
+          ) : (
+            <>
+              <img
+                src="/second/checkBalance.png"
+                className="w-16 animate-bounce"
+                alt="Success"
+              />
+              <h3 className="text-xl font-semibold mt-2">
+                Withdrawal Successful
+              </h3>
+              <p className="text-3xl font-bold mt-2">-${amount}.00</p>
+            </>
+          )}
           <div className="modal-action">
-            <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
-            </form>
+            <button
+              className="btn btn-neutral"
+              onClick={() => document.getElementById("withdraw_modal").close()}
+            >
+              Close
+            </button>
           </div>
         </div>
       </dialog>

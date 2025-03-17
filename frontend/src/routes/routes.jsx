@@ -29,6 +29,9 @@ import Users from "../pages/Users.jsx";
 import UserProfile from "../pages/UserProfile.jsx";
 import WithdrawMoney from "../pages/AccountManagementPages/WithdrawMoney.jsx";
 import AboutUs from "../components/AboutUs.jsx";
+import Loan from "../pages/Loan.jsx";
+import LoanOptions from "../pages/LoanOptions.jsx";
+import LoanStatus from "../pages/LoanStatus.jsx";
 
 
 
@@ -109,6 +112,33 @@ const AppRoutes = () => {
               <PrivateRoute
                 element={user ? <Transfer /> : <Navigate to="/login" />}
                 allowedRoles={["user"]}
+              />
+            }
+          />
+          <Route
+            path="/loanoptions"
+            element={
+              <PrivateRoute
+                element={user ? <LoanOptions /> : <Navigate to="/login" />}
+                allowedRoles={["user","admin"]}
+              />
+            }
+          />
+          <Route
+            path="/loan"
+            element={
+              <PrivateRoute
+                element={user ? <Loan /> : <Navigate to="/login" />}
+                allowedRoles={["user","admin"]}
+              />
+            }
+          />
+          <Route
+            path="/loanstatus"
+            element={
+              <PrivateRoute
+                element={user ? <LoanStatus /> : <Navigate to="/login" />}
+                allowedRoles={["user","admin"]}
               />
             }
           />

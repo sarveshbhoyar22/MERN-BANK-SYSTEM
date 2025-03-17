@@ -2,10 +2,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 
-const Goback = () => {
+const Goback = ({link="/dashboard"}) => {
   return (
     <div>
-      <Link to="/dashboard" >
+      <Link to={link} >
         <IoArrowBackCircleOutline className='text-3xl' />
       </Link>
     </div>

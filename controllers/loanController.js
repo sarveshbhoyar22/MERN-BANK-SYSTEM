@@ -5,7 +5,7 @@ import { sendEmail } from "../utils/emailService.js";
 
 // Apply for a Loan
 export const applyForLoan = asyncHandler(async (req, res) => {
-  const { amount } = req.body;
+  const { amount, duration } = req.body;
 
   if (!amount || amount <= 0) {
     res.status(400);
@@ -15,6 +15,7 @@ export const applyForLoan = asyncHandler(async (req, res) => {
   const loan = await Loan.create({
     user: req.user._id,
     amount,
+    duration,
     status: "pending",
   });
 
@@ -74,4 +75,9 @@ export const getUserLoans = asyncHandler(async (req, res) => {
 export const getAllLoans = asyncHandler(async (req, res) => {
   const loans = await Loan.find().populate("user", "name email");
   res.json(loans);
+});
+
+export const LoanStatus = asyncHandler(async (req, res) => {
+  const loan = await Loan.find({ user: req.user._id }); 
+  res.json(loan);
 });

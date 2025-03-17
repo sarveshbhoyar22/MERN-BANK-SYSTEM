@@ -53,25 +53,25 @@ const Contact = () => {
       <div className="w-full max-w-4xl mt-20 flex flex-col md:flex-row items-center justify-between space-y-8 md:space-y-0 md:space-x-12">
         {/* Left Side - Contact Info */}
         <div className="text-center md:text-left md:w-1/2">
-          <h1 className="text-5xl font-bold text-blue-400 animate-fadeIn">
+          <h1 className="sm:text-5xl text-3xl font-bold text-blue-400 animate-fadeIn">
             Contact Us
           </h1>
           <p className="mt-4 text-gray-400">
             Have any questions or feedback? Feel free to reach out, and our team
             will respond as soon as possible.
           </p>
-          <div className="mt-6 space-y-4">
+          <div className="mt-6 space-y-4 ">
             <p className="flex items-center space-x-3 text-gray-300">
               📧 <span className="font-medium">support@authbank.com</span>
             </p>
             <p className="flex items-center space-x-3 text-gray-300">
               📍{" "}
               <span className="font-medium">
-                123 Finance Street, New York, NY
+                You can find us on Instagram, Twitter and Linkedin
               </span>
             </p>
             <p className="flex items-center space-x-3 text-gray-300">
-              ☎ <span className="font-medium">+1 (800) 555-0123</span>
+              ☎ <span className="font-medium">+1 (800) 987-6543</span>
             </p>
           </div>
         </div>

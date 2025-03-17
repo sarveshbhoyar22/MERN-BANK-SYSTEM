@@ -28,7 +28,7 @@ const Home = () => {
             and more—all with enhanced security.
           </p>
           <Link to={user ? "/dashboard" : "/login"}>
-            <button className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-md transition-transform transform hover:scale-105">
+            <button className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-md transition-transform transform hover:scale-105 animate-bounce">
               🚀 Get Started
             </button>
           </Link>
@@ -69,7 +69,7 @@ const Home = () => {
       </section>
 
       {/* Blog Promotion Section */}
-      <section className="bg-gray-900  py-16 px-8 text-center text-gray-300">
+      <section className="bg-black border-t border-gray-800  py-16 px-8 text-center text-gray-300">
         <h2 className="text-3xl font-bold text-blue-400 mb-4">
           📢 Explore Our Blog
         </h2>
@@ -86,6 +86,7 @@ const Home = () => {
         </div>
       </section>
 
+      <div className="border border-gray-800"></div>
       <Contact/>
 
       

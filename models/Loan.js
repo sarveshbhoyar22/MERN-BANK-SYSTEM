@@ -9,6 +9,8 @@ const loanSchema = mongoose.Schema(
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
+    duration: { type: Number, required: true },
+    
     approvedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }

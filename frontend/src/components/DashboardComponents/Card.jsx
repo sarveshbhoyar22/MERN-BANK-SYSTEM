@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Card = ({ title, photo, description, buttonname, link = "" }) => {
   return (
     <Link to={link} className="group">
-      <div className="bg-black text-white border border-gray-800 shadow-lg rounded-lg w-48 h-72 p-4 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+      <div className="bg-black text-white border border-gray-800 shadow-lg rounded-lg sm:w-64 w-48 h-72 p-4 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
         {/* Image */}
         <div className="flex justify-center">
           <img
@@ -23,7 +23,7 @@ const Card = ({ title, photo, description, buttonname, link = "" }) => {
         {/* Button */}
         {buttonname && (
           <div className="flex justify-center mt-4">
-            <button className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition duration-300">
+            <button className="bg-blue-500 cursor hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition duration-300">
               {buttonname}
             </button>
           </div>

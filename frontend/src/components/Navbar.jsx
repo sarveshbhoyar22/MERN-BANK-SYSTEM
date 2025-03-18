@@ -5,6 +5,8 @@ import UseLogout from '../hooks/UseLogout';
 import useScreenSize from '../hooks/Usescreensize';
 import { useNotificationContext } from '../context/NotificationContext';
 import NotificationDropdown from './NotificationDropdown';
+import { BsQrCodeScan } from "react-icons/bs";
+
 
 const Navbar = ({ profilePhoto = "/logo.png" }) => {
   // const {notifications, markedAsRead} = useNotificationContext();
@@ -45,7 +47,7 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
                 tabIndex={0}
                 className="menu menu-lg gap-4 dropdown-content bg-base-100 rounded-box z-1 mt- w-52 p-2 shadow"
               >
-                <Link to="/">Home</Link>
+                <Link to="/dashboard">Home</Link>
                 <Link to="/about">About us</Link>
                 <Link to="/blog">Blog</Link>
                 <Link to="/contact">Contact</Link>
@@ -106,6 +108,13 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
           </div>
         )}
         <div className="navbar-end">
+          {user && (
+            <div>
+              <Link to="scan-QR">
+                <BsQrCodeScan />
+              </Link>
+            </div>
+          )}
           {user && <NotificationDropdown />}
 
           <div className="dropdown dropdown-end gap-2 m-2">

@@ -181,16 +181,16 @@ const UserProfile = () => {
         }
       );
 
-      if (res.status === 200) {
+     
         setDone(true);
         setOpennew(false);
         setVerified(false);
         setNewPassword("");
         setOldPassword("");
 
-        Navigate("/dashboard");
+       
         toast.success("Password Updated");
-      }
+    
     } catch (error) {
       console.error(
         toast.error("Error updating Password:"),

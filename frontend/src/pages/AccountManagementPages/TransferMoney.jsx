@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Goback from "../../components/Goback";
+import { useSearchParams } from "react-router-dom";
 
 const TransferMoney = () => {
-  const [receiverAccountNumber, setReceiverAccountNumber] = useState("");
+  const [searchParams] = useSearchParams();
+  const initialAccountNumber = searchParams.get("account" || "");
+  const [receiverAccountNumber, setReceiverAccountNumber] = useState(initialAccountNumber);
   const [amount, setAmount] = useState("");
   const { authUser: user } = useAuthContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,7 +83,7 @@ const TransferMoney = () => {
               required
               onChange={(e) => setReceiverAccountNumber(e.target.value)}
             />
-
+            
             <label className="block text-gray-300 text-sm">Amount</label>
             <input
               type="number"

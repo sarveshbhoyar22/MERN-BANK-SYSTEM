@@ -32,6 +32,10 @@ import AboutUs from "../components/AboutUs.jsx";
 import Loan from "../pages/Loan.jsx";
 import LoanOptions from "../pages/LoanOptions.jsx";
 import LoanStatus from "../pages/LoanStatus.jsx";
+import ForgetPassword from "../pages/forgetPassword.jsx";
+import QRScanner from "../components/QRCode/QRScanner.jsx";
+import Setting from "../pages/Setting.jsx";
+
 
 
 
@@ -76,6 +80,7 @@ const AppRoutes = () => {
           <Route path="/blog" element={<Blog />} />
           <Route path="/users" element={<Users />} />
           <Route path="/about" element={<AboutUs />} />
+          <Route path="/forgot-password" element={<ForgetPassword />} />
 
           {/* User Routes */}
 
@@ -120,7 +125,7 @@ const AppRoutes = () => {
             element={
               <PrivateRoute
                 element={user ? <LoanOptions /> : <Navigate to="/login" />}
-                allowedRoles={["user","admin"]}
+                allowedRoles={["user", "admin"]}
               />
             }
           />
@@ -129,7 +134,7 @@ const AppRoutes = () => {
             element={
               <PrivateRoute
                 element={user ? <Loan /> : <Navigate to="/login" />}
-                allowedRoles={["user","admin"]}
+                allowedRoles={["user", "admin"]}
               />
             }
           />
@@ -138,7 +143,7 @@ const AppRoutes = () => {
             element={
               <PrivateRoute
                 element={user ? <LoanStatus /> : <Navigate to="/login" />}
-                allowedRoles={["user","admin"]}
+                allowedRoles={["user", "admin"]}
               />
             }
           />
@@ -174,6 +179,24 @@ const AppRoutes = () => {
             element={
               <PrivateRoute
                 element={user ? <Transactions /> : <Navigate to="/login" />}
+                allowedRoles={["user", "admin"]}
+              />
+            }
+          />
+          <Route
+            path="/scan-QR"
+            element={
+              <PrivateRoute
+                element={user ? <QRScanner /> : <Navigate to="/login" />}
+                allowedRoles={["user", "admin"]}
+              />
+            }
+          />
+          <Route
+            path="/setting"
+            element={
+              <PrivateRoute
+                element={user ? <Setting /> : <Navigate to="/login" />}
                 allowedRoles={["user", "admin"]}
               />
             }

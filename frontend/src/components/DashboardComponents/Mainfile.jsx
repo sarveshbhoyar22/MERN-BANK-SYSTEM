@@ -2,6 +2,7 @@ import React from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import useScreenSize from "../../hooks/Usescreensize";
 import { Link } from "react-router-dom";
+import QRCodeComponent from "../QRCode/QRCodeComponent";
 
 const Mainfile = () => {
   const { authUser: user } = useAuthContext();
@@ -9,7 +10,7 @@ const Mainfile = () => {
 
   return (
     <div className="flex justify-center mt-16">
-      <Link to="/profile">
+      
         <div className="bg-black m-2 text-white border border-gray-800 shadow-lg p-6 rounded-xl w-[350px] sm:w-[420px] hover:shadow-xl transition-all duration-300">
           {/* Profile Picture */}
           <div className="flex flex-col items-center">
@@ -19,7 +20,6 @@ const Mainfile = () => {
                 alt="Profile"
                 className="w-20 h-20 rounded-full border-4 border-gray-700 shadow-md"
               />
-             
             </div>
             <h2 className="text-2xl font-semibold mt-3">
               {user?.name.toUpperCase()}
@@ -40,10 +40,9 @@ const Mainfile = () => {
             </p>
           </div>
 
-         
-          
+          <QRCodeComponent accountNumber={user?.account?.accountNumber} />
         </div>
-      </Link>
+      
     </div>
   );
 };

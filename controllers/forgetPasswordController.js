@@ -24,10 +24,9 @@ export const forgetPassword = asyncHandler(async (req, res) => {
     email,
     "Password Reset OTP",
     `Your OTP for password reset is: ${otp}`
-  )
+  );
 
   try {
-    
     res.status(200).json({ message: "OTP sent to email" });
   } catch (error) {
     console.error("Error sending OTP:", error);
@@ -60,32 +59,23 @@ export const verifyOtp = asyncHandler(async (req, res) => {
 export const resetPassword = asyncHandler(async (req, res) => {
   const { email, newPassword } = req.body;
 
-  // console.log(email,newPassword)
-  const user = await User.findOne({ email }); 
-  if (!user) { 
+  console.log(email,newPassword)
+  const user = await User.findOne({ email });
+  if (!user) {
     res.status(404);
     throw new Error("User not found");
   }
-  
 
   user.password = newPassword;
   await user.save();
-  
-  
-  
 
-  
-
-  
-
-  res
-    .status(200)
+  res.status(200)
     .json({ message: "Password reset successfully. You can now log in." });
-}); 
+});
 
 export const verifyoldPassword = asyncHandler(async (req, res) => {
   const { email, oldPassword } = req.body;
-  console.log(oldPassword)
+  console.log(oldPassword);
 
   const user = await User.findOne({ email });
   if (!user) {
@@ -93,13 +83,10 @@ export const verifyoldPassword = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  if(!oldPassword === await user.matchPassword(oldPassword)){
+  if (!oldPassword === (await user.matchPassword(oldPassword))) {
     res.status(400);
     throw new Error("Invalid old password");
   }
-  
-  res.status(200)
-    .json({ message: "Password matched" });
+
+  res.status(200).json({ message: "Password matched" });
 });
-
-

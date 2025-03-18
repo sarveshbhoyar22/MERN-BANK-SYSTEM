@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
 import AboutUs from "../components/AboutUs";
 import Contact from "../pages/Contact";
+import { TypeAnimation } from "react-type-animation";
 
 const Home = () => {
   const { authUser: user } = useAuthContext();
@@ -22,6 +23,23 @@ const Home = () => {
           <h1 className="text-5xl font-extrabold mb-4 animate-fadeIn">
             Welcome to <span className="text-blue-400">Auth-Bank</span>
           </h1>
+          <h2 className="font-extrabold h-20 text-4xl bg-clip-text text-transparent m-5 bg-gradient-to-l from-blue-600 to-purple-400">
+            <TypeAnimation
+              sequence={[
+                // Same substring at the start will only be typed once, initially
+                "  Secure Banking",
+                2000,
+                "  Easy Transactions",
+                2000,
+                "  Transparent Loan System",
+                2000,
+                
+              ]}
+              speed={5}
+              style={{ fontSize: "1em" }}
+              repeat={Infinity}
+            />
+          </h2>
           <p className="text-lg text-gray-300 mb-6 animate-fadeIn delay-200">
             Experience a secure and user-friendly banking platform designed for
             seamless financial operations. Manage transactions, apply for loans,
@@ -79,7 +97,7 @@ const Home = () => {
         </p>
         <div className="mt-6">
           <Link to="/blog">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-md transition-transform transform hover:scale-105">
+            <button className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-md transition-transform transform hover:scale-105">
               📖 Read Blogs
             </button>
           </Link>
@@ -87,10 +105,7 @@ const Home = () => {
       </section>
 
       <div className="border border-gray-800"></div>
-      <Contact/>
-
-      
-      
+      <Contact />
     </>
   );
 };

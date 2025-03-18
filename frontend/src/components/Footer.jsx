@@ -1,13 +1,21 @@
 import React from "react";
 import { useAuthContext } from "../context/AuthContext";
 import useScreenSize from "../hooks/Usescreensize";
+import { FaGithub } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
+import { FaDiscord } from "react-icons/fa";
+import { Link } from "react-router-dom";
+
+
+
 
 const Footer = () => {
   const { authUser: user } = useAuthContext();
   const { width } = useScreenSize();
 
   return (
-    <footer className="bg-gradient-to-t from-gray-900 to-black text-white py-10">
+    <footer className="bg-gradient-to-t from-gray-800 to-black text-white py-10">
       <div className="divider"></div>
       <div className="container mx-auto px-6 md:px-12">
         {/* Grid Layout */}
@@ -21,7 +29,7 @@ const Footer = () => {
             />
             <p className="mt-3 text-gray-400 text-sm">
               Auth-Bank Ltd. <br />
-              Providing reliable Web-dev since 2022.
+              Providing reliable Web-dev since 2025.
             </p>
           </div>
 
@@ -31,7 +39,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <a
-                  href="#"
+                  href="/branding"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Branding
@@ -39,7 +47,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/design"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Design
@@ -47,7 +55,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/marketing"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Marketing
@@ -70,7 +78,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <a
-                  href="#"
+                  href="/about"
                   className="text-gray-400 hover:text-white transition"
                 >
                   About Us
@@ -78,7 +86,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/contact"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Contact
@@ -86,7 +94,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/jobs"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Jobs
@@ -94,7 +102,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/presskit"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Press Kit
@@ -109,7 +117,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <a
-                  href="#"
+                  href="/terms"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Terms of Use
@@ -117,7 +125,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/about"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Privacy Policy
@@ -125,7 +133,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/about"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Cookie Policy
@@ -133,18 +141,8 @@ const Footer = () => {
               </li>
             </ul>
 
-            {/* Social Icons */}
-            <div className="flex gap-4 mt-4">
-              <a href="#" className="hover:text-blue-500 transition">
-                <i className="fab fa-twitter text-2xl"></i>
-              </a>
-              <a href="#" className="hover:text-red-500 transition">
-                <i className="fab fa-youtube text-2xl"></i>
-              </a>
-              <a href="#" className="hover:text-blue-700 transition">
-                <i className="fab fa-facebook text-2xl"></i>
-              </a>
-            </div>
+            
+            
           </div>
         </div>
 
@@ -152,6 +150,21 @@ const Footer = () => {
         <div className="mt-8 border-t border-gray-700 pt-4 text-center text-gray-500 text-sm">
           <p>© 2025 Auth-Bank Ltd. All rights reserved.</p>
           <p>Created by Sarvesh Bhoyar (IIT(ISM) Dhanbad)</p>
+        </div>
+
+        <div className="text-center flex gap-4 justify-center m-2">
+          <a href="https://github.com/sarveshbhoyar22">
+            <FaGithub />
+          </a>
+          <a href="https://www.linkedin.com/in/sarvesh-bhoyar-711818239/">
+            <FaLinkedin />
+          </a>
+          <a href="https://www.instagram.com/sarvesh_bhoyar_/profilecard/?igsh=MXExd3I1enNkcXloNQ==https://www.instagram.com/sarvesh_bhoyar_/profilecard/?igsh=MXExd3I1enNkcXloNQ==">
+            <FaInstagram />
+          </a>
+          <a>
+            <FaDiscord />
+          </a>
         </div>
       </div>
     </footer>

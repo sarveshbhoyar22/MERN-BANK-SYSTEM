@@ -6,6 +6,7 @@ import useScreenSize from '../hooks/Usescreensize';
 import { useNotificationContext } from '../context/NotificationContext';
 import NotificationDropdown from './NotificationDropdown';
 import { BsQrCodeScan } from "react-icons/bs";
+import { RiBankFill } from "react-icons/ri";
 
 
 const Navbar = ({ profilePhoto = "/logo.png" }) => {
@@ -18,7 +19,7 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
 
   return (
     <>
-      <div className="navbar bg-gradient-to-b from-gray-900  to-black  text-white shadow-sm  fixed z-10 ">
+      <div className="navbar bg-gradient-to-b from-gray-800  to-black  text-white shadow-sm  fixed z-10 ">
         {width < 768 ? (
           <div className="navbar-start dropdown ">
             <div
@@ -94,19 +95,19 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
           </div>
         )}
 
-        {user && (
-          <div className="navbar-center">
-            <Link
-              to="/dashboard"
-              role="button"
-              draggable="false"
-              className="btn btn-ghost normal-case sm:text-2xl text-xl"
-            >
-              OnlineAuth-BANK
-            </Link>
-            {/* <a className="btn btn-ghost text-xl">Auth-Bank</a> */}
-          </div>
-        )}
+        <div className="navbar-center">
+          <RiBankFill className="text-2xl" />
+          <Link
+            to="/dashboard"
+            role="button"
+            draggable="false"
+            className="normal-case sm:text-2xl m-1 text-xl"
+          >
+            OnlineAuth-BANK
+          </Link>
+          {/* <a className="btn btn-ghost text-xl">Auth-Bank</a> */}
+        </div>
+
         <div className="navbar-end">
           {user && (
             <div>
@@ -140,13 +141,8 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
                   <Link to="/login">Login</Link>
                 )}
               </li>
-              <li>
-                {user ? (
-                  <Link to="/Setting">Setting</Link>
-                ) : (
-                  <Link to="/register">Register</Link>
-                )}
-              </li>
+              <li>{!user && <Link to="/register">register</Link>}</li>
+
               <li>
                 {user && (
                   <button onClick={logout}>

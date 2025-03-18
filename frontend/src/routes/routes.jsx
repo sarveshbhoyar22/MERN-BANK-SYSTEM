@@ -35,6 +35,13 @@ import LoanStatus from "../pages/LoanStatus.jsx";
 import ForgetPassword from "../pages/forgetPassword.jsx";
 import QRScanner from "../components/QRCode/QRScanner.jsx";
 import Setting from "../pages/Setting.jsx";
+import Branding from "../pages/footer/Branding.jsx";
+import Design from "../pages/footer/Design.jsx";
+import Marketing from "../pages/footer/Marketing.jsx";
+import Jobs from "../pages/footer/Jobs.jsx";
+import PressKit from "../pages/footer/PressKit.jsx";
+import TermsOfUse from "../pages/footer/TermsOfUse.jsx";
+
 
 
 
@@ -81,6 +88,14 @@ const AppRoutes = () => {
           <Route path="/users" element={<Users />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/forgot-password" element={<ForgetPassword />} />
+          {/* ................ */}
+          <Route path="/branding" element={<Branding />} />
+          <Route path="/design" element={<Design />} />
+          <Route path="/marketing" element={<Marketing />} />
+          <Route path="/jobs" element={<Jobs />} />
+          <Route path="/presskit" element={<PressKit />} />
+          <Route path="/terms" element={<TermsOfUse />} />
+          
 
           {/* User Routes */}
 

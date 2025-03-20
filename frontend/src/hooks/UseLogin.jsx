@@ -33,7 +33,7 @@ const UseLogin = () => {
       if (!success) return;
       setloading(true);
       // console.log(email, password);
-      const res = await axios.post("/api/auth/login", {email, password}, {
+      const res = await api.post("/api/auth/login", {email, password}, {
         withCredentials: true
       });
 

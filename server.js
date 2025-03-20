@@ -13,7 +13,7 @@ import infoRoutes from "./routes/infoRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import blogRoutes from "./routes/blogroutes.js";
 import forgetPasswordRoutes from "./routes/forgetPasswordRoutes.js";
-// ..........................
+// ..........................................................................................
 
 dotenv.config();
 
@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(CookieParser());
 app.use(
   cors({
-    origin: "http://localhost:3000", // Change to your frontend URL
+    origin: `${process.env.FRONTEND_URL}`, // Change to your frontend URL
     credentials: true, // ALLOW cookies
   })
 );
@@ -43,7 +43,7 @@ import http from "http";
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: `${process.env.FRONTEND_URL}`,
     methods: ["GET", "POST"],
     credentials: true,
   },

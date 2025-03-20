@@ -2,11 +2,12 @@ import asyncHandler from "express-async-handler";
 import Loan from "../models/Loan.js";
 import Account from "../models/Account.js";
 import { sendEmail } from "../utils/emailService.js";
+import User from "../models/User.js";
 
 // Apply for a Loan
 export const applyForLoan = asyncHandler(async (req, res) => {
   const { amount, duration } = req.body;
-
+  const user = req.user;
   if (!amount || amount <= 0) {
     res.status(400);
     throw new Error("Invalid loan amount");
@@ -19,12 +20,22 @@ export const applyForLoan = asyncHandler(async (req, res) => {
     status: "pending",
   });
 
+  sendEmail(
+    user.email,
+    "Loan Application Submitted",
+    `Hello ${user.name},\n\nYour loan application for $${amount} has been submitted.`
+  );
+
   res.json({ message: "Loan application submitted", loan });
 });
 
 // Admin Approve/Reject Loan
 export const reviewLoan = asyncHandler(async (req, res) => {
   const { loanId, status } = req.body;
+  const loann = await Loan.findById(loanId);
+  const userId = await loann.user;
+  const user = await User.findById(userId);
+
 
   if (!loanId || !["approved", "pending", "rejected"].includes(status)) {
     res.status(400);
@@ -47,6 +58,13 @@ export const reviewLoan = asyncHandler(async (req, res) => {
 
   if (status === "approved") {
     const account = await Account.findOne({ user: loan.user });
+
+    sendEmail(
+      user.email,
+      `Your Loan Request has been ${status}`,
+      `Hello ${user.name},\n\nYour loan request for $${loan.amount} has been ${status}.`
+    )
+
     if (account) {
       account.balance += loan.amount;
       await account.save();
@@ -57,9 +75,9 @@ export const reviewLoan = asyncHandler(async (req, res) => {
 
   // Send Email
   sendEmail(
-    loan.user.email,
+    user.email,
     `Your Loan Request has been ${status}`,
-    `Hello ${loan.user.name},\n\nYour loan request for ₹${loan.amount} has been ${status}.`
+    `Hello ${user.name},\n\nYour loan request for ₹${loan.amount} has been ${status}.`
   );
 
   res.json({ message: `Loan ${status} successfully`, loan });

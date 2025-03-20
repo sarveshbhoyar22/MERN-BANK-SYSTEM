@@ -4,7 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import {useAuthContext as useAuth} from "../context/AuthContext.jsx";// Auth context for checking user roles
+import { useAuthContext as useAuth } from "../context/AuthContext.jsx"; // Auth context for checking user roles
 
 import Login from "../pages/Login.jsx";
 import Register from "../pages/Register.jsx";
@@ -17,7 +17,6 @@ import Transactions from "../pages/AccountManagementPages/Transaction.jsx";
 
 import AdminUsers from "../pages/AdminUserManagement.jsx";
 import Home from "../pages/Home.jsx";
-
 
 import CheckBalance from "../pages/CheckBalance.jsx";
 import Layout from "../layouts/layout.jsx";
@@ -34,7 +33,6 @@ import LoanOptions from "../pages/LoanOptions.jsx";
 import LoanStatus from "../pages/LoanStatus.jsx";
 import ForgetPassword from "../pages/forgetPassword.jsx";
 import QRScanner from "../components/QRCode/QRScanner.jsx";
-
 import Branding from "../pages/footer/Branding.jsx";
 import Design from "../pages/footer/Design.jsx";
 import Marketing from "../pages/footer/Marketing.jsx";
@@ -42,17 +40,10 @@ import Jobs from "../pages/footer/Jobs.jsx";
 import PressKit from "../pages/footer/PressKit.jsx";
 import TermsOfUse from "../pages/footer/TermsOfUse.jsx";
 
-
-
-
-
-
-
 // Protected route component
 const PrivateRoute = ({ element, allowedRoles }) => {
   const { authUser: user } = useAuth();
   // console.log("routeUser:",user);
-  
 
   if (!user) {
     return <Navigate to="/" />;
@@ -68,9 +59,9 @@ const PrivateRoute = ({ element, allowedRoles }) => {
 const AppRoutes = () => {
   const { authUser: user, loading } = useAuth();
 
-    if (loading) {
-      <loading/>// Show loading screen while checking auth state
-    }
+  if (loading) {
+    <loading />; // Show loading screen while checking auth state
+  }
   return (
     <Router>
       {/* <Navbar /> */}
@@ -96,8 +87,6 @@ const AppRoutes = () => {
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/presskit" element={<PressKit />} />
           <Route path="/terms" element={<TermsOfUse />} />
-          
-          
 
           {/* User Routes */}
 
@@ -209,7 +198,6 @@ const AppRoutes = () => {
               />
             }
           />
-          
 
           {/* Admin Routes */}
           <Route

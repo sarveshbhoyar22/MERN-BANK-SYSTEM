@@ -16,7 +16,7 @@ import Transactions from "../pages/AccountManagementPages/Transaction.jsx";
 import AdminUsers from "../pages/AdminUserManagement.jsx";
 import Home from "../pages/Home.jsx";
 import CheckBalance from "../pages/CheckBalance.jsx";
-import Layout from "../layouts/layout.jsx";
+import Layout from "../layouts/Layout.jsx";
 import ScrollToTop from "../utils/ScrollToTop.jsx";
 import Contact from "../pages/Contact.jsx";
 import Blog from "../pages/Blog.jsx";

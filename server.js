@@ -85,7 +85,7 @@ app.use("/forget", forgetPasswordRoutes);
 
 // Basic Route
 app.get("/", (req, res) => {
-  res.send("Banking System Backend is Running...");
+  res.send("Banking System Backend is Running....");
 });
 
 // Start Server

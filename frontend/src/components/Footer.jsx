@@ -1,14 +1,8 @@
 import React from "react";
 import { useAuthContext } from "../context/AuthContext";
 import useScreenSize from "../hooks/Usescreensize";
-import { FaGithub } from "react-icons/fa";
-import { FaLinkedin } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa";
-import { FaDiscord } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaInstagram, FaDiscord } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
-
-
 
 const Footer = () => {
   const { authUser: user } = useAuthContext();
@@ -38,36 +32,33 @@ const Footer = () => {
             <h6 className="text-lg font-semibold mb-3">Services</h6>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="/branding"
-                  className="text-gray-400 hover:text-white transition"
-                >
+                <Link to="/branding" className="text-gray-400 hover:text-white transition">
                   Branding
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/design"
+                <Link
+                  to="/design"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Design
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/marketing"
+                <Link
+                  to="/marketing"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Marketing
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/about"
+                <Link
+                  to="/about"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Advertisement
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -77,36 +68,36 @@ const Footer = () => {
             <h6 className="text-lg font-semibold mb-3">Company</h6>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="/about"
+                <Link
+                  to="/about"
                   className="text-gray-400 hover:text-white transition"
                 >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/contact"
+                <Link
+                  to="/contact"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Contact
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/jobs"
+                <Link
+                  to="/jobs"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Jobs
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/presskit"
+                <Link
+                  to="/presskit"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Press Kit
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -116,33 +107,30 @@ const Footer = () => {
             <h6 className="text-lg font-semibold mb-3">Legal</h6>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="/terms"
+                <Link
+                  to="/terms"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Terms of Use
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/about"
+                <Link
+                  to="/about"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/about"
+                <Link
+                  to="/about"
                   className="text-gray-400 hover:text-white transition"
                 >
                   Cookie Policy
-                </a>
+                </Link>
               </li>
             </ul>
-
-            
-            
           </div>
         </div>
 
@@ -159,7 +147,7 @@ const Footer = () => {
           <a href="https://www.linkedin.com/in/sarvesh-bhoyar-711818239/">
             <FaLinkedin />
           </a>
-          <a href="https://www.instagram.com/sarvesh_bhoyar_/profilecard/?igsh=MXExd3I1enNkcXloNQ==https://www.instagram.com/sarvesh_bhoyar_/profilecard/?igsh=MXExd3I1enNkcXloNQ==">
+          <a href="https://www.instagram.com/sarvesh_bhoyar_/profilecard/?igsh=MXExd3I1enNkcXloNQ==">
             <FaInstagram />
           </a>
           <a>

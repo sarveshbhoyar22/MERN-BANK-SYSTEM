@@ -60,7 +60,7 @@ const Contact = () => {
             Have any questions or feedback? Feel free to reach out, and our team
             will respond as soon as possible.
           </p>
-          <div className="mt-6 space-y-4 ">
+          {width >= 768 && (<div className="mt-6 space-y-4 ">
             <p className="flex items-center space-x-3 text-gray-300">
               📧 <span className="font-medium">support@authbank.com</span>
             </p>
@@ -73,7 +73,7 @@ const Contact = () => {
             <p className="flex items-center space-x-3 text-gray-300">
               ☎ <span className="font-medium">+1 (800) 987-6543</span>
             </p>
-          </div>
+          </div>)}
         </div>
 
         {/* Right Side - Contact Form */}

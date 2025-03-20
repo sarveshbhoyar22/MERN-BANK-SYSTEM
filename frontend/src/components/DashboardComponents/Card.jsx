@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Card = ({ title, photo, description, buttonname, link = "" }) => {
   return (
     <Link to={link} className="group">
-      <div className="bg-black text-white border border-gray-800 shadow-lg rounded-lg sm:w-64 w-48 h-72 p-4 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+      <div className="bg-black text-white border border-gray-800 shadow-lg rounded-lg sm:w-64 w-40 h-72 p-4 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
         {/* Image */}
         <div className="flex justify-center">
           <img

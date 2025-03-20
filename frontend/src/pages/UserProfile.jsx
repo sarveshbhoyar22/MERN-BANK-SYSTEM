@@ -307,7 +307,7 @@ const UserProfile = () => {
           <Goback />
           <img
             src={user?.profilePhoto}
-            className="rounded-full h-12 w-12 "
+            className="rounded-full h-12 w-12 object-cover "
             alt=""
           />
           User Profile

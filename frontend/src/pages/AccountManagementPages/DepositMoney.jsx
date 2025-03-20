@@ -46,7 +46,7 @@ const DepositMoney = () => {
     <>
       {/* Background */}
       <div className="bg-black min-h-screen flex items-center justify-center">
-        <div className="w-auto max-w-md p-6 bg-black border border-gray-800 rounded-lg shadow-lg">
+        <div className="sm:w-auto w-76 max-w-md p-6 bg-black border border-gray-800 rounded-lg shadow-lg">
           <div className="flex items-center mb-6 space-x-3">
             <Goback />
             <img src="/second/deposit.png" className="w-12" alt="Safe Icon" />

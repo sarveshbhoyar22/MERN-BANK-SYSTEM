@@ -12,7 +12,7 @@ function App() {
         <NotificationProvider>
         
         <AppRoutes />
-        <Footer/>
+        
 
         <Toaster />
         </NotificationProvider>

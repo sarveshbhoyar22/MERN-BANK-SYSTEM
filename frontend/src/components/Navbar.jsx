@@ -117,9 +117,9 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
 
         <div className="navbar-end">
           {user && (
-            <div>
+            <div className="">
               <Link to="scan-QR">
-                <BsQrCodeScan />
+                <BsQrCodeScan className="text-sm" />
               </Link>
             </div>
           )}

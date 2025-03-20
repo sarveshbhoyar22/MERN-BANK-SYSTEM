@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 import axios from "axios";
-import Goback from "../components/Goback";
-import { useAuthContext } from "../context/AuthContext";
+import Goback from "../components/Goback.jsx";
+import { useAuthContext } from "../context/AuthContext.jsx";
 
 const Loan = () => {
   const [loanAmount, setLoanAmount] = useState("");

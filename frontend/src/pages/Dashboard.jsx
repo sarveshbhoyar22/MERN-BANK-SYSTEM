@@ -1,11 +1,10 @@
 
 
 import React, { useState } from "react";
-import Mainfile from "../components/DashboardComponents/mainfile";
-import Card from "../components/DashboardComponents/card";
-import { useAuthContext } from "../context/AuthContext";
-import useTransaction from "../hooks/UseTransaction";
-import useScreenSize from "../hooks/Usescreensize";
+import Mainfile from "../components/DashboardComponents/Mainfile.jsx";
+import Card from "../components/DashboardComponents/Card.jsx";
+import useTransaction from "../hooks/UseTransaction.jsx";
+import useScreenSize from "../hooks/Usescreensize.jsx";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {

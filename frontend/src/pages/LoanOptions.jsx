@@ -1,6 +1,6 @@
 import React from 'react'
-import Card from '../components/DashboardComponents/card'
-import Goback from '../components/Goback';
+import Card from '../components/Card.jsx';
+import Goback from '../components/Goback.jsx';
 
 const LoanOptions = () => {
   return (

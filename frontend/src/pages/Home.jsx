@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
-import AboutUs from "../components/AboutUs";
 import Contact from "../pages/Contact";
 import { TypeAnimation } from "react-type-animation";
 import toast from "react-hot-toast";

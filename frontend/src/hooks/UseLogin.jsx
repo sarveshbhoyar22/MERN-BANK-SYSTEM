@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
+const BASE_URL = import.meta.env.VITE_BASE_URL
 const API_BASE_URL = `${BASE_URL}`;
 
 const api = axios.create({
@@ -48,8 +48,10 @@ const UseLogin = () => {
       localStorage.setItem("user", JSON.stringify(data));
       localStorage.setItem("token", data.token);
       setAuthUser(data);
-      
-      toast.success("You have logged in successful!");
+      if(authUser){
+
+        toast.success("You have logged in successful!");
+      }
       
       return true;
 

@@ -27,7 +27,7 @@ import AboutUs from "../components/AboutUs.jsx";
 import Loan from "../pages/Loan.jsx";
 import LoanOptions from "../pages/LoanOptions.jsx";
 import LoanStatus from "../pages/LoanStatus.jsx";
-import ForgetPassword from "../pages/forgetPassword.jsx";
+import ForgetPassword from "../pages/ForgetPassword.jsx";
 import QRScanner from "../components/QRCode/QRScanner.jsx";
 import Branding from "../pages/footer/Branding.jsx";
 import Design from "../pages/footer/Design.jsx";

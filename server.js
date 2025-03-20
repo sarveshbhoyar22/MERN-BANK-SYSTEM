@@ -82,6 +82,7 @@ app.use("/api/transaction", transactionRoutes);
 app.use("/blogs",blogRoutes)
 app.use("/forget", forgetPasswordRoutes);
 
+
 // Basic Route
 app.get("/", (req, res) => {
   res.send("Banking System Backend is Running...");

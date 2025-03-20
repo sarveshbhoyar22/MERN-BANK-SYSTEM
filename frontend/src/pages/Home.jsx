@@ -4,9 +4,45 @@ import { useAuthContext } from "../context/AuthContext";
 import AboutUs from "../components/AboutUs";
 import Contact from "../pages/Contact";
 import { TypeAnimation } from "react-type-animation";
-
+import toast from "react-hot-toast";
+import axios from "axios"
 const Home = () => {
   const { authUser: user } = useAuthContext();
+  const [isReady, setIsReady] = React.useState(false);
+
+  const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
+
+  React.useEffect(() => {
+    let toastId;
+    if (!isReady) {
+      toastId = toast.loading("Please wait, Backend is starting...");
+      return () => toast.dismiss(toastId);
+    }
+  }, [isReady]);
+
+  React.useEffect(() => {
+    const checkbackendStatus = async () => {
+      try {
+        const res =await axios.get(`${BASE_URL}/api/info/ready`, {
+          withCredentials: true,
+        });
+
+        if (res.status === 200) {
+          setIsReady(true);
+          toast.dismiss(); // Remove loading toast
+          toast.success("Backend is ready! ✅");
+        }
+      } catch (error) {
+        setTimeout(
+
+          console.error("Failed to check backend status."),
+          20000
+        )
+      }
+    };
+
+    checkbackendStatus();
+  }, []);
 
   return (
     <>
@@ -33,7 +69,6 @@ const Home = () => {
                 2000,
                 "  Transparent Loan System",
                 2000,
-                
               ]}
               speed={5}
               style={{ fontSize: "1em" }}

@@ -6,6 +6,10 @@ import { sendEmail } from "../utils/emailService.js";
 import Notification from "../models/Notification.js";
 import { getAccountDetails } from "./accountController.js";
 
+
+export const serverReady = asyncHandler(async (req, res) => {
+  res.status(200).json({ message: "Server is ready" });
+})
 // Register New User
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, balance = 0 } = req.body;

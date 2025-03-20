@@ -19,7 +19,7 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
     <>
       <div className="navbar bg-gradient-to-b from-gray-800  to-black  text-white shadow-sm  fixed z-50 ">
         {width < 768 ? (
-          <div className="navbar-start dropdown ">
+          <div className="navbar-start dropdown border  ">
             <div
               tabIndex={0}
               role="button"
@@ -63,7 +63,7 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
             </div>
           </div>
         ) : (
-          <div className="navbar-start -mr-1  ">
+          <div className="navbar-start -mr-1 hidden  ">
             <div>
               <Link
                 to="/dashboard"

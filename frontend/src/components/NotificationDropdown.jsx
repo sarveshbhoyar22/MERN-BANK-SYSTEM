@@ -44,7 +44,7 @@ const NotificationDropdown = () => {
 
       {/* Notification Dropdown Panel */}
       {open && (
-        <div className="absolute right-0 mt-3 w-80 bg-gray-900 border border-gray-400 text-white shadow-lg rounded-lg overflow-hidden transition-all duration-200 animate-fade-in">
+        <div className="absolute right-0 mt-2 sm:ml-5  sm:w-80 w-64 bg-gray-900 border border-gray-400 text-white shadow-lg rounded-lg overflow-hidden transition-all duration-200 animate-fade-in">
           <div className="p-4 border-b border-gray-700 flex justify-between items-center">
             <h3 className="text-lg font-semibold text-gray-400">Notifications</h3>
             

@@ -77,7 +77,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
 
   return (
     <div className="bg-black min-h-screen flex flex-col items-center py-6">
-      <div className="w-full max-w-2xl m-5 mt-20 p-6 bg-black border border-gray-800 rounded-lg shadow-lg">
+      <div className="sm:w-full w-80 max-w-2xl m-5 mt-20 p-6 bg-black border border-gray-800 rounded-lg shadow-lg">
         {/* Header */}
         <div className="flex items-center mb-6 space-x-3">
           <Goback link="/loanoptions" />

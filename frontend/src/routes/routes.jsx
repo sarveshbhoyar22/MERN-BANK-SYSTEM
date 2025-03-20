@@ -11,19 +11,15 @@ import Register from "../pages/Register.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 import AdminDashboard from "../pages/AdminDashboard.jsx";
 import Deposit from "../pages/AccountManagementPages/DepositMoney.jsx";
-
 import Transfer from "../pages/AccountManagementPages/TransferMoney.jsx";
 import Transactions from "../pages/AccountManagementPages/Transaction.jsx";
-
 import AdminUsers from "../pages/AdminUserManagement.jsx";
 import Home from "../pages/Home.jsx";
-
 import CheckBalance from "../pages/CheckBalance.jsx";
 import Layout from "../layouts/layout.jsx";
 import ScrollToTop from "../utils/ScrollToTop.jsx";
 import Contact from "../pages/Contact.jsx";
 import Blog from "../pages/Blog.jsx";
-
 import Users from "../pages/Users.jsx";
 import UserProfile from "../pages/UserProfile.jsx";
 import WithdrawMoney from "../pages/AccountManagementPages/WithdrawMoney.jsx";

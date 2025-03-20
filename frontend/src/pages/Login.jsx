@@ -8,14 +8,22 @@ const Login = () => {
   const [error, setError] = useState("");
   const { loading, login } = UseLogin();
   const navigate = useNavigate();
+  const[process,setProcess] = useState(false);
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    const result = await login(email, password);
-    if (result) {
-      navigate("/dashboard");
-    } else {
-      setError("Invalid email or password");
+    setProcess(true);
+    try {
+      e.preventDefault();
+      const result = await login(email, password);
+      if (result) {
+        navigate("/dashboard");
+      } else {
+        setError("Invalid email or password");
+      }
+    } catch (error) {
+      console.log(error)    
+    }finally{
+      setProcess(false);
     }
   };
 
@@ -73,7 +81,7 @@ const Login = () => {
             className="w-full bg-blue-500 hover:bg-blue-600 transition duration-300 text-white py-2 rounded-lg font-semibold flex justify-center items-center"
             disabled={loading}
           >
-            {loading ? (
+            {loading && process ? (
               <span className="loading loading-ring loading-lg"></span>
             ) : (
               "Login"

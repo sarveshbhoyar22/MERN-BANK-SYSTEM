@@ -47,6 +47,7 @@ import TermsOfUse from "../pages/footer/TermsOfUse.jsx";
 
 
 
+
 // Protected route component
 const PrivateRoute = ({ element, allowedRoles }) => {
   const { authUser: user } = useAuth();
@@ -95,6 +96,7 @@ const AppRoutes = () => {
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/presskit" element={<PressKit />} />
           <Route path="/terms" element={<TermsOfUse />} />
+          
           
 
           {/* User Routes */}

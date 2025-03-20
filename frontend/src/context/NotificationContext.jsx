@@ -26,6 +26,7 @@ export const NotificationProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
+    if(!authUser || !authUser._id) return
     if (authUser) {
       fetchNotifications();
 
@@ -38,7 +39,17 @@ export const NotificationProvider = ({ children }) => {
         reconnectionDelay: 2000,
         forceNew: true,
       });
-      newSocket.emit("join", authUser._id);
+      newSocket.emit("joinroom", authUser._id);
+      
+      newSocket.on("joinRoom", (userId) => {
+        if (userId) {
+          socket.join(userId);
+          console.log(`User ${userId} joined room ${userId}`);
+        } else {
+          console.log("User ID is missing for joinRoom event");
+        }
+      });
+
      setSocket(newSocket)
 
       newSocket.on("connect", () => {
@@ -60,7 +71,7 @@ export const NotificationProvider = ({ children }) => {
         }
       };
     }
-  }, [authUser]);
+  }, [authUser?.id]);
 
   // Fetch notifications from backend
   const fetchNotifications = async () => {

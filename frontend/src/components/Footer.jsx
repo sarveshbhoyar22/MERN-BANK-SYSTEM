@@ -19,7 +19,7 @@ const Footer = () => {
       <div className="divider"></div>
       <div className="container mx-auto px-6 md:px-12">
         {/* Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo & Description */}
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <img

@@ -17,10 +17,11 @@ const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
 
       setLoading(true);
       setError(null);
+      
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get(`${BASE_URL}/loan/loan-status`, {
-          headers: { Authorization: `Bearer ${token}` },
+        const response = await axios.get(`${BASE_URL}/api/loan/loan-status`, {
+          headers: { "Content-Type": "application/json",Authorization: `Bearer ${token}` },
           withCredentials: true,
         });
 

@@ -67,7 +67,7 @@ const Dashboard = () => {
       title: "Loan",
       photo: "/second/loan.png",
       description: "Apply for a Secure Loan.",
-      buttonname: "Check Balance",
+      buttonname: "loan",
     },
     
     {

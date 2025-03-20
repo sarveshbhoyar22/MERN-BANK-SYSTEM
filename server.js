@@ -38,7 +38,7 @@ app.use(morgan("dev"));
 //socketio
 import { Server } from "socket.io";
 import http from "http";
-import { forgetPassword } from "./controllers/forgetPasswordController.js";
+
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -47,6 +47,7 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
     credentials: true,
   },
+  allowEIO3: true,
 });
 
 // WebSocket Event Handling
@@ -54,6 +55,8 @@ io.on("connection", (socket) => {
   console.log("user Connected", socket.id);
 
   socket.on("joinRoom", (userId) => {
+
+
     socket.join(userId);
     console.log(`User ${userId} joined room`);
   });

@@ -112,9 +112,15 @@ const Users = () => {
                         className="text-gray-300 hover:text-blue-400 transition duration-200"
                       >
                         {copied === user.accountNumber ? (
-                          <ClipboardCheck className="w-5 h-5 text-green-400" />
+                          <span className="flex items-center">
+                            <ClipboardCheck className="w-5 h-5 text-green-400" />
+                            <span className="text-green-400 text-sm">Copied</span>
+                          </span>
                         ) : (
-                          <Clipboard className="w-5 h-5" />
+                          <span className="flex items-center">
+                            <Clipboard className="w-5 h-5" />
+                            <span className="text-sm">Copy</span>
+                          </span>
                         )}
                       </button>
                       <span>{user.accountNumber}</span>

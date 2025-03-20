@@ -41,8 +41,8 @@ const QRScanner = () => {
       </div>
 
       <h2 className="text-2xl font-bold mb-4">Scan QR Code</h2>
-      <p>Click to grant Permission ---> Request_camera_permission 👇</p>
-      <p>Click to upload QR ---> Request_camera_permission 👇</p>
+      <p>Click to grant Permission --- Request_camera_permission 👇</p>
+      <p>Click to upload QR --- Request_camera_permission 👇</p>
 
       {/* QR Scanner Box */}
       <div id="reader" className="w-full m-5 max-w-sm border border-gray-600 p-2 rounded-lg bg-gray-800">

@@ -5,7 +5,8 @@ import Account from "../models/Account.js";
 import dotenv from "dotenv";
 import Contact from "../models/Contact.js";
 import { sendEmail } from "../utils/emailService.js";
-
+import cloudinary from "../utils/cloudinary.js";
+import fs from "fs";
 dotenv.config();
 
 
@@ -136,6 +137,55 @@ export const updateUser = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json(updatedUser);
+});
+
+export const updateUserProfilePicture = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    // Convert buffer to base64 and upload to Cloudinary
+    const uploadToCloudinary = () => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "profile_pictures" },
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(result.secure_url);
+            }
+          }
+        );
+        stream.end(req.file.buffer);
+      });
+    };
+
+    const profilePhotoUrl = await uploadToCloudinary();
+
+    // Update user profile with the new photo URL
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { profilePhoto: profilePhotoUrl },
+      { new: true, runValidators: true }
+    );
+
+    res
+      .status(200)
+      .json({
+        message: "Profile picture updated successfully",
+        user: updatedUser,
+      });
+  } catch (error) {
+    console.error("Error uploading profile picture:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 

@@ -16,9 +16,11 @@ const Mainfile = () => {
           <div className="flex flex-col items-center">
             <div className="relative">
               <img
-                src="/logo.png"
+                src={user?.profilePhoto || "/logo.png"}
                 alt="Profile"
-                className="w-20 h-20 rounded-full border-4 border-gray-700 shadow-md"
+                draggable="false"
+              
+                className="w-20 h-20 rounded-full border-4 object-cover border-gray-700 shadow-md"
               />
             </div>
             <h2 className="text-2xl font-semibold mt-3">

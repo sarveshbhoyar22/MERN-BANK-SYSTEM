@@ -11,7 +11,7 @@ const ForgetPassword = () => {
     const[verified,setVerified] = useState(false);
     const[ newPassword,setNewPassword] = useState("");
     const [done,setDone] = useState(false)
-
+    const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
     useEffect(()=>{
         if(done){
             toast.success("Password Changed Successfully.")
@@ -25,7 +25,7 @@ const ForgetPassword = () => {
       try {
         setLoading(true);
         const res = await axios.post(
-          "http://localhost:5000/forget/forget-password",
+          `${BASE_URL}/forget/forget-password`,
           { email: email },
           {
             headers: {
@@ -58,7 +58,7 @@ const ForgetPassword = () => {
         setLoading(true);
       try {
         const res = await axios.post(
-          "http://localhost:5000/forget/verify-otp",
+          `${BASE_URL}/forget/verify-otp`,
           { otp: otp, email: email },
           {
             headers: {
@@ -91,8 +91,8 @@ const ForgetPassword = () => {
       try {
         setLoading(true)
         const res = await axios.post(
-          "http://localhost:5000/forget/reset-password",
-          { newPassword,  email },
+          `${BASE_URL}/forget/reset-password`,
+          { newPassword, email },
           {
             headers: {
               "Content-Type": "application/json",

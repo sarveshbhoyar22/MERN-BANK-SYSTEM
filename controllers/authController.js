@@ -16,7 +16,20 @@ export const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already exists");
   }
 
-  const user = await User.create({ name, email, password, role: "user", accountId: null });
+  // Generate default profile picture
+  const [firstName, lastName] = name.split(" ");
+  const defaultProfilePhoto = `https://api.dicebear.com/9.x/initials/svg?seed=${
+    firstName || "User"
+  }+${lastName || ""}`;
+
+  const user = await User.create({
+    name,
+    email,
+    password,
+    role: "user",
+    accountId: null,
+    profilePhoto: defaultProfilePhoto,
+  });
   const account = await Account.create({
     user: user._id,
     accountNumber: Math.floor(Math.random() * 900000000000) + 100000000000,
@@ -24,8 +37,6 @@ export const registerUser = asyncHandler(async (req, res) => {
   });
 
   console.log("✅ Account created successfully");
-
-
 
   if (user) {
     // Automatically create an account for the user
@@ -37,7 +48,6 @@ export const registerUser = asyncHandler(async (req, res) => {
       email,
       "Welcome to Our Auth Banking System",
       `Hello ${name},\n\nYour account has been created successfully!`
-      
     );
 
     // ✅ Add Welcome Notification
@@ -54,6 +64,7 @@ export const registerUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      profilePhoto: user.profilePhoto,
       account: account,
       accountNumber: account.accountNumber,
       token: generateToken(user._id),
@@ -72,6 +83,8 @@ export const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email }).populate("_id");
   const token = generateToken(user._id);
   
+
+
   if (user && (await user.matchPassword(password))) {
     res.cookie("jwt", token, {
       httpOnly: true, // Prevents XSS attacks
@@ -91,7 +104,11 @@ export const loginUser = asyncHandler(async (req, res) => {
     await welcomeNotification.save();
 
     const account = await Account.findById(user.accountId);
-    
+    const name = user.name;
+    const [firstName, lastName] = name.split(" ");
+    const defaultProfilePhoto = `https://api.dicebear.com/9.x/initials/svg?seed=${
+      firstName || "User"
+    }+${lastName || ""}`;
 
     res.json({
       _id: user._id,
@@ -100,6 +117,7 @@ export const loginUser = asyncHandler(async (req, res) => {
       role: user.role,
       account: account,
       token: token,
+      profilePhoto: user.profilePhoto || defaultProfilePhoto,
     });
     sendEmail(
       email,

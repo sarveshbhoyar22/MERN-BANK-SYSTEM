@@ -15,7 +15,7 @@ const Transaction = () => {
   const [filters, setFilters] = useState({ type: "", status: "", date: "" });
   const { transactions: transactionsData, loading, error } = UseTransaction();
   const { width } = useScreenSize(); // Get screen width for responsiveness
-
+  
   useEffect(() => {
     if (transactionsData) {
       const formattedTransactions = transactionsData.map((txn) => ({

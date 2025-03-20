@@ -6,11 +6,12 @@ import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import Goback from "../components/Goback";
 const BlogPage = () => {
   const [blogs, setBlogs] = useState([]);
   const [open, setOpen] = useState(false);
   const {authUser:user} = useAuthContext(); 
-
+  const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
   const handleCreateBlog = () => {
     if(user !== null){
         
@@ -28,7 +29,7 @@ const BlogPage = () => {
 
   const fetchBlogs = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/blogs",{
+      const response = await axios.get(`${BASE_URL}/blogs`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -45,7 +46,7 @@ const BlogPage = () => {
     <div className="bg-black">
       <div className=" bg-black max-w-4xl mx-auto p-4">
         <div className="mt-20">
-          <h1 className="text-3xl font-bold text-center mb-6">Blog Page</h1>
+          <h1 className="text-3xl font-bold text-center mb-6"><Goback/>Blog Page</h1>
           <button
             onClick={handleCreateBlog}
             className={`${

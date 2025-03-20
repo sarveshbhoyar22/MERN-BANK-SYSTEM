@@ -4,6 +4,7 @@ import { format } from "date-fns";
 const BlogCard = ({ blog, onBlogDeleted }) => {
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
   const handleDelete = async () => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this blog?"
@@ -11,7 +12,7 @@ const BlogCard = ({ blog, onBlogDeleted }) => {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:5000/blogs/${blog._id}`, {
+      await axios.delete(`${BASE_URL}/${blog._id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,

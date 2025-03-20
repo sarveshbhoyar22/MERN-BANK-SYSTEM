@@ -1,25 +1,23 @@
-import React, { use } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuthContext } from '../context/AuthContext';
-import UseLogout from '../hooks/UseLogout';
-import useScreenSize from '../hooks/Usescreensize';
-import { useNotificationContext } from '../context/NotificationContext';
-import NotificationDropdown from './NotificationDropdown';
+import React, { use } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
+import UseLogout from "../hooks/UseLogout";
+import useScreenSize from "../hooks/Usescreensize";
+import { useNotificationContext } from "../context/NotificationContext";
+import NotificationDropdown from "./NotificationDropdown";
 import { BsQrCodeScan } from "react-icons/bs";
 import { RiBankFill } from "react-icons/ri";
-
 
 const Navbar = ({ profilePhoto = "/logo.png" }) => {
   // const {notifications, markedAsRead} = useNotificationContext();
   // const [open, setOpen] = useState(false);
   const { authUser: user } = useAuthContext();
   const { logout, loading } = UseLogout();
-  const {width} = useScreenSize();
- 
+  const { width } = useScreenSize();
 
   return (
     <>
-      <div className="navbar bg-gradient-to-b from-gray-800  to-black  text-white shadow-sm  fixed z-10 ">
+      <div className="navbar bg-gradient-to-b from-gray-800  to-black  text-white shadow-sm  fixed z-50 ">
         {width < 768 ? (
           <div className="navbar-start dropdown ">
             <div
@@ -34,24 +32,33 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                {" "}
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
                   d="M4 6h16M4 12h16M4 18h7"
-                />{" "}
+                />
               </svg>
             </div>
-            <div className="mt-10 -ml-8">
-              <ul
-                tabIndex={0}
-                className="menu menu-lg gap-4 dropdown-content bg-base-100 rounded-box z-1 mt- w-52 p-2 shadow"
-              >
-                <Link to="/dashboard">Home</Link>
-                <Link to="/about">About us</Link>
-                <Link to="/blog">Blog</Link>
-                <Link to="/contact">Contact</Link>
+
+            {/* Dropdown Menu */}
+            <div
+              tabIndex={0}
+              className="dropdown-content absolute left-0 mt-65 w-52 bg-base-300 rounded-box shadow z-50"
+            >
+              <ul className="menu menu-lg gap-4 p-2 ">
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="/about">About us</Link>
+                </li>
+                <li>
+                  <Link to="/blog">Blog</Link>
+                </li>
+                <li>
+                  <Link to="/contact">Contact</Link>
+                </li>
               </ul>
             </div>
           </div>
@@ -125,7 +132,7 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
               className="btn btn-ghost btn-circle avatar"
             >
               <div className="w-10 rounded-full">
-                <img alt="Tailwind CSS Navbar component" src={profilePhoto} />
+                <img alt="Tailwind CSS Navbar component" src={user?.profilePhoto || "/logo.png"} /> 
               </div>
             </div>
             <ul
@@ -162,4 +169,4 @@ const Navbar = ({ profilePhoto = "/logo.png" }) => {
   );
 };
 
-export default Navbar
+export default Navbar;

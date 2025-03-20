@@ -34,7 +34,7 @@ import LoanOptions from "../pages/LoanOptions.jsx";
 import LoanStatus from "../pages/LoanStatus.jsx";
 import ForgetPassword from "../pages/forgetPassword.jsx";
 import QRScanner from "../components/QRCode/QRScanner.jsx";
-import Setting from "../pages/Setting.jsx";
+
 import Branding from "../pages/footer/Branding.jsx";
 import Design from "../pages/footer/Design.jsx";
 import Marketing from "../pages/footer/Marketing.jsx";
@@ -207,15 +207,7 @@ const AppRoutes = () => {
               />
             }
           />
-          <Route
-            path="/setting"
-            element={
-              <PrivateRoute
-                element={user ? <Setting /> : <Navigate to="/login" />}
-                allowedRoles={["user", "admin"]}
-              />
-            }
-          />
+          
 
           {/* Admin Routes */}
           <Route

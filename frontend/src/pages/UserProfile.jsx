@@ -6,10 +6,10 @@ import { set } from "mongoose";
 import { Navigate } from "react-router-dom";
 import useScreenSize from "../hooks/Usescreensize";
 import Goback from "../components/Goback";
+import { SlOptions } from "react-icons/sl";
 
 const UserProfile = () => {
-
-  const {width} = useScreenSize();
+  const { width } = useScreenSize();
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
@@ -27,12 +27,13 @@ const UserProfile = () => {
   const [verified, setVerified] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
 
   useEffect(() => {
     const user2 = JSON.parse(localStorage.getItem("user"));
     setUser(user2);
 
-    if(done){
+    if (done) {
       setNewPassword("");
       setOldPassword("");
       setOpennew(false);
@@ -40,33 +41,29 @@ const UserProfile = () => {
       setOtpSent(false);
     }
   }, []);
-   
-   
-   
-  
+
   // const {authuser:user} = useAuthContext();
 
   const handleChangePassword = async () => {
-
-  
     const verifyold = async () => {
       try {
         // setOldPassword(OldPassword);
-        if(!OldPassword ){
+        if (!OldPassword) {
           toast.error("Please Enter Old Password");
         }
-        console.log(OldPassword)
+        console.log(OldPassword);
         const token = localStorage.getItem("token");
         const res = await axios.post(
-          `http://localhost:5000/forget/verify-old`,
-          { oldPassword: OldPassword , email: user.email },
+          `${BASE_URL}/forget/verify-old`,
+          { oldPassword: OldPassword, email: user.email },
           {
             headers: {
-              "Content-Type": "application/json", 
-              
-              Authorization: `Bearer ${token}` },
+              "Content-Type": "application/json",
+
+              Authorization: `Bearer ${token}`,
+            },
             withCredentials: true,
-          } 
+          }
         );
 
         if (res.status === 200) {
@@ -84,11 +81,10 @@ const UserProfile = () => {
     };
 
     if (await verifyold()) {
-      console.log(newPassword)
+      console.log(newPassword);
       const res3 = await axios.post(
-
-        "http://localhost:5000/forget/reset-password",
-        {newPassword , email: user.email},
+        `${BASE_URL}/forget/reset-password`,
+        { newPassword, email: user.email },
         {
           headers: {
             "Content-Type": "application/json",
@@ -102,20 +98,13 @@ const UserProfile = () => {
         setDone(true);
         toast.success("Password Updated");
       }
-       
-     };
-     
-
-    
+    }
   };
-
- 
 
   const sendotp = async () => {
     try {
-      
       const res = await axios.post(
-        "http://localhost:5000/forget/forget-password",
+        `${BASE_URL}/forget/forget-password`,
         { email: user.email },
         {
           headers: {
@@ -143,8 +132,8 @@ const UserProfile = () => {
   const verifyotp = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/forget/verify-otp",
-        { otp: otp ,email: user.email},
+        `${BASE_URL}/forget/verify-otp`,
+        { otp: otp, email: user.email },
         {
           headers: {
             "Content-Type": "application/json",
@@ -164,14 +153,14 @@ const UserProfile = () => {
         toast.error("Error updating Password:"),
         error.response?.data?.message || error.message
       );
-    }}
+    }
+  };
 
   const resetPassword = async () => {
     try {
-      
       const res = await axios.post(
-        "http://localhost:5000/forget/reset-password",
-        {newPassword , email: user.email},
+        `${BASE_URL}/forget/reset-password`,
+        { newPassword, email: user.email },
         {
           headers: {
             "Content-Type": "application/json",
@@ -181,22 +170,19 @@ const UserProfile = () => {
         }
       );
 
-     
-        setDone(true);
-        setOpennew(false);
-        setVerified(false);
-        setNewPassword("");
-        setOldPassword("");
+      setDone(true);
+      setOpennew(false);
+      setVerified(false);
+      setNewPassword("");
+      setOldPassword("");
 
-       
-        toast.success("Password Updated");
-    
+      toast.success("Password Updated");
     } catch (error) {
       console.error(
         toast.error("Error updating Password:"),
         error.response?.data?.message || error.message
-      );  
-    }finally{
+      );
+    } finally {
       setOpennew(false);
       setVerified(false);
     }
@@ -206,16 +192,13 @@ const UserProfile = () => {
     const fetchUserProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get(
-          "http://localhost:5000/api/info/profile",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get(`${BASE_URL}/api/info/profile`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
 
         // setUser(response.data);
         setUpdatedUser({
@@ -240,11 +223,12 @@ const UserProfile = () => {
 
   // Handle profile update
   const handleUpdateProfile = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
-        `http://localhost:5000/api/info/update-User`,
-         updatedUser,
+        `${BASE_URL}/api/info/update-User`,
+        updatedUser,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -263,22 +247,92 @@ const UserProfile = () => {
         "Error updating profile:",
         error.response?.data?.message || error.message
       );
+    }finally{
+      setLoading(false);
     }
   };
 
-  // Handle password update
- 
+  //profile picture change
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleProfileClick = async (file) => {
+    if (!file) {
+      toast.error("Please select a file");
+      return;
+    }
+
+    const formData =new FormData();
+    formData.append("profilePhoto", file);
+
+    console.log("FormData content:");
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]); // Logs key-value pairs in FormData
+    }
+   
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/api/info/profile-update`,
+
+        formData,
+
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
+
+      console.log("Server response:", res); // Debugging log
+
+      if (res.status === 200) {
+        toast.success("Profile Picture Updated");
+        // window.location.reload();
+      }
+    } catch (error) {
+      console.error("Error uploading profile picture:", error);
+      toast.error("Failed to update profile picture");
+    }
+  };
 
   return (
     <div className="p-6 bg-black text-white min-h-screen flex justify-center">
       <div className="mt-16 w-full max-w-lg bg-black border border-gray-700 p-6 rounded-lg shadow-lg">
         <h2 className="text-3xl font-semibold mb-6 flex items-center gap-2 text-white">
           <Goback />
+          <img
+            src={user?.profilePhoto}
+            className="rounded-full h-12 w-12 "
+            alt=""
+          />
           User Profile
         </h2>
 
+        <div className="text-white p-1">Update Profile Picture</div>
+        <input
+          type="file"
+          
+          onChange={handleFileChange}
+          className="btn p-2 mr-1 hover:bg-gray-700 "
+        />
+        {loading ? (
+          <span className="loading loading-ring loading-lg"></span>
+        ) : (
+          <button
+            className="btn text-sm hover:bg-gray-700 "
+            onClick={() => handleProfileClick(selectedFile)}
+          >
+            Upload
+          </button>
+        )}
+
         {/* User Information */}
-        <div className="space-y-4">
+        <div className="space-y-5 m-1">
           <div>
             <label className="block text-sm font-medium text-gray-300">
               Name:

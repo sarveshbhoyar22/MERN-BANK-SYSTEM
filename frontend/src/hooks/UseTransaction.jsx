@@ -7,7 +7,7 @@ const useTransaction = () => {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
   useEffect(() => {
 
     const token = localStorage.getItem("token");
@@ -19,16 +19,13 @@ const useTransaction = () => {
 
     const fetchTransactions = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/transaction",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get(`${BASE_URL}/api/transaction`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
 
         if (!response?.data) {
           console.warn("No transactions found");

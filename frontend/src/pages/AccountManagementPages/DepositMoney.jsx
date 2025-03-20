@@ -6,9 +6,9 @@ import Goback from "../../components/Goback";
 const DepositMoney = () => {
   const [amount, setAmount] = useState("");
   const { authUser: user } = useAuthContext();
-  const [accountNumber] = useState(user?.account?.accountNumber);
+  const [accountNumber] = useState(user?.account?.accountNumber || "Deposit in your account");
   const [loading, setLoading] = useState(false);
-
+  const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -26,7 +26,7 @@ const DepositMoney = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/account/deposit/${userId}`,
+        `${BASE_URL}/api/account/deposit/${userId}`,
         { amount, accountNumber },
         {
           headers: {
@@ -49,7 +49,7 @@ const DepositMoney = () => {
         <div className="w-auto max-w-md p-6 bg-black border border-gray-800 rounded-lg shadow-lg">
           <div className="flex items-center mb-6 space-x-3">
             <Goback />
-            <img src="/second/safe.png" className="w-12" alt="Safe Icon" />
+            <img src="/second/deposit.png" className="w-12" alt="Safe Icon" />
             <h2 className="text-white text-2xl font-semibold">Deposit Money</h2>
           </div>
 

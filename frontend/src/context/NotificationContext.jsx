@@ -3,7 +3,8 @@ import axios from "axios";
 import { useAuthContext } from "./AuthContext";
 import {io} from "socket.io-client"
 
-const API_BASE_URL = "http://localhost:5000/api";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
+const API_BASE_URL = `${BASE_URL}/api`;
 
 
 
@@ -30,12 +31,12 @@ export const NotificationProvider = ({ children }) => {
 
       //socketio
       // Initialize socket connection
-      const newSocket = io("http://localhost:5000", {
+      const newSocket = io(`${BASE_URL}`, {
         transports: ["websocket"],
         reconnection: true, // Auto-reconnect if disconnected
         reconnectionAttempts: 5,
         reconnectionDelay: 2000,
-        forceNew: true
+        forceNew: true,
       });
       newSocket.emit("join", authUser._id);
      setSocket(newSocket)

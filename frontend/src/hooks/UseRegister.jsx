@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
 
-const API_BASE_URL = "http://localhost:5000/api";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
+const API_BASE_URL = `${BASE_URL}/api`;
 
 import axios from "axios";
 

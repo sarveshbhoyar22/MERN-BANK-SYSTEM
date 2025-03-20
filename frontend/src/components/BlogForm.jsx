@@ -1,18 +1,17 @@
 import { useState } from "react";
 import axios from "axios";
 
-
 const BlogForm = ({ onBlogAdded }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
   const [author] = useState(user?.name || "");
-
+  const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.post(
-        "http://localhost:5000/blogs/create",
+        `${BASE_URL}/blogs/create`,
         { title, content, author },
         {
           headers: {

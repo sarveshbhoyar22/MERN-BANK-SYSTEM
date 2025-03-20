@@ -13,7 +13,7 @@ const TransferMoney = () => {
   const { authUser: user } = useAuthContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+  const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
   
 
   const handleSubmit = async (e) => {
@@ -37,7 +37,7 @@ const TransferMoney = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/account/transfer`,
+        `${BASE_URL}/api/account/transfer`,
         { amount, receiverAccountNumber },
         {
           headers: {

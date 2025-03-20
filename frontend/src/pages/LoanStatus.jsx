@@ -10,7 +10,7 @@ const LoanStatus = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-
+const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
   useEffect(() => {
     const fetchLoanStatus = async () => {
       if (!user?.account?._id) return;
@@ -19,13 +19,10 @@ const LoanStatus = () => {
       setError(null);
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get(
-          "http://localhost:5000/api/loan/loan-status",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get(`${BASE_URL}/loan/loan-status`, {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        });
 
         if (!response.data || response.data.length === 0) {
           throw new Error("No loan applications found.");

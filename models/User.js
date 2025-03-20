@@ -8,9 +8,10 @@ const userSchema = mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ["user", "admin"], default: "user" },
-    accountId:{type: String},
-  }, 
-  { timestamps: true } 
+    accountId: { type: String },
+    profilePhoto: { type: String },
+  },
+  { timestamps: true }
 ); 
  
 // Password Hashing Before Saving 
@@ -18,6 +19,16 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+userSchema.pre("save", function (next) {
+  if (!this.profilePhoto) {
+    const [firstName, lastName] = this.name.split(" ");
+    this.profilePhoto = `https://api.dicebear.com/9.x/initials/svg?seed=${
+      firstName || "User"
+    }+${lastName || ""}`;
+  }
   next();
 });
 

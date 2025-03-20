@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import UseRegister from "../hooks/UseRegister";
 
 const Register = () => {
+   
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [balance, setBalance] = useState("");

@@ -5,26 +5,23 @@ import { Clipboard, ClipboardCheck } from "lucide-react";
 import Goback from "../components/Goback";
 
 const Users = () => {
-  const [users, setUsers] = useState([]); // Stores all users
-  const [searchQuery, setSearchQuery] = useState(""); // Stores search input
-  const [filteredUsers, setFilteredUsers] = useState([]); // Stores searched users
+  const [users, setUsers] = useState([]); 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [copied, setCopied] = useState(null);
-
+  const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const tokens = localStorage.getItem("token");
 
-        const response = await axios.get(
-          "http://localhost:5000/api/info/getusers",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${tokens}`,
-            },
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get(`${BASE_URL}/api/info/getusers`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${tokens}`,
+          },
+          withCredentials: true,
+        });
         setUsers(response.data);
         setFilteredUsers(response.data); // Initially, show all users
       } catch (error) {

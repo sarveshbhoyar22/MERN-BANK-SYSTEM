@@ -8,7 +8,7 @@ const WithdrawMoney = () => {
   const { authUser: user } = useAuthContext();
   const [accountNumber] = useState(user?.account?.accountNumber);
   const [loading, setLoading] = useState(false);
-
+  const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -26,7 +26,7 @@ const WithdrawMoney = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/account/withdraw/`,
+        `${BASE_URL}/api/account/withdraw/`,
         { amount, accountNumber },
         {
           headers: {

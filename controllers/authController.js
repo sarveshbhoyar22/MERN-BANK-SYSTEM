@@ -6,10 +6,9 @@ import { sendEmail } from "../utils/emailService.js";
 import Notification from "../models/Notification.js";
 import { getAccountDetails } from "./accountController.js";
 
-
 export const serverReady = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Server is ready" });
-})
+});
 // Register New User
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, balance = 0 } = req.body;
@@ -81,13 +80,10 @@ export const registerUser = asyncHandler(async (req, res) => {
 
 // User Login
 export const loginUser = asyncHandler(async (req, res) => {
-  const { email,password } = req.body;
-
+  const { email, password } = req.body;
 
   const user = await User.findOne({ email }).populate("_id");
   const token = generateToken(user._id);
-  
-
 
   if (user && (await user.matchPassword(password))) {
     res.cookie("jwt", token, {
@@ -104,7 +100,6 @@ export const loginUser = asyncHandler(async (req, res) => {
       type: "welcome",
     });
 
-    
     await welcomeNotification.save();
 
     const account = await Account.findById(user.accountId);
@@ -146,11 +141,9 @@ export const getProfile = asyncHandler(async (req, res) => {
       role: user.role,
       accountId: user.accountId,
       account: account,
-      
     });
   } else {
     res.status(404);
     throw new Error("User not found");
   }
 });
-

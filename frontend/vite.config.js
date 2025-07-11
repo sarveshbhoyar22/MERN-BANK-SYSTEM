@@ -16,6 +16,9 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
+    rollupOptions: {
+      external: ["some-problematic-module"], // not usually needed for frontends
+    },
   },
 });
 

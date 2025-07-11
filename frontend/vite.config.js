@@ -16,8 +16,12 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
-    rollupOptions: {
-      external: ["some-problematic-module"], // not usually needed for frontends
+    output: {
+      manualChunks: {
+        react: ["react", "react-dom"],
+        lucide: ["lucide-react"],
+        firebase: ["firebase/app", "firebase/firestore", "firebase/auth"],
+      },
     },
   },
 });

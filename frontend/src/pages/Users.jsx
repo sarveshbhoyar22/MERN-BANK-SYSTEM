@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Clipboard, ClipboardCheck } from "lucide-react";
+import { Clipboard, ClipboardCheck, Loader } from "lucide-react";
 import Goback from "../components/Goback";
 
 const Users = () => {
@@ -95,8 +95,9 @@ const Users = () => {
             <tbody>
               {filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan="3" className="text-center py-4">
-                    No users found
+                  <td colSpan="3" className="text-center h-40 flex items-center justify-center py-4">
+                    <Loader className="w-5 h-5 mr-2 animate-spin" />
+                    Loading...
                   </td>
                 </tr>
               ) : (

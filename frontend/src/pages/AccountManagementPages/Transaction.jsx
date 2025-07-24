@@ -7,6 +7,7 @@ import UseTransaction from "../../hooks/UseTransaction";
 import { useAuthContext } from "../../context/AuthContext";
 import useScreenSize from "../../hooks/Usescreensize";
 import Goback from "../../components/Goback";
+import {Loader} from "lucide-react"
 
 const Transaction = () => {
   const [transactions, setTransactions] = useState([]);
@@ -15,7 +16,7 @@ const Transaction = () => {
   const [filters, setFilters] = useState({ type: "", status: "", date: "" });
   const { transactions: transactionsData, loading, error } = UseTransaction();
   const { width } = useScreenSize(); // Get screen width for responsiveness
-  
+  const [loadingit,setloadingit] = useState(false);
   useEffect(() => {
     if (transactionsData) {
       const formattedTransactions = transactionsData.map((txn) => ({
@@ -147,7 +148,10 @@ const Transaction = () => {
                 {filteredTransactions.length === 0 ? (
                   <tr>
                     <td colSpan="7" className="text-center py-4">
-                      No Transactions Found
+                      <Loader className="animate-spin mx-auto" />
+                      <p className="mt-2">Loading transactions...</p>
+                      <p>If this takes too long, please Make a transaction </p>
+                      
                     </td>
                   </tr>
                 ) : (
@@ -180,7 +184,14 @@ const Transaction = () => {
           </div>
         ) : (
           <div>
-            {filteredTransactions.map((txn) => (
+            {filteredTransactions.length === 0 ? (<tr>
+                    <td colSpan="7" className="text-center py-4">
+                      <Loader className="animate-spin mx-auto" />
+                      <p className="mt-2">Loading transactions...</p>
+                      <p>If this takes too long, please Make a transaction </p>
+                      
+                    </td>
+                  </tr>):(filteredTransactions.map((txn) => (
               <div
                 key={txn._id}
                 className="bg-gray-900 p-4 rounded-lg mb-4 shadow-md"
@@ -210,7 +221,7 @@ const Transaction = () => {
                   <span className="font-bold">Date and Time:</span> {txn.date}
                 </p>
               </div>
-            ))}
+            )))}
           </div>
         )}
       </div>
